@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		49EEC31F2CE79C82007CE991 /* TabBarControllerPawPal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = TabBarControllerPawPal.app; path = "/Users/user61/Desktop/TabBarControllerPaPawn/build/Debug-iphoneos/TabBarControllerPawPal.app"; sourceTree = "<absolute>"; };
+		49EEC39A2CE79FB7007CE991 /* TabBarControllerPawPal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = TabBarControllerPawPal.app; path = "/Users/user61/Desktop/TabBarControllerPaPawn/build/Debug-iphoneos/TabBarControllerPawPal.app"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -71,7 +71,7 @@
 			packageProductDependencies = (
 			);
 			productName = TabBarControllerPawPal;
-			productReference = 49EEC31F2CE79C82007CE991 /* TabBarControllerPawPal.app */;
+			productReference = 49EEC39A2CE79FB7007CE991 /* TabBarControllerPawPal.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
