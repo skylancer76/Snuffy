@@ -1,17 +1,14 @@
 //
-//  addNewPetViewController.swift
+//  FiltersViewController.swift
 //  TabBarControllerPawPal
 //
-//  Created by user@61 on 07/11/24.
+//  Created by user@61 on 16/11/24.
 //
 
 import UIKit
 
-class addNewPetViewController: UIViewController {
-    
-    
-    @IBOutlet weak var backButton: UIButton!
-    
+class FiltersViewController: UIViewController {
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -19,9 +16,6 @@ class addNewPetViewController: UIViewController {
     }
     
 
-    @IBAction func backButtonTapped(_ sender: Any) {
-        dismiss(animated: true, completion: nil)
-    }
     /*
     // MARK: - Navigation
 
