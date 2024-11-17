@@ -22,6 +22,12 @@ class CompletedBookingViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        if let booking = booking {
+                    title = booking.name // Use a property of the booking model as the title
+                } else {
+                    title = "Booking Details" // Default title
+                }
+            
         configureUI()
 
         // Do any additional setup after loading the view.

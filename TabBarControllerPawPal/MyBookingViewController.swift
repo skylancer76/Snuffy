@@ -32,7 +32,7 @@ class MyBookingViewController: UIViewController , UITableViewDelegate , UITableV
             cell.image1.image = UIImage(named: booking.image)
             
             if cell.statusLabel.text == "Completed"{
-                cell.statusLabel.textColor = .blue
+                cell.statusLabel.textColor = .systemBlue
             }
             else{
                 cell.statusLabel.textColor = .systemGreen
