@@ -55,6 +55,7 @@ struct Booking{
     var iscompleted: Bool
     var image: String
     var status : String?
+    var price : String?
     
 }
 

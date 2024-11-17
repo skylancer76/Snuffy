@@ -38,41 +38,62 @@ class MyBookingViewController: UIViewController , UITableViewDelegate , UITableV
                 cell.statusLabel.textColor = .systemGreen
             }
         }
-
+        
         return cell
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 100
     }
     
-    
 
-    
-    
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        tableView.delegate = self
-        tableView.dataSource = self
-        // Do any additional setup after loading the view.
-    }
-    
-
-    @IBAction func setCompleted(_ sender: UISegmentedControl) {
         
+        
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if segue.identifier == "showDetail" {
+//            if let detailVC = segue.destination as? CompletedBookingViewController,
+//               let indexPath = tableView.indexPathForSelectedRow {
+//                detailVC.booking = filteredBookings[indexPath.row]
+//            }
+//        }
+//    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedBooking = filteredBookings[indexPath.row]
+        
+        // Instantiate CompletedBookingViewController using its Storyboard ID
+        if let detailVC = storyboard?.instantiateViewController(withIdentifier: "CompletedBookingViewController") as? CompletedBookingViewController {
+            detailVC.booking = selectedBooking // Pass data to the detail view controller
+            
+            // Push onto the navigation stack
+            navigationController?.pushViewController(detailVC, animated: true)
+        } else {
+            print("Could not instantiate CompletedBookingViewController")
+        }
+    }
+        override func viewDidLoad() {
+            super.viewDidLoad()
+            tableView.delegate = self
+            tableView.dataSource = self
+            // Do any additional setup after loading the view.
+        }
+        
+        
+        @IBAction func setCompleted(_ sender: UISegmentedControl) {
+            
             isCompleted = sender.selectedSegmentIndex == 1
             tableView.reloadData()
+        }
+        
+        
+        /*
+         // MARK: - Navigation
+         
+         // In a storyboard-based application, you will often want to do a little preparation before navigation
+         override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+         // Get the new view controller using segue.destination.
+         // Pass the selected object to the new view controller.
+         }
+         */
+        
     }
-    
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
-}
