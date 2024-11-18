@@ -42,6 +42,8 @@ class CompletedBookingViewController: UIViewController {
             caretakingStatusLabel.text = booking.status ?? "Unknown"
             caretakingFeesLabel.text = " Rs 1250"
             paymentStatusLabel.text =  booking.iscompleted ? "Completed" : "Pending"
+        
+        paymentStatusLabel.textColor = booking.iscompleted ? UIColor.green : UIColor.systemBlue
         }
 
     /*
