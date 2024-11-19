@@ -30,17 +30,17 @@ class BookingRequestViewController: UIViewController {
         super.viewDidLoad()
         datePickerView.datePickerMode = .date
         
-        let usersItem = UIAction(title: "Pet", image: UIImage(systemName: "dog.fill")) { (action) in
+        let usersItem = UIAction(title: "Pet" ) { (action) in
             
             print("Users action was tapped")
         }
         
-        let addUserItem = UIAction(title: "Buzzo", image: UIImage(systemName: "dog.fill")) { (action) in
+        let addUserItem = UIAction(title: "Buzzo") { (action) in
             
             print("Buzzo got selected")
         }
         
-        let removeUserItem = UIAction(title: "Haachi", image: UIImage(systemName: "dog.fill")) { (action) in
+        let removeUserItem = UIAction(title: "Haachi") { (action) in
             print("Haachi got selected")
         }
         
@@ -49,7 +49,7 @@ class BookingRequestViewController: UIViewController {
         selectPetButton.menu = menu
         selectPetButton.showsMenuAsPrimaryAction = true
         
-        let startTime = UIAction(title: "Time", image: UIImage(systemName: "dog.fill")) { (action) in
+        let startTime = UIAction(title: "Time") { (action) in
             
             print("Users action was tapped")
         }
