@@ -1,24 +1,19 @@
 //
 //  ViewController.swift
-//  TabBarControllerPawPal
+//  PawPal
 //
-//  Created by user@61 on 06/11/24.
+//  Created by admin19 on 14/11/24.
 //
 
 import UIKit
 
 class ViewController: UIViewController {
-
-    
-
-    
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
     }
 
-
+    
 }
 
