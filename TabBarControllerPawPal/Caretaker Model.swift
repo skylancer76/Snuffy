@@ -43,10 +43,10 @@ struct PetSitter {
 
 let petSitters: [PetSitter] = [
     PetSitter(name: "Katie", price: "Rs 350 / Day", distance: "2.7 km, Chennai", rating: "Rating1", isVerified: true , profileImageName: "Profile Image 1", isrecommended: false),
-    PetSitter(name: "Katie", price: "Rs 350 / Day", distance: "2.7 km, Chennai", rating: "Rating1", isVerified: true, profileImageName: "Profile Image 1", isrecommended: true),
-    PetSitter(name: "Katie", price: "Rs 350 / Day", distance: "2.7 km, Chennai", rating: "Rating1", isVerified: true, profileImageName: "Profile Image 1", isrecommended: false),
-    PetSitter(name: "Katie", price: "Rs 350 / Day", distance: "2.7 km, Chennai", rating: "Rating1", isVerified: true, profileImageName: "Profile Image 1",  isrecommended: true),
-    PetSitter(name: "Katie", price: "Rs 350 / Day", distance: "2.7 km, Chennai", rating: "Rating1", isVerified: true, profileImageName: "Profile Image 1", isrecommended: false)
+    PetSitter(name: "Ananya", price: "Rs 250 / Day", distance: "2.7 km, Chennai", rating: "Rating1", isVerified: true, profileImageName: "Ananya", isrecommended: true),
+    PetSitter(name: "Aman", price: "Rs 350 / Day", distance: "2.7 km, Chennai", rating: "Rating1", isVerified: true, profileImageName: "Aman", isrecommended: false),
+    PetSitter(name: "Pooja", price: "Rs 450 / Day", distance: "2.7 km, Chennai", rating: "Rating1", isVerified: true, profileImageName: "Pooja",  isrecommended: true),
+    PetSitter(name: "Shraddha", price: "Rs 250 / Day", distance: "2.7 km, Chennai", rating: "Rating1", isVerified: true, profileImageName: "Shraddha", isrecommended: false)
 ]
 
 struct Booking{
@@ -61,10 +61,10 @@ struct Booking{
 
 var bookings: [Booking] = [
     Booking(name: "Shraddha", date: "03 Jun 24 • 11 Jun 24", iscompleted: true, image: "Shraddha", status: "Completed"),
-    Booking(name: "Shraddha", date: "03 Jun 24 • 11 Jun 24", iscompleted: false, image: "Karan", status: "ongoing"),
-    Booking(name: "Shraddha", date: "04 May 24 • 09 May 24 ", iscompleted: false, image: "Ananya",status: "pending"),
-    Booking(name: "Shraddha", date: "02 Feb 24 • 21 Feb 24", iscompleted: true, image: "Aman",status: "Completed"),
-    Booking(name: "Shraddha", date: "13 Dec 23 • 24 Dec 23", iscompleted: true, image: "Pooja",status: "Completed"),
+    Booking(name: "Karan", date: "03 Jun 24 • 11 Jun 24", iscompleted: false, image: "Karan", status: "ongoing"),
+    Booking(name: "Ananya", date: "04 May 24 • 09 May 24 ", iscompleted: false, image: "Ananya",status: "pending"),
+    Booking(name: "Aman", date: "02 Feb 24 • 21 Feb 24", iscompleted: true, image: "Aman",status: "Completed"),
+    Booking(name: "Pooja", date: "13 Dec 23 • 24 Dec 23", iscompleted: true, image: "Pooja",status: "Completed"),
     Booking(name: "Shraddha", date: "19 Nov 23 • 05 Dec 23", iscompleted: true, image: "Shraddha",status: "Completed")
     
 ]

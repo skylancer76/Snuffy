@@ -60,11 +60,11 @@ class MyBookingViewController: UIViewController , UITableViewDelegate , UITableV
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedBooking = filteredBookings[indexPath.row]
         
-        // Instantiate CompletedBookingViewController using its Storyboard ID
+        
         if let detailVC = storyboard?.instantiateViewController(withIdentifier: "CompletedBookingViewController") as? CompletedBookingViewController {
-            detailVC.booking = selectedBooking // Pass data to the detail view controller
+            detailVC.booking = selectedBooking
             
-            // Push onto the navigation stack
+           
             navigationController?.pushViewController(detailVC, animated: true)
         } else {
             print("Could not instantiate CompletedBookingViewController")
@@ -74,7 +74,7 @@ class MyBookingViewController: UIViewController , UITableViewDelegate , UITableV
             super.viewDidLoad()
             tableView.delegate = self
             tableView.dataSource = self
-            // Do any additional setup after loading the view.
+            
         }
         
         

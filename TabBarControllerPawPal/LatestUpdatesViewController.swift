@@ -24,7 +24,7 @@ class LatestUpdatesViewController: UIViewController, UICollectionViewDataSource,
     
     
     var LastestUpdateImages: [String] = ["pick1","pick2","pick3"]
-//    var currentPage: Int = 0
+
 
     
     @IBOutlet var myPage: UIPageControl!

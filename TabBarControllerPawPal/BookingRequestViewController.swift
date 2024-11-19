@@ -117,28 +117,50 @@ class BookingRequestViewController: UIViewController {
     
     
     @IBAction func sendRequestButtonTapped(_ sender: UIButton) {
-            // Step 1: Show alert
-            let alertController = UIAlertController(
+            
+//            let alertController = UIAlertController(
+//                title: "Request Sent",
+//                message: "Your request has been sent and is pending approval.",
+//                preferredStyle: .alert
+//            )
+//            alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
+//               
+//                self.navigateToHomeViewController()
+//            }))
+//            present(alertController, animated: true)
+//        }
+//        
+//        private func navigateToHomeViewController() {
+//            if let homeVC = storyboard?.instantiateViewController(withIdentifier: "HomeViewController") as? HomeViewController {
+//                homeVC.modalTransitionStyle = .crossDissolve
+//                homeVC.modalPresentationStyle = .currentContext
+//                present(homeVC, animated: true)
+//            }
+//        }
+//    
+    
+        let alertController = UIAlertController(
                 title: "Request Sent",
                 message: "Your request has been sent and is pending approval.",
                 preferredStyle: .alert
             )
             alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
-                // Step 2: Navigate to HomeViewController after alert dismissal
+                
                 self.navigateToHomeViewController()
             }))
             present(alertController, animated: true)
         }
-        
+
         private func navigateToHomeViewController() {
-            if let homeVC = storyboard?.instantiateViewController(withIdentifier: "HomeViewController") as? HomeViewController {
-                homeVC.modalTransitionStyle = .crossDissolve
-                homeVC.modalPresentationStyle = .fullScreen
-                present(homeVC, animated: true)
+            
+            if let tabBarController = self.tabBarController {
+                
+                tabBarController.selectedIndex = 0
+            } else {
+                
+                dismiss(animated: true)
             }
         }
-    
-    
     /*
       MARK: - Navigation
      

@@ -18,12 +18,12 @@ class VaccinationDetailsViewController: UIViewController , UITableViewDelegate ,
         }
         let vaccination = vaccinationDetails[indexPath.row]
         
-        // Set the labels with the corresponding data
+        
         cell.vaccinationName.text = vaccination.vacinationName
         cell.vaccinationDate.text = vaccination.vacinationDate
         cell.vaacinationDescription.text = vaccination.vacinationDescription
         
-        // Change the color based on vaccination completion
+        
         if vaccination.isVaccinationCompleted {
             cell.vaacinationDescription.textColor = UIColor.red
         } else {
