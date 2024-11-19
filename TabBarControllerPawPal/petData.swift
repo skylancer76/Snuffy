@@ -26,3 +26,16 @@ class PetData
         self.petWeight = petWeight
     }
 }
+
+struct VaccinationDetails {
+    var vacinationName: String
+    var vacinationDate: String
+    var vacinationDescription: String
+    var isVaccinationCompleted: Bool
+}
+
+var vaccinationDetails: [VaccinationDetails] = [
+    VaccinationDetails(vacinationName: "Rabies", vacinationDate: "16 Jul, 2024", vacinationDescription: "All Doses Completed", isVaccinationCompleted: true),
+    VaccinationDetails(vacinationName: "Distemper Vaccine", vacinationDate: "18 Jul, 2024", vacinationDescription: "Booster Dose Needed", isVaccinationCompleted: false),
+    VaccinationDetails(vacinationName: "Parvovirus Vaccine", vacinationDate: "20 Jul, 2024", vacinationDescription: "All Doses Completed", isVaccinationCompleted: true),
+]
