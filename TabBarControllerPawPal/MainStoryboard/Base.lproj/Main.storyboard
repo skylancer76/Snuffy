@@ -205,13 +205,13 @@
                                 </constraints>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="SwC-h6-LeR">
-                                <rect key="frame" x="120.99999999999999" y="431" width="150.66666666666663" height="231"/>
+                                <rect key="frame" x="120.99999999999999" y="431.00000000000006" width="150.66666666666663" height="216.66666666666669"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Pet Caretaker Illustration" translatesAutoresizingMaskIntoConstraints="NO" id="i30-ag-ZRP">
-                                        <rect key="frame" x="0.3333333333333286" y="0.0" width="150" height="176.66666666666666"/>
+                                        <rect key="frame" x="0.3333333333333286" y="0.0" width="150" height="162.33333333333334"/>
                                     </imageView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="A6v-aZ-xaJ">
-                                        <rect key="frame" x="11.666666666666664" y="196.66666666666663" width="127.66666666666669" height="34.333333333333343"/>
+                                        <rect key="frame" x="11.666666666666664" y="182.33333333333337" width="127.66666666666669" height="34.333333333333343"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="34.333333333333343" id="EWy-tM-mrt"/>
                                         </constraints>
@@ -225,10 +225,10 @@
                                 </subviews>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="s3L-cf-AsU">
-                                <rect key="frame" x="20" y="714.33333333333337" width="362" height="35.666666666666629"/>
+                                <rect key="frame" x="20" y="700" width="362" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="362" id="U1G-Ni-ziU"/>
-                                    <constraint firstAttribute="height" constant="35.670000000000002" id="hl4-dH-SxV"/>
+                                    <constraint firstAttribute="height" constant="50" id="nzG-AD-z4W"/>
                                 </constraints>
                                 <color key="tintColor" systemColor="systemPurpleColor"/>
                                 <state key="normal" title="Button"/>

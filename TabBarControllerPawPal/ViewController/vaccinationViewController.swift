@@ -21,6 +21,11 @@ class vaccinationViewController: UIViewController, UITableViewDataSource, UITabl
 //        )
     }
     
+    
+    @IBAction func backButtonTapped(_ sender: Any) {
+        dismiss(animated: true, completion: nil)
+    }
+    
         
     // MARK: - UITableViewDataSource Methods
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

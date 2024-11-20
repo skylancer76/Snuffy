@@ -33,13 +33,25 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sBQ-ke-WF7">
+                                        <rect key="frame" x="7" y="77" width="80" height="35"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" image="chevron.backward" catalog="system" title="Back" imagePadding="2"/>
+                                        <connections>
+                                            <action selector="backButtonTapped:" destination="6Xa-cQ-3Xf" eventType="touchUpInside" id="izF-vd-Daq"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
                                 <constraints>
                                     <constraint firstItem="GoL-6V-OsK" firstAttribute="centerY" secondItem="jsE-Iy-hHQ" secondAttribute="centerY" id="1pm-pr-j3a"/>
                                     <constraint firstAttribute="trailing" secondItem="GoL-6V-OsK" secondAttribute="trailing" constant="15" id="76D-fU-i8i"/>
+                                    <constraint firstAttribute="bottom" secondItem="sBQ-ke-WF7" secondAttribute="bottom" constant="8" id="Hy1-T7-kaX"/>
                                     <constraint firstAttribute="bottom" secondItem="jsE-Iy-hHQ" secondAttribute="bottom" constant="15" id="IR4-sn-Ceu"/>
+                                    <constraint firstItem="sBQ-ke-WF7" firstAttribute="leading" secondItem="FuI-oA-ciV" secondAttribute="leading" constant="7" id="Qkp-4R-2B3"/>
+                                    <constraint firstItem="jsE-Iy-hHQ" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="sBQ-ke-WF7" secondAttribute="trailing" symbolic="YES" id="RRD-tZ-c2W"/>
                                     <constraint firstItem="jsE-Iy-hHQ" firstAttribute="leading" secondItem="FuI-oA-ciV" secondAttribute="leading" constant="118" id="UJa-uU-a1h"/>
+                                    <constraint firstItem="sBQ-ke-WF7" firstAttribute="top" secondItem="FuI-oA-ciV" secondAttribute="top" constant="77" id="Vif-2f-KWr"/>
                                     <constraint firstItem="GoL-6V-OsK" firstAttribute="top" secondItem="FuI-oA-ciV" secondAttribute="top" constant="64" id="k6t-nk-5Zn"/>
                                     <constraint firstItem="GoL-6V-OsK" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="jsE-Iy-hHQ" secondAttribute="trailing" constant="8" symbolic="YES" id="wzF-Dk-Kro"/>
                                 </constraints>
@@ -417,6 +429,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="chevron.backward" catalog="system" width="97" height="128"/>
         <systemColor name="linkColor">
             <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
