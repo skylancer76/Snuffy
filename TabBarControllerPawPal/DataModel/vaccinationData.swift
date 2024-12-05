@@ -7,14 +7,14 @@
 
 import Foundation
 
-struct Vaccination : Codable {
-    var vaccineName: String
-    var vaccineType: String
-    var dateOfVaccination: String
-    var expiryDate: String
-    var nextDueDate: String
-}
-
-var vaccinations: [Vaccination] = []
+//struct Vaccination : Codable {
+//    var vaccineName: String
+//    var vaccineType: String
+//    var dateOfVaccination: String
+//    var expiryDate: String
+//    var nextDueDate: String
+//}
+//
+//var vaccinations: [Vaccination] = []
 
 
