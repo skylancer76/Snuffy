@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="6fy-Vc-4CS">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23094" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="6fy-Vc-4CS">
     <device id="retina6_3" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23084"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -214,7 +214,6 @@
                                 </buttonConfiguration>
                                 <connections>
                                     <action selector="loginClicked:" destination="6DQ-db-eNt" eventType="touchUpInside" id="Ytw-6A-wZg"/>
-                                    <segue destination="vho-1J-uCx" kind="show" id="eRM-RH-JiG"/>
                                 </connections>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OYx-K7-z4K" userLabel="Don't have an account">
@@ -234,7 +233,7 @@
                                             <fontDescription key="titleFontDescription" type="system" weight="medium" pointSize="18"/>
                                         </buttonConfiguration>
                                         <connections>
-                                            <segue destination="KDT-8r-P2m" kind="show" id="8c7-Dz-iCq"/>
+                                            <segue destination="KDT-8r-P2m" kind="show" identifier="returnToLogin" id="8c7-Dz-iCq"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -467,16 +466,6 @@
             </objects>
             <point key="canvasLocation" x="101.49253731343283" y="3.432494279176201"/>
         </scene>
-        <!--Main 3-->
-        <scene sceneID="Wp8-bR-tJE">
-            <objects>
-                <viewControllerPlaceholder storyboardName="Main 3" id="vho-1J-uCx" sceneMemberID="viewController">
-                    <navigationItem key="navigationItem" id="2KT-D7-5fC"/>
-                </viewControllerPlaceholder>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="N0M-cU-3IO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2707" y="3"/>
-        </scene>
     </scenes>
     <resources>
         <image name="Main Logo 1" width="217" height="91"/>
@@ -484,10 +473,10 @@
         <image name="checkmark.square.fill" catalog="system" width="128" height="114"/>
         <image name="square" catalog="system" width="128" height="114"/>
         <systemColor name="secondarySystemBackgroundColor">
-            <color red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemPurpleColor">
-            <color red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.68627450980392157" green="0.32156862745098042" blue="0.87058823529411766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

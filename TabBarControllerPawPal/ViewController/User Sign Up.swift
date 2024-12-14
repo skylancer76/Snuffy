@@ -51,32 +51,31 @@ class User_Sign_Up: UIViewController {
     @IBAction func signUpClicked(_ sender: Any) {
         
         guard let name = nameTextField.text, !name.isEmpty,
-        let email = emailTextField.text, !email.isEmpty,
-        let password = passwordTextField.text, !password.isEmpty else {
+              let email = emailTextField.text, !email.isEmpty,
+              let password = passwordTextField.text, !password.isEmpty else {
             showAlert(title: "Error", message: "Please fill in all fields.")
             return
         }
-                
+        
         if !hasAgreedToTerms {
             showAlert(title: "Error", message: "You must agree to the terms and conditions.")
             return
         }
-                
+        
         let role = roleSegmentedControl.selectedSegmentIndex == 0 ? "Pet Owner" : "Pet Caretaker"
-                
+        
         // MARK: - Create User with Firebase Auth
         Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
             if let error = error {
-                    self.showAlert(title: "Error", message: error.localizedDescription)
-                    return
-                }
-                    
-                // Save Additional User Data to Firestore
-                if let user = authResult?.user {
-                    self.saveUserDataToFirestore(uid: user.uid, name: name, email: email, role: role)
-                }
+                self.showAlert(title: "Error", message: error.localizedDescription)
+                return
+            }
+            
+            // Save user data to Firestore
+            if let user = authResult?.user {
+                self.saveUserDataToFirestore(uid: user.uid, name: name, email: email, role: role)
+            }
         }
-
     }
     
     // MARK: - Save User Data to Firestore
@@ -93,13 +92,21 @@ class User_Sign_Up: UIViewController {
             if let error = error {
                 self.showAlert(title: "Error", message: "Failed to save user data: \(error.localizedDescription)")
             } else {
-                self.showAlert(title: "Success", message: "Account created successfully!", completion: {
-                    // Navigate to Login Screen or Home Screen
-                    self.navigationController?.popViewController(animated: true)
-                })
+                // Show success message and navigate back to Login Page
+                self.navigateToHomeScreen()
             }
         }
     }
+    func navigateToHomeScreen() {
+          // Create an instance of the Home screen (Main 3)
+          let storyboard = UIStoryboard(name: "Main 3", bundle: nil) // Ensure this storyboard name is correct
+          if let homeVC = storyboard.instantiateInitialViewController() {
+              homeVC.modalPresentationStyle = .fullScreen
+              self.present(homeVC, animated: true, completion: nil)
+          } else {
+              self.showAlert(title: "Error", message: "Home screen could not be loaded.")
+          }
+      }
        
     // MARK: - Helper: Show Alert
     func showAlert(title: String, message: String, completion: (() -> Void)? = nil) {

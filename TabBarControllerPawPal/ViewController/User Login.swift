@@ -33,17 +33,25 @@ class User_Login: UIViewController {
                 
         // Firebase Login
         Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
-            if let error = error {
-                self.showAlert("Login Failed", error.localizedDescription)
-                return
-            }
-            
-            if authResult != nil {
-                // Navigate to Home Page after successful login
-                self.performSegue(withIdentifier: "goToHome", sender: self)
+                if let error = error {
+                    self.showAlert("Login Failed", error.localizedDescription)
+                    return
+                }
+                
+                if authResult != nil {
+                   
+                    let storyboard = UIStoryboard(name: "Main 3", bundle: nil)
+                    if let homeVC = storyboard.instantiateInitialViewController() {
+                       
+                        homeVC.modalPresentationStyle = .fullScreen
+                        self.present(homeVC, animated: true, completion: nil)
+                    } else {
+                        
+                        self.showAlert("Error", "Home screen could not be loaded.")
+                    }
+                }
             }
         }
-    }
     
     func showAlert(_ title: String, _ message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
