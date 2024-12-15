@@ -1,0 +1,155 @@
+[
+    {
+      "id": "1",
+      "name": "Katie",
+      "price": "Price : Rs 350 / Day",
+      "address": "2.7 km, Chennai",
+      "rating": "4.5",
+      "isVerified": true,
+      "profileImageName": "https://drive.google.com/file/d/1jgOb_nyiavVE9lkntWrF8B5cxtmL_C9j/view?usp=share_link",
+      "coverImageURL": "https://drive.google.com/file/d/1jgOb_nyiavVE9lkntWrF8B5cxtmL_C9j/view?usp=share_link",
+      "distance": "2.7 km",
+      "isRecommended": true,
+      "about": "Experienced caretaker with a love for animals.",
+      "galleryImages":  ["https://drive.google.com/file/d/1W20SyqCtSgY1-T4QeCLbTdwOpXuV2vET/view?usp=share_link",
+          "https://drive.google.com/file/d/1fyNb3CSwSNsatnx7g8AQQlxDfUqMldzK/view?usp=share_link",
+      "https://drive.google.com/file/d/1xy3pFB1nabUvPTrZANHd5jdzVyBsJDjZ/view?usp=share_link",
+      "https://drive.google.com/file/d/1twBDKIRk5FBiWDdK6P_HqF-7H9uWfZgS/view?usp=share_link"],
+      "bookings": [
+        {
+          "date": "2024-12-20",
+          "isCompleted": true,
+          "status": "Completed",
+          "price": "350",
+          "image": "https://drive.google.com/file/d/1yY6Qigk7ALJYR3lU-vk9R02H7uA7xxCS/view?usp=share_link"
+        }
+      
+      ]
+    },
+    {
+      "id": "2",
+      "name": "Ananya",
+      "price": "Price : Rs 250 / Day",
+      "address": "3 km, Chennai",
+      "rating": "4.3",
+      "isVerified": true,
+      "profileImageName": "https://drive.google.com/file/d/1c_jf9ki17Kv4aVeZn7ZFHAbPfScg6jWR/view?usp=share_link",
+      "coverImageURL": "https://drive.google.com/file/d/1jgOb_nyiavVE9lkntWrF8B5cxtmL_C9j/view?usp=share_link",
+      "distance": "3 km",
+      "isRecommended": true,
+      "about": "Dedicated caretaker for your furry friends.",
+      "galleryImages": ["https://drive.google.com/file/d/1W20SyqCtSgY1-T4QeCLbTdwOpXuV2vET/view?usp=share_link",
+          "https://drive.google.com/file/d/1fyNb3CSwSNsatnx7g8AQQlxDfUqMldzK/view?usp=share_link",
+      "https://drive.google.com/file/d/1xy3pFB1nabUvPTrZANHd5jdzVyBsJDjZ/view?usp=share_link",
+      "https://drive.google.com/file/d/1twBDKIRk5FBiWDdK6P_HqF-7H9uWfZgS/view?usp=share_link"],
+      "bookings": [
+        {
+          "date": "2024-12-15",
+          "isCompleted": true,
+          "status": "Completed",
+          "price": "250",
+          "image": "https://drive.google.com/file/d/1yY6Qigk7ALJYR3lU-vk9R02H7uA7xxCS/view?usp=share_link"
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "name": "Karan",
+      "price": "Price : Rs 300 / Day",
+      "address": "3.2 km, Chennai",
+      "rating": "4.6",
+      "isVerified": true,
+      "profileImageName": "https://drive.google.com/file/d/1Nqpa-nJUZzlWdVHHtx3G1qwsgHV1tXKN/view?usp=share_link",
+      "coverImageURL": "https://drive.google.com/file/d/1jgOb_nyiavVE9lkntWrF8B5cxtmL_C9j/view?usp=share_link",
+      "distance": "3.2 km",
+      "isRecommended": false,
+      "about": "Providing the best care for your pets.",
+      "galleryImages":  ["https://drive.google.com/file/d/1W20SyqCtSgY1-T4QeCLbTdwOpXuV2vET/view?usp=share_link",
+          "https://drive.google.com/file/d/1fyNb3CSwSNsatnx7g8AQQlxDfUqMldzK/view?usp=share_link",
+      "https://drive.google.com/file/d/1xy3pFB1nabUvPTrZANHd5jdzVyBsJDjZ/view?usp=share_link",
+      "https://drive.google.com/file/d/1twBDKIRk5FBiWDdK6P_HqF-7H9uWfZgS/view?usp=share_link"],
+      "bookings": [{
+          "date": "2024-12-18",
+          "isCompleted": true,
+          "status": "Completed",
+          "price": "400",
+          "image": "https://drive.google.com/file/d/1yY6Qigk7ALJYR3lU-vk9R02H7uA7xxCS/view?usp=share_link"
+        }]
+    },
+    {
+      "id": "4",
+      "name": "Pooja",
+      "price": "Price : Rs 350 / Day",
+      "address": "2.7 km, Chennai",
+      "rating": "4.8",
+      "isVerified": true,
+      "profileImageName": "https://drive.google.com/file/d/11ol-DgU6xp1tSfJTTuawNWsJq1ALtuxq/view?usp=share_link",
+      "coverImageURL":"https://drive.google.com/file/d/1jgOb_nyiavVE9lkntWrF8B5cxtmL_C9j/view?usp=share_link",
+      "distance": "2.7 km",
+      "isRecommended": true,
+      "about": "Reliable caretaker who treats pets like family.",
+      "galleryImages": ["https://drive.google.com/file/d/1W20SyqCtSgY1-T4QeCLbTdwOpXuV2vET/view?usp=share_link",
+          "https://drive.google.com/file/d/1fyNb3CSwSNsatnx7g8AQQlxDfUqMldzK/view?usp=share_link",
+      "https://drive.google.com/file/d/1xy3pFB1nabUvPTrZANHd5jdzVyBsJDjZ/view?usp=share_link",
+      "https://drive.google.com/file/d/1twBDKIRk5FBiWDdK6P_HqF-7H9uWfZgS/view?usp=share_link"],
+      "bookings": [
+        {
+          "date": "2024-12-22",
+          "isCompleted": false,
+          "status": "Upcoming",
+          "price": "350",
+          "image": "https://drive.google.com/file/d/1yY6Qigk7ALJYR3lU-vk9R02H7uA7xxCS/view?usp=share_link"
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "name": "Aman",
+      "price": "Price : Rs 250 / Day",
+      "address": "4 km, Chennai",
+      "rating": "4.2",
+      "isVerified": false,
+      "profileImageName": "https://drive.google.com/file/d/1g5ctbemSGBTEhiaFCKepDxHx9AzXEzoy/view?usp=share_link",
+      "coverImageURL": "https://drive.google.com/file/d/1jgOb_nyiavVE9lkntWrF8B5cxtmL_C9j/view?usp=share_link",
+      "distance": "4 km",
+      "isRecommended": false,
+      "about": "Trustworthy caretaker with years of experience.",
+      "galleryImages": ["https://drive.google.com/file/d/1W20SyqCtSgY1-T4QeCLbTdwOpXuV2vET/view?usp=share_link",
+          "https://drive.google.com/file/d/1fyNb3CSwSNsatnx7g8AQQlxDfUqMldzK/view?usp=share_link",
+      "https://drive.google.com/file/d/1xy3pFB1nabUvPTrZANHd5jdzVyBsJDjZ/view?usp=share_link",
+      "https://drive.google.com/file/d/1twBDKIRk5FBiWDdK6P_HqF-7H9uWfZgS/view?usp=share_link"],
+      "bookings": [{
+          "date": "2024-12-22",
+          "isCompleted": false,
+          "status": "Upcoming",
+          "price": "350",
+          "image": "https://drive.google.com/file/d/1yY6Qigk7ALJYR3lU-vk9R02H7uA7xxCS/view?usp=share_link"
+        }]
+    },
+    {
+      "id": "6",
+      "name": "Shraddha",
+      "price": "Price : Rs 400 / Day",
+      "address": "5 km, Chennai",
+      "rating": "4.7",
+      "isVerified": true,
+      "profileImageName": "https://drive.google.com/file/d/1CShgVZGr146DNIspYo_2lS4zduCw-WNZ/view?usp=share_link",
+      "coverImageURL": "https://drive.google.com/file/d/1jgOb_nyiavVE9lkntWrF8B5cxtmL_C9j/view?usp=share_link",
+      "distance": "5 km",
+      "isRecommended": true,
+      "about": "Caring and professional pet caretaker.",
+      "galleryImages": ["https://drive.google.com/file/d/1W20SyqCtSgY1-T4QeCLbTdwOpXuV2vET/view?usp=share_link",
+          "https://drive.google.com/file/d/1fyNb3CSwSNsatnx7g8AQQlxDfUqMldzK/view?usp=share_link",
+      "https://drive.google.com/file/d/1xy3pFB1nabUvPTrZANHd5jdzVyBsJDjZ/view?usp=share_link",
+      "https://drive.google.com/file/d/1twBDKIRk5FBiWDdK6P_HqF-7H9uWfZgS/view?usp=share_link"],
+      "bookings": [
+        {
+          "date": "2024-12-18",
+          "isCompleted": true,
+          "status": "Completed",
+          "price": "400",
+          "image": "https://drive.google.com/file/d/1yY6Qigk7ALJYR3lU-vk9R02H7uA7xxCS/view?usp=share_link"
+        }
+      ]
+    }
+  ]
