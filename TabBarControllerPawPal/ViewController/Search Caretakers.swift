@@ -13,18 +13,11 @@ class Search_Caretakers: UIViewController, UITableViewDataSource, UITableViewDel
     
     var caretakerList = [Caretakers]()
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let caretakers = [
-                Caretakers(name: "Katie", price: "Price : Rs 350 / Day", address: "2.7 km, Chennai", profileImageName: "Profile Image 1"),
-                Caretakers(name: "Ananya", price: "Price : Rs 250 / Day", address: "3 km, Chennai", profileImageName: "Ananya"),
-                Caretakers(name: "Karan", price: "Price : Rs 300 / Day", address: "3.2 km, Chennai", profileImageName: "Karan"),
-                Caretakers(name: "Pooja", price: "Price : Rs 350 / Day", address: "2.7 km, Chennai", profileImageName: "Pooja"),
-                Caretakers(name: "Aman", price: "Price : Rs 250 / Day", address: "4 km, Chennai", profileImageName: "Aman"),
-                Caretakers(name: "Shraddha", price: "Price : Rs 400 / Day", address: "5 km, Chennai", profileImageName: "Shraddha"),
-                Caretakers(name: "Nidhi", price: "Price : Rs 400 / Day", address: "4.5 km, Chennai", profileImageName: "Profile Image 1")
-            ]
+
 
             FirebaseManager.shared.saveCaretakerData(caretakers: caretakers) { error in
                 if let error = error {
@@ -41,6 +34,11 @@ class Search_Caretakers: UIViewController, UITableViewDataSource, UITableViewDel
         
     }
     
+    @IBAction func backButtonTapped(_ sender: Any) {
+        dismiss(animated: true, completion: nil)
+        
+        
+    }
     private func fetchCaretakers() {
         FirebaseManager.shared.fetchCaretakerData { [weak self] caretakers, error in
             if let error = error {

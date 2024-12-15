@@ -38,19 +38,17 @@ class User_Login: UIViewController {
                     return
                 }
                 
-                if authResult != nil {
-                   
-                    let storyboard = UIStoryboard(name: "Main 3", bundle: nil)
-                    if let homeVC = storyboard.instantiateInitialViewController() {
-                       
-                        homeVC.modalPresentationStyle = .fullScreen
-                        self.present(homeVC, animated: true, completion: nil)
-                    } else {
-                        
-                        self.showAlert("Error", "Home screen could not be loaded.")
+            if authResult != nil {
+                        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                        if let tabBarVC = storyboard.instantiateViewController(withIdentifier: "TabBarControllerID") as? UITabBarController {
+                            
+                            tabBarVC.modalPresentationStyle = .fullScreen
+                            self.present(tabBarVC, animated: true, completion: nil)
+                        } else {
+                            self.showAlert("Error", "Home screen could not be loaded.")
+                        }
                     }
                 }
-            }
         }
     
     func showAlert(_ title: String, _ message: String) {
