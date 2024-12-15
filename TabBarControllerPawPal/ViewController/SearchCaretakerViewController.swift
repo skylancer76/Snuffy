@@ -90,7 +90,6 @@ extension SearchCaretakerViewController : UITableViewDataSource, UITableViewDele
         return cell
     }
     
-    
-    
-    
 }
+
+
