@@ -28,22 +28,28 @@ class Home_Scene: UIViewController {
         
         headerBgImage.alpha = 0.1
         
-        petCaretakerView.layer.cornerRadius = 10
-        petCaretakerView.layer.masksToBounds = true
+        petCaretakerView.layer.cornerRadius = 15
+        //petCaretakerView.layer.masksToBounds = true
+        petCaretakerView.layer.shadowOffset = CGSize(width: 1, height: 1)
+        petCaretakerView.layer.shadowOpacity = 0.2
+        petCaretakerView.layer.shadowRadius = 3
         
         petCaretakerImage.layer.cornerRadius = 15
         petCaretakerImage.layer.masksToBounds = true
         
-        bookPetCaretakerButoon.layer.cornerRadius = 25
+        bookPetCaretakerButoon.layer.cornerRadius = 15
         bookPetCaretakerButoon.layer.masksToBounds = true
         
-        dogWalkerView.layer.cornerRadius = 10
-        dogWalkerView.layer.masksToBounds = true
+        dogWalkerView.layer.cornerRadius = 15
+        //dogWalkerView.layer.masksToBounds = true
+        dogWalkerView.layer.shadowOffset = CGSize(width: 1, height: 1)
+        dogWalkerView.layer.shadowOpacity = 0.2
+        dogWalkerView.layer.shadowRadius = 3
         
         dogWalkerImage.layer.cornerRadius = 15
         dogWalkerImage.layer.masksToBounds = true
         
-        bookDogWalkerButton.layer.cornerRadius = 25
+        bookDogWalkerButton.layer.cornerRadius = 15
         bookDogWalkerButton.layer.masksToBounds = true
         // Do any additional setup after loading the view.
     }

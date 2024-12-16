@@ -80,6 +80,10 @@ class Search_Caretakers: UIViewController, UITableViewDataSource, UITableViewDel
         cell.AddressLabel.text = caretaker.address
         cell.PriceLabel.text = caretaker.price
         cell.caretakerImage.image = UIImage(named: caretaker.profileImageName)
+        cell.cellView.layer.cornerRadius = 15
+        cell.cellView.layer.shadowOffset = CGSize(width: 2, height: 2)
+        cell.cellView.layer.shadowOpacity = 0.1
+        cell.cellView.layer.shadowRadius = 3
         
         return cell
     }
