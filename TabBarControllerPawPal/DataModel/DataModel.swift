@@ -19,6 +19,8 @@ class Caretakers : Codable {
     var distance : String?
     var isRecommended: Bool?
     var about: String?
+    var experience : String?
+    var petSitted : String?
     var galleryImages: [String]?
     var bookings: [Bookings]?
 
@@ -33,6 +35,8 @@ class Caretakers : Codable {
         coverImageURL: String? = nil,
         distance : String? = nil,
         isRecommended: Bool? = nil,
+        experience:String? = nil,
+        petSitted : String? = nil,
         about: String? = nil,
         galleryImages: [String]? = nil,
         bookings: [Bookings]? = nil )
@@ -47,6 +51,8 @@ class Caretakers : Codable {
         self.isRecommended = isRecommended
         self.about = about
         self.distance = distance
+        self.experience = experience
+        self.petSitted = petSitted
         self.galleryImages = galleryImages
         self.bookings = bookings
 
@@ -72,6 +78,8 @@ let caretakers: [Caretakers] = [
         coverImageURL: "background image",
         distance: "2.7 km",
         isRecommended: true,
+        experience: "8 years",
+        petSitted: "15+",
         about: "Loving and caring caretaker with 5 years of experience in pet sitting.",
         galleryImages: ["caretaker1","caretaker2","caretaker3","caretaker4"],
         bookings: [
@@ -87,6 +95,8 @@ let caretakers: [Caretakers] = [
         coverImageURL: "background image",
         distance: "3 km",
         isRecommended: true,
+        experience: "6 years",
+        petSitted: "10+",
         about: "Friendly and experienced with both cats and dogs, ensuring safe and fun care.",
         galleryImages: ["caretaker1","caretaker2","caretaker3","caretaker4"],
         bookings: [
@@ -102,6 +112,8 @@ let caretakers: [Caretakers] = [
         coverImageURL: "background image",
         distance: "3.2 km",
         isRecommended: false,
+        experience: "2 years",
+        petSitted: "5",
         about: "Specializes in caring for large dogs with active needs.",
         galleryImages: ["caretaker1","caretaker2","caretaker3","caretaker4"],
         bookings: [
@@ -117,6 +129,8 @@ let caretakers: [Caretakers] = [
         coverImageURL: "background image",
         distance: "2.7 km",
         isRecommended: true,
+        experience: "1 years",
+        petSitted: "2",
         about: "Offers a clean and playful environment with regular updates to owners.",
         galleryImages: ["caretaker1","caretaker2","caretaker3","caretaker4"],
         bookings: [
@@ -132,6 +146,8 @@ let caretakers: [Caretakers] = [
         coverImageURL: "https://example.com/images/aman_cover.jpg",
         distance: "4 km",
         isRecommended: false,
+        experience: "10 years",
+        petSitted: "15+",
         about: "Reliable caretaker with experience in administering medications to pets.",
         galleryImages: ["caretaker1","caretaker2","caretaker3","caretaker4"],
         bookings: [
@@ -147,6 +163,8 @@ let caretakers: [Caretakers] = [
         coverImageURL: "background image",
         distance: "5 km",
         isRecommended: true,
+        experience: "4 years",
+        petSitted: "12",
         about: "Trusted sitter known for her patience and love for all pets.",
         galleryImages: ["caretaker1","caretaker2","caretaker3","caretaker4"],
         bookings: [
@@ -162,6 +180,8 @@ let caretakers: [Caretakers] = [
         coverImageURL: "background image",
         distance: "4.5 km",
         isRecommended: false,
+        experience: "2 years",
+        petSitted: "3s",
         about: "Experienced with high-energy pets and ensuring daily exercise needs.",
         galleryImages: ["caretaker1","caretaker2","caretaker3","caretaker4"],
         bookings: [
