@@ -71,7 +71,7 @@ class Search_Caretakers: UIViewController, UITableViewDataSource, UITableViewDel
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = myTable.dequeueReusableCell(withIdentifier: "caretakercell", for: indexPath) as! Search_Caretaker
+        let cell = myTable.dequeueReusableCell(withIdentifier: "caretakercell", for: indexPath) as! Search_CaretakerCell
         
         let caretaker = caretakerList[indexPath.row]
         
@@ -94,11 +94,16 @@ class Search_Caretakers: UIViewController, UITableViewDataSource, UITableViewDel
         print("Selected caretaker: \(selectedCaretaker.name)")
         tableView.deselectRow(at: indexPath, animated: true)
         
-        let profileVC = storyboard?.instantiateViewController(withIdentifier: "Caretaker_Profile") as! Caretaker_Profile
-        profileVC.caretakerNameForProfile = caretakerList[indexPath.row].name
-        navigationController?.pushViewController(profileVC, animated: true)
+        performSegue(withIdentifier: "showCaretakerProfile", sender: selectedCaretaker)
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showCaretakerProfile" {
+            if let profileVC = segue.destination as? Caretaker_Profile,
+               let selectedCaretaker = sender as? Caretakers {
+                // Pass data to Caretaker_Profile
+                profileVC.caretakerNameForProfile = selectedCaretaker.name
+            }
+        }
+    }
 }
-
-

@@ -10,7 +10,7 @@ import Foundation
 import FirebaseFirestore
 
 class FirebaseManager {
-    static let shared = FirebaseManager() // Singleton instance
+    static let shared = FirebaseManager()
     private let db = Firestore.firestore()
 
     // Save caretaker data to Firestore
@@ -87,4 +87,3 @@ extension FirebaseManager {
         }
     }
 }
-

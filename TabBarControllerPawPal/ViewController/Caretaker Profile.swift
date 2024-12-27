@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseFirestore
 
 class Caretaker_Profile: UIViewController {
 
@@ -27,14 +28,15 @@ class Caretaker_Profile: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+      
         caretakerGallery.delegate = self
         caretakerGallery.dataSource = self
         fetchCaretakerProfile()
         setupGalleryView()
         
+        
     }
-    
+
     private func fetchCaretakerProfile() {
         guard let name = caretakerNameForProfile else { return }
         

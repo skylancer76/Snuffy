@@ -7,7 +7,7 @@
 
 import UIKit
 
-class Search_Caretaker: UITableViewCell {
+class Search_CaretakerCell: UITableViewCell {
 
     @IBOutlet weak var caretakerImage: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!

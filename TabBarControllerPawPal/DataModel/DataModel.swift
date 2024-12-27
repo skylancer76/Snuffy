@@ -143,7 +143,7 @@ let caretakers: [Caretakers] = [
         address: "4 km, Chennai",
         profileImageName: "Aman",
         rating: "4.2",
-        coverImageURL: "https://example.com/images/aman_cover.jpg",
+        coverImageURL: "background image",
         distance: "4 km",
         isRecommended: false,
         experience: "10 years",
