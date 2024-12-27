@@ -892,6 +892,9 @@
                                                             <buttonConfiguration key="configuration" style="plain" title="">
                                                                 <imageReference key="image" image="chevron.right" catalog="system" symbolScale="small"/>
                                                             </buttonConfiguration>
+                                                            <connections>
+                                                                <segue destination="4DD-8U-CzT" kind="presentation" identifier="Caretaker_Profile" modalPresentationStyle="currentContext" id="ryB-Rc-ed6"/>
+                                                            </connections>
                                                         </button>
                                                     </subviews>
                                                     <color key="backgroundColor" systemColor="secondarySystemGroupedBackgroundColor"/>
@@ -1283,9 +1286,10 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="aboutCaretaer" destination="iED-y1-nNz" id="4WU-cw-N9g"/>
+                        <outlet property="aboutCaretaker" destination="iED-y1-nNz" id="FUK-wa-ihh"/>
                         <outlet property="backgroundImage" destination="Cmx-mL-Cwc" id="cQO-ce-af1"/>
                         <outlet property="caretakerAddress" destination="IMy-qW-iDx" id="4YY-zV-GWW"/>
+                        <outlet property="caretakerGallery" destination="GTk-gM-1om" id="SpK-Te-NX6"/>
                         <outlet property="caretakerName" destination="ETO-K3-7VD" id="cD4-C5-khs"/>
                         <outlet property="caretakerRating" destination="8z9-Uj-98d" id="FA0-yM-YAO"/>
                         <outlet property="distanceAway" destination="IVq-nT-xBW" id="0Fb-E1-lIf"/>
@@ -1298,7 +1302,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3Zg-r4-g42" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5823.8805970149251" y="12.356979405034323"/>
+            <point key="canvasLocation" x="5742" y="3"/>
         </scene>
         <!--Filters-->
         <scene sceneID="HmT-h4-xp9">

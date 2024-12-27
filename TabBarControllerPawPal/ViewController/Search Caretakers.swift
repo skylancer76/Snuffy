@@ -17,16 +17,13 @@ class Search_Caretakers: UIViewController, UITableViewDataSource, UITableViewDel
     override func viewDidLoad() {
         super.viewDidLoad()
         
-
-
-            FirebaseManager.shared.saveCaretakerData(caretakers: caretakers) { error in
-                if let error = error {
-                    print("Error saving data: \(error.localizedDescription)")
-                } else {
-                    print("Caretakers saved successfully.")
-                }
+        FirebaseManager.shared.saveCaretakerData(caretakers: caretakers) { error in
+            if let error = error {
+                print("Error saving data: \(error.localizedDescription)")
+            } else {
+                print("Caretakers saved successfully.")
             }
-        
+        }
         
         setupTableView()
         fetchCaretakers()
@@ -36,9 +33,9 @@ class Search_Caretakers: UIViewController, UITableViewDataSource, UITableViewDel
     
     @IBAction func backButtonTapped(_ sender: Any) {
         dismiss(animated: true, completion: nil)
-        
-        
     }
+    
+    
     private func fetchCaretakers() {
         FirebaseManager.shared.fetchCaretakerData { [weak self] caretakers, error in
             if let error = error {
@@ -53,6 +50,7 @@ class Search_Caretakers: UIViewController, UITableViewDataSource, UITableViewDel
         }
     }
 
+    
     private func setupTableView() {
         // Register the custom cell
         myTable.register(UITableViewCell.self, forCellReuseIdentifier: "CaretakerCell")
@@ -70,6 +68,7 @@ class Search_Caretakers: UIViewController, UITableViewDataSource, UITableViewDel
         return caretakerList.count
     }
 
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = myTable.dequeueReusableCell(withIdentifier: "caretakercell", for: indexPath) as! Search_Caretaker
@@ -88,13 +87,18 @@ class Search_Caretakers: UIViewController, UITableViewDataSource, UITableViewDel
         return cell
     }
     
+    
     // UITableViewDelegate method (optional)
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedCaretaker = caretakerList[indexPath.row]
         print("Selected caretaker: \(selectedCaretaker.name)")
         tableView.deselectRow(at: indexPath, animated: true)
+        
+        let profileVC = storyboard?.instantiateViewController(withIdentifier: "Caretaker_Profile") as! Caretaker_Profile
+        profileVC.caretakerNameForProfile = caretakerList[indexPath.row].name
+        navigationController?.pushViewController(profileVC, animated: true)
     }
-
+    
 }
 
 

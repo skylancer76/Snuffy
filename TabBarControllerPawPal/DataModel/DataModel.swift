@@ -21,7 +21,7 @@ class Caretakers : Codable {
     var about: String?
     var experience : String?
     var petSitted : String?
-    var galleryImages: [String]?
+    var galleryImages: [String]
     var bookings: [Bookings]?
 
     // Initialization
@@ -38,7 +38,7 @@ class Caretakers : Codable {
         experience:String? = nil,
         petSitted : String? = nil,
         about: String? = nil,
-        galleryImages: [String]? = nil,
+        galleryImages: [String],
         bookings: [Bookings]? = nil )
     {
         self.id = id
