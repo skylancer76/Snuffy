@@ -17,6 +17,10 @@ class Search_Caretakers: UIViewController, UITableViewDataSource, UITableViewDel
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        myTable.dataSource = self
+        myTable.delegate = self
+        myTable.allowsSelection = true
+        
         FirebaseManager.shared.saveCaretakerData(caretakers: caretakers) { error in
             if let error = error {
                 print("Error saving data: \(error.localizedDescription)")
@@ -27,13 +31,14 @@ class Search_Caretakers: UIViewController, UITableViewDataSource, UITableViewDel
         
         setupTableView()
         fetchCaretakers()
-
-        
     }
+    
+    
     
     @IBAction func backButtonTapped(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
+    
     
     
     private func fetchCaretakers() {
@@ -42,7 +47,6 @@ class Search_Caretakers: UIViewController, UITableViewDataSource, UITableViewDel
                 print("Failed to fetch caretakers: \(error.localizedDescription)")
                 return
             }
-            
             self?.caretakerList = caretakers ?? []
             DispatchQueue.main.async {
                 self?.myTable.reloadData()
@@ -50,31 +54,32 @@ class Search_Caretakers: UIViewController, UITableViewDataSource, UITableViewDel
         }
     }
 
+        
+    
     
     private func setupTableView() {
         // Register the custom cell
         myTable.register(UITableViewCell.self, forCellReuseIdentifier: "CaretakerCell")
-        
-        // Set the data source and delegate
-        myTable.dataSource = self
-        myTable.delegate = self
-        
-        // Customize the table view appearance if needed
         myTable.tableFooterView = UIView(frame: .zero) // Removes empty rows
     }
+        
+        
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return caretakerList.count
     }
 
+        
+    
+    
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
+            
         let cell = myTable.dequeueReusableCell(withIdentifier: "caretakercell", for: indexPath) as! Search_CaretakerCell
-        
+            
         let caretaker = caretakerList[indexPath.row]
-        
+            
         cell.nameLabel.text = caretaker.name
         cell.AddressLabel.text = caretaker.address
         cell.PriceLabel.text = caretaker.price
@@ -83,27 +88,25 @@ class Search_Caretakers: UIViewController, UITableViewDataSource, UITableViewDel
         cell.cellView.layer.shadowOffset = CGSize(width: 2, height: 2)
         cell.cellView.layer.shadowOpacity = 0.1
         cell.cellView.layer.shadowRadius = 3
-        
+            
         return cell
     }
-    
-    
-    // UITableViewDelegate method (optional)
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let selectedCaretaker = caretakerList[indexPath.row]
-        print("Selected caretaker: \(selectedCaretaker.name)")
-        tableView.deselectRow(at: indexPath, animated: true)
         
-        performSegue(withIdentifier: "showCaretakerProfile", sender: selectedCaretaker)
-    }
+        
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "showCaretakerProfile" {
-            if let profileVC = segue.destination as? Caretaker_Profile,
-               let selectedCaretaker = sender as? Caretakers {
-                // Pass data to Caretaker_Profile
-                profileVC.caretakerNameForProfile = selectedCaretaker.name
-            }
+    
+    
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("Cell at row \(indexPath.row) tapped")
+        let selectedCaretaker = caretakerList[indexPath.row]
+            
+        // Instantiate the destination view controller
+        if let profileVC = storyboard?.instantiateViewController(withIdentifier: "CaretakerProfileVC") as? Caretaker_Profile {
+            profileVC.caretakerNameForProfile = selectedCaretaker.name
+                
+            // Push the view controller to the navigation stack
+            navigationController?.pushViewController(profileVC, animated: true)
         }
     }
 }

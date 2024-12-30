@@ -28,29 +28,27 @@ class Caretaker_Profile: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-      
+          
         caretakerGallery.delegate = self
         caretakerGallery.dataSource = self
         fetchCaretakerProfile()
-        setupGalleryView()
-        
-        
+    //  setupGalleryView()
     }
 
     private func fetchCaretakerProfile() {
-        guard let name = caretakerNameForProfile else { return }
-        
-        FirebaseManager.shared.fetchCaretakerProfile(name: name) { [weak self] caretaker, error in
+        guard let selectedName = caretakerNameForProfile else { return }
+            
+        FirebaseManager.shared.fetchCaretakerProfile(name: selectedName) { [weak self] caretaker, error in
             if let error = error {
                 print("Failed to fetch caretaker profile: \(error.localizedDescription)")
                 return
             }
-            
+                
             guard let caretaker = caretaker else {
                 print("No caretaker found with the given name.")
                 return
             }
-            
+                
             self?.updateUI(with: caretaker)
             self?.galleryImages = caretaker.galleryImages
             DispatchQueue.main.async {
@@ -58,10 +56,10 @@ class Caretaker_Profile: UIViewController {
             }
         }
     }
-    
-    
+        
+        
     private func updateUI(with caretaker: Caretakers) {
-        backgroundImage.image = UIImage(named: caretaker.profileImageName)
+        backgroundImage.image = UIImage(named: caretaker.coverImage ?? "background image")
         profileImage.image = UIImage(named: caretaker.profileImageName)
         caretakerName.text = caretaker.name
         caretakerAddress.text = caretaker.address
@@ -72,13 +70,14 @@ class Caretaker_Profile: UIViewController {
         distanceAway.text = caretaker.distance
         aboutCaretaker.text = caretaker.about
     }
+        
+    
     
     private func setupGalleryView() {
         caretakerGallery.register(UINib(nibName: "GalleryCell", bundle: nil), forCellWithReuseIdentifier: "GalleryCell")
     }
-    
-    
 }
+
 
 extension Caretaker_Profile: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -91,5 +90,4 @@ extension Caretaker_Profile: UICollectionViewDelegate, UICollectionViewDataSourc
         cell.galleryImage.image = UIImage(named: imageName)
         return cell
     }
-
 }

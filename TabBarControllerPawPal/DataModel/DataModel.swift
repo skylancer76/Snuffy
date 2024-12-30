@@ -15,7 +15,7 @@ class Caretakers : Codable {
     var address: String
     var profileImageName: String
     var rating: String?
-    var coverImageURL: String?
+    var coverImage: String?
     var distance : String?
     var isRecommended: Bool?
     var about: String?
@@ -32,7 +32,7 @@ class Caretakers : Codable {
         address: String,
         profileImageName: String,
         rating: String? = nil,
-        coverImageURL: String? = nil,
+        coverImage: String? = nil,
         distance : String? = nil,
         isRecommended: Bool? = nil,
         experience:String? = nil,
@@ -47,7 +47,7 @@ class Caretakers : Codable {
         self.address = address
         self.profileImageName = profileImageName
         self.rating = rating
-        self.coverImageURL = coverImageURL
+        self.coverImage = coverImage
         self.isRecommended = isRecommended
         self.about = about
         self.distance = distance
@@ -75,7 +75,7 @@ let caretakers: [Caretakers] = [
         address: "2.7 km, Chennai",
         profileImageName: "Profile Image 1",
         rating: "4.5",
-        coverImageURL: "background image",
+        coverImage: "background image",
         distance: "2.7 km",
         isRecommended: true,
         experience: "8 years",
@@ -92,7 +92,7 @@ let caretakers: [Caretakers] = [
         address: "3 km, Chennai",
         profileImageName: "Ananya",
         rating: "4.7",
-        coverImageURL: "background image",
+        coverImage: "background image",
         distance: "3 km",
         isRecommended: true,
         experience: "6 years",
@@ -109,7 +109,7 @@ let caretakers: [Caretakers] = [
         address: "3.2 km, Chennai",
         profileImageName: "Karan",
         rating: "4.3",
-        coverImageURL: "background image",
+        coverImage: "background image",
         distance: "3.2 km",
         isRecommended: false,
         experience: "2 years",
@@ -126,7 +126,7 @@ let caretakers: [Caretakers] = [
         address: "2.7 km, Chennai",
         profileImageName: "Pooja",
         rating: "4.8",
-        coverImageURL: "background image",
+        coverImage: "background image",
         distance: "2.7 km",
         isRecommended: true,
         experience: "1 years",
@@ -143,7 +143,7 @@ let caretakers: [Caretakers] = [
         address: "4 km, Chennai",
         profileImageName: "Aman",
         rating: "4.2",
-        coverImageURL: "background image",
+        coverImage: "background image",
         distance: "4 km",
         isRecommended: false,
         experience: "10 years",
@@ -160,7 +160,7 @@ let caretakers: [Caretakers] = [
         address: "5 km, Chennai",
         profileImageName: "Shraddha",
         rating: "4.9",
-        coverImageURL: "background image",
+        coverImage: "background image",
         distance: "5 km",
         isRecommended: true,
         experience: "4 years",
@@ -177,7 +177,7 @@ let caretakers: [Caretakers] = [
         address: "4.5 km, Chennai",
         profileImageName: "Profile Image 1",
         rating: "4.6",
-        coverImageURL: "background image",
+        coverImage: "background image",
         distance: "4.5 km",
         isRecommended: false,
         experience: "2 years",
