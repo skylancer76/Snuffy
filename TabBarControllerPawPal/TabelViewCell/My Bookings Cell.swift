@@ -9,6 +9,12 @@ import UIKit
 
 class My_Bookings_Cell: UITableViewCell {
 
+    
+    @IBOutlet var cellView: UIView!
+    @IBOutlet var date: UILabel!
+    @IBOutlet var statusLabel: UILabel!
+    @IBOutlet var nameLabel: UILabel!
+    @IBOutlet var profileImage: UIImageView!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

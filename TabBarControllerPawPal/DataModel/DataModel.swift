@@ -61,6 +61,7 @@ class Caretakers : Codable {
 
 // MARK: - Booking Model
 struct Bookings: Codable {
+    var name : String
     var date: String
     var isCompleted: Bool
     var status: String?
@@ -83,7 +84,7 @@ let caretakers: [Caretakers] = [
         about: "Loving and caring caretaker with 5 years of experience in pet sitting.",
         galleryImages: ["caretaker1","caretaker2","caretaker3","caretaker4"],
         bookings: [
-            Bookings(date: "03 Jun 24 • 11 Jun 24", isCompleted: true, status: "Completed", price: "Rs 350 / Day", image: "Profile Image 1")
+            Bookings(name: "Katie",date: "03 Jun 24 • 11 Jun 24", isCompleted: true, status: "Completed", price: "Rs 350 / Day", image: "Profile Image 1")
         ]
     ),
     Caretakers(
@@ -100,7 +101,7 @@ let caretakers: [Caretakers] = [
         about: "Friendly and experienced with both cats and dogs, ensuring safe and fun care.",
         galleryImages: ["caretaker1","caretaker2","caretaker3","caretaker4"],
         bookings: [
-            Bookings(date: "04 May 24 • 09 May 24", isCompleted: false, status: "Pending", price: "Rs 250 / Day", image: "Ananya")
+            Bookings(name: "Ananya",date: "04 May 24 • 09 May 24", isCompleted: false, status: "Pending", price: "Rs 250 / Day", image: "Ananya")
         ]
     ),
     Caretakers(
@@ -117,7 +118,7 @@ let caretakers: [Caretakers] = [
         about: "Specializes in caring for large dogs with active needs.",
         galleryImages: ["caretaker1","caretaker2","caretaker3","caretaker4"],
         bookings: [
-            Bookings(date: "03 Jun 24 • 11 Jun 24", isCompleted: false, status: "Ongoing", price: "Rs 300 / Day", image: "Karan")
+            Bookings(name: "Karan",date: "03 Jun 24 • 11 Jun 24", isCompleted: false, status: "Ongoing", price: "Rs 300 / Day", image: "Karan")
         ]
     ),
     Caretakers(
@@ -134,7 +135,7 @@ let caretakers: [Caretakers] = [
         about: "Offers a clean and playful environment with regular updates to owners.",
         galleryImages: ["caretaker1","caretaker2","caretaker3","caretaker4"],
         bookings: [
-            Bookings(date: "13 Dec 23 • 24 Dec 23", isCompleted: true, status: "Completed", price: "Rs 350 / Day", image: "Pooja")
+            Bookings(name: "Karan",date: "13 Dec 23 • 24 Dec 23", isCompleted: true, status: "Completed", price: "Rs 350 / Day", image: "Pooja")
         ]
     ),
     Caretakers(
@@ -151,7 +152,7 @@ let caretakers: [Caretakers] = [
         about: "Reliable caretaker with experience in administering medications to pets.",
         galleryImages: ["caretaker1","caretaker2","caretaker3","caretaker4"],
         bookings: [
-            Bookings(date: "02 Feb 24 • 21 Feb 24", isCompleted: true, status: "Completed", price: "Rs 250 / Day", image: "Aman")
+            Bookings(name: "Aman",date: "02 Feb 24 • 21 Feb 24", isCompleted: true, status: "Completed", price: "Rs 250 / Day", image: "Aman")
         ]
     ),
     Caretakers(
@@ -168,7 +169,7 @@ let caretakers: [Caretakers] = [
         about: "Trusted sitter known for her patience and love for all pets.",
         galleryImages: ["caretaker1","caretaker2","caretaker3","caretaker4"],
         bookings: [
-            Bookings(date: "19 Nov 23 • 05 Dec 23", isCompleted: true, status: "Completed", price: "Rs 400 / Day", image: "Shraddha")
+            Bookings(name: "Shraddha",date: "19 Nov 23 • 05 Dec 23", isCompleted: true, status: "Completed", price: "Rs 400 / Day", image: "Shraddha")
         ]
     ),
     Caretakers(
@@ -185,7 +186,7 @@ let caretakers: [Caretakers] = [
         about: "Experienced with high-energy pets and ensuring daily exercise needs.",
         galleryImages: ["caretaker1","caretaker2","caretaker3","caretaker4"],
         bookings: [
-            Bookings(date: "19 Nov 23 • 05 Dec 23", isCompleted: true, status: "Completed", price: "Rs 400 / Day", image: "Profile Image 1")
+            Bookings(name: "Nidhi",date: "19 Nov 23 • 05 Dec 23", isCompleted: true, status: "Completed", price: "Rs 400 / Day", image: "Profile Image 1")
         ]
     )
 ]

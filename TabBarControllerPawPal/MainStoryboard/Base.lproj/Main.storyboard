@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="67Q-lV-hh9">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23094" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="67Q-lV-hh9">
     <device id="retina6_3" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23084"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -1798,7 +1798,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qeG-dJ-uZF" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4838.8059701492539" y="736.61327231121277"/>
+            <point key="canvasLocation" x="6191" y="715"/>
         </scene>
         <!--hello-->
         <scene sceneID="R46-vB-PzZ">
@@ -2164,7 +2164,7 @@
         <!--My Bookings-->
         <scene sceneID="2nY-8V-Vdp">
             <objects>
-                <viewController id="ef2-WO-QDd" customClass="Search_Caretakers" customModule="TabBarControllerPawPal" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="ef2-WO-QDd" customClass="My_Bookings" customModule="TabBarControllerPawPal" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="TNx-l6-kkt">
                         <rect key="frame" x="0.0" y="0.0" width="402" height="874"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2197,17 +2197,17 @@
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="BBd-L8-iRB">
-                                <rect key="frame" x="0.0" y="171" width="402" height="703"/>
+                                <rect key="frame" x="0.0" y="201" width="402" height="673"/>
                                 <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="caretakercell" rowHeight="120" id="UCK-iv-6bu" customClass="Search_CaretakerCell" customModule="TabBarControllerPawPal" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="MyBooking" rowHeight="120" id="UCK-iv-6bu" customClass="My_Bookings_Cell" customModule="TabBarControllerPawPal" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="50" width="402" height="120"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="UCK-iv-6bu" id="xyB-9E-JXp">
                                             <rect key="frame" x="0.0" y="0.0" width="402" height="120"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <view multipleTouchEnabled="YES" contentMode="scaleToFill" restorationIdentifier="caretakercell" translatesAutoresizingMaskIntoConstraints="NO" id="ijY-2I-RVV">
+                                                <view multipleTouchEnabled="YES" contentMode="scaleToFill" restorationIdentifier="MyBooking" translatesAutoresizingMaskIntoConstraints="NO" id="ijY-2I-RVV">
                                                     <rect key="frame" x="16" y="0.0" width="370" height="105"/>
                                                     <subviews>
                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Profile Image 1" translatesAutoresizingMaskIntoConstraints="NO" id="ykz-fQ-6cw">
@@ -2281,16 +2281,17 @@
                                             <accessibilityTraits key="traits" button="YES"/>
                                         </accessibility>
                                         <connections>
-                                            <outlet property="PriceLabel" destination="PxA-8O-SFh" id="RqT-4r-Vyu"/>
-                                            <outlet property="caretakerImage" destination="ykz-fQ-6cw" id="vl3-YV-ewg"/>
-                                            <outlet property="cellView" destination="ijY-2I-RVV" id="Jav-rO-Rbo"/>
-                                            <outlet property="nameLabel" destination="q2w-tf-qKG" id="WR6-nD-8wG"/>
+                                            <outlet property="cellView" destination="ijY-2I-RVV" id="tRV-Ui-nkE"/>
+                                            <outlet property="date" destination="zsC-wQ-2nW" id="0f9-BB-F32"/>
+                                            <outlet property="nameLabel" destination="q2w-tf-qKG" id="M7l-15-wCi"/>
+                                            <outlet property="profileImage" destination="ykz-fQ-6cw" id="L1y-0K-Pla"/>
+                                            <outlet property="statusLabel" destination="PxA-8O-SFh" id="Qzr-Io-fHt"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
-                                    <outlet property="dataSource" destination="ef2-WO-QDd" id="Srd-Ds-HdX"/>
-                                    <outlet property="delegate" destination="ef2-WO-QDd" id="aHm-VX-rqF"/>
+                                    <outlet property="dataSource" destination="ef2-WO-QDd" id="gH4-1U-xKv"/>
+                                    <outlet property="delegate" destination="ef2-WO-QDd" id="LaO-fY-iHf"/>
                                 </connections>
                             </tableView>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="2CY-HH-3BK">
@@ -2299,13 +2300,16 @@
                                     <segment title="Ongoing"/>
                                     <segment title="Completed"/>
                                 </segments>
+                                <connections>
+                                    <action selector="setCompleted:" destination="ef2-WO-QDd" eventType="valueChanged" id="30g-cB-Tx3"/>
+                                </connections>
                             </segmentedControl>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="XbR-ih-KgL"/>
                         <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="BBd-L8-iRB" firstAttribute="leading" secondItem="XbR-ih-KgL" secondAttribute="leading" id="78L-Le-Qgg"/>
-                            <constraint firstItem="BBd-L8-iRB" firstAttribute="top" secondItem="2CY-HH-3BK" secondAttribute="bottom" id="GbG-kd-cX1"/>
+                            <constraint firstItem="BBd-L8-iRB" firstAttribute="top" secondItem="2CY-HH-3BK" secondAttribute="bottom" constant="30" id="GbG-kd-cX1"/>
                             <constraint firstAttribute="bottom" secondItem="BBd-L8-iRB" secondAttribute="bottom" id="GhA-Mx-LYb"/>
                             <constraint firstItem="2CY-HH-3BK" firstAttribute="top" secondItem="kVg-1x-LMz" secondAttribute="bottom" constant="30" id="UER-wc-qRg"/>
                             <constraint firstItem="kVg-1x-LMz" firstAttribute="top" secondItem="TNx-l6-kkt" secondAttribute="top" id="efG-ll-wAK"/>
@@ -2319,12 +2323,12 @@
                     </tabBarItem>
                     <navigationItem key="navigationItem" id="UX1-BI-Otn"/>
                     <connections>
-                        <outlet property="myTable" destination="BBd-L8-iRB" id="7O7-6u-TID"/>
+                        <outlet property="tableView" destination="BBd-L8-iRB" id="Hj4-rr-wQg"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bXL-iZ-Ka2" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3427" y="949"/>
+            <point key="canvasLocation" x="3272" y="886"/>
         </scene>
     </scenes>
     <resources>
