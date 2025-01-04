@@ -1,13 +1,13 @@
 //
-//  FiltersViewController.swift
+//  Pet Profile.swift
 //  TabBarControllerPawPal
 //
-//  Created by user@61 on 16/11/24.
+//  Created by admin19 on 01/01/25.
 //
 
 import UIKit
 
-class FiltersViewController: UIViewController {
+class Pet_Profile: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -15,11 +15,7 @@ class FiltersViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
-    
-    @IBAction func closeButtonTapped(_ sender: Any) {
-        dismiss(animated: true, completion: nil)
-    }
-    
+
     /*
     // MARK: - Navigation
 

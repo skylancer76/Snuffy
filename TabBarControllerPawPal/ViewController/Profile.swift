@@ -1,21 +1,20 @@
 //
-//  ScheduleBookingViewController.swift
+//  Profile.swift
 //  TabBarControllerPawPal
 //
-//  Created by user@61 on 17/11/24.
+//  Created by admin19 on 04/01/25.
 //
 
 import UIKit
 
-class ScheduleBookingViewController: UIViewController {
+class Profile: UIViewController {
 
+    
+    @IBOutlet weak var personalDetails: UITableView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
-        
 
-        // Do any additional setup after loading the view.
     }
     
 

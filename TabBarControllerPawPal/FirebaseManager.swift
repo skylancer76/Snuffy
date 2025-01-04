@@ -6,7 +6,6 @@
 //
 
 import Foundation
-
 import FirebaseFirestore
 
 class FirebaseManager {
@@ -33,6 +32,18 @@ class FirebaseManager {
         completion(nil)
     }
     
+    
+    func savePetDataToFirebase(data: [String: Any], completion: @escaping (Error?) -> Void) {
+        let collection = db.collection("Pets")
+        collection.addDocument(data: data) { error in
+            if let error = error {
+                print("Failed to save pet data: \(error.localizedDescription)")
+                completion(error)
+            } else {
+                completion(nil)
+            }
+        }
+    }
 }
 
 
