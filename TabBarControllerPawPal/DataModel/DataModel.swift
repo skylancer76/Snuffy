@@ -7,6 +7,7 @@
 
 import Foundation
 
+
 // MARK: - Unified Caretaker Model
 class Caretakers : Codable {
     var id: UUID
@@ -277,3 +278,50 @@ class VaccinationDetails {
         self.nextDueDate = nextDueDate
     }
 }
+
+
+
+
+import CoreLocation
+
+class PetLiveUpdate  {
+    var name: String
+    var description: String
+    var location: CLLocationCoordinate2D
+    var im: [String]
+    
+    init(name: String, description: String, location: CLLocationCoordinate2D, im: [String]) {
+        self.name = name
+        self.description = description
+        self.location = location
+        self.im = im
+    }
+    
+    // Convert to Dictionary
+    func toDictionary() -> [String: Any] {
+        return [
+            "name": name,
+            "description": description,
+            "latitude": location.latitude,
+            "longitude": location.longitude,
+            "im": im
+        ]
+    }
+    
+    // Initialize from Dictionary
+    convenience init?(from dictionary: [String: Any]) {
+        guard let name = dictionary["name"] as? String,
+              let description = dictionary["description"] as? String,
+              let latitude = dictionary["latitude"] as? Double,
+              let longitude = dictionary["longitude"] as? Double,
+              let im = dictionary["im"] as? [String] else {
+            print("Failed to decode PetLiveUpdate from dictionary: \(dictionary)")
+            return nil
+        }
+        
+        let location = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+        self.init(name: name, description: description, location: location, im: im)
+    }
+}
+
+
