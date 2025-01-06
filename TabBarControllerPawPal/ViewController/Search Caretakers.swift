@@ -31,14 +31,21 @@ class Search_Caretakers: UIViewController, UITableViewDataSource, UITableViewDel
         
         setupTableView()
         fetchCaretakers()
+      
     }
     
     
-    
-    @IBAction func backButtonTapped(_ sender: Any) {
-        dismiss(animated: true, completion: nil)
+    @IBAction func backButtonTapped(_ sender: UIBarButtonItem) {
+        
+        
     }
     
+    
+
+//    @IBAction func backButtonTapped(_ sender: Any) {
+//        self.tabBarController?.selectedIndex = 0
+//    }
+//    
     
     
     private func fetchCaretakers() {

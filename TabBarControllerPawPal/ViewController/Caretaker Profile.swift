@@ -22,7 +22,7 @@ class Caretaker_Profile: UIViewController {
     @IBOutlet weak var aboutCaretaker: UILabel!
     @IBOutlet weak var scheduleBooking: UIButton!
     @IBOutlet weak var caretakerGallery: UICollectionView!
-    
+    var caretakerId: String?
     var caretakerNameForProfile: String?
     var galleryImages: [String] = []
     
@@ -48,7 +48,7 @@ class Caretaker_Profile: UIViewController {
                 print("No caretaker found with the given name.")
                 return
             }
-                
+            self?.caretakerId = caretaker.id.uuidString
             self?.updateUI(with: caretaker)
             self?.galleryImages = caretaker.galleryImages
             DispatchQueue.main.async {
@@ -89,5 +89,15 @@ extension Caretaker_Profile: UICollectionViewDelegate, UICollectionViewDataSourc
         let imageName = galleryImages[indexPath.item]
         cell.galleryImage.image = UIImage(named: imageName)
         return cell
+    }
+    
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showScheduleBooking" {
+            if let destinationVC = segue.destination as? Schedule_Booking {
+                destinationVC.caretakerName = caretakerName.text
+                destinationVC.caretakerId = caretakerId
+            }
+        }
     }
 }
