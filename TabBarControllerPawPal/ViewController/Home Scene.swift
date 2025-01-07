@@ -7,62 +7,39 @@
 
 import UIKit
 
-class Home_Scene: UIViewController {
+class Home_Scene: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
 
-    @IBOutlet weak var headerBgImage: UIImageView!
+    @IBOutlet weak var servicesCollectionView: UICollectionView!
+   
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return bannerImages.count
+    }
     
-    @IBOutlet weak var petCaretakerView: UIView!
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = servicesCollectionView.dequeueReusableCell(withReuseIdentifier: "Banner", for: indexPath) as! HomeBannerCell
+        
+        
+        cell.bannerImage.image = UIImage(named: bannerImages[indexPath.row])
+        cell.bannerImage.layer.cornerRadius = 15
+        
+        return cell
+    }
     
-    @IBOutlet weak var petCaretakerImage: UIImageView!
+
     
-    @IBOutlet weak var bookPetCaretakerButoon: UIButton!
+    var bannerImages:[String] = ["Home1" , "Home2"]
     
-    @IBOutlet weak var dogWalkerView: UIView!
-    
-    @IBOutlet weak var dogWalkerImage: UIImageView!
-    
-    @IBOutlet weak var bookDogWalkerButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        headerBgImage.alpha = 0.1
-        
-        petCaretakerView.layer.cornerRadius = 15
-        //petCaretakerView.layer.masksToBounds = true
-        petCaretakerView.layer.shadowOffset = CGSize(width: 1, height: 1)
-        petCaretakerView.layer.shadowOpacity = 0.2
-        petCaretakerView.layer.shadowRadius = 3
-        
-        petCaretakerImage.layer.cornerRadius = 15
-        petCaretakerImage.layer.masksToBounds = true
-        
-        bookPetCaretakerButoon.layer.cornerRadius = 15
-        bookPetCaretakerButoon.layer.masksToBounds = true
-        
-        dogWalkerView.layer.cornerRadius = 15
-        //dogWalkerView.layer.masksToBounds = true
-        dogWalkerView.layer.shadowOffset = CGSize(width: 1, height: 1)
-        dogWalkerView.layer.shadowOpacity = 0.2
-        dogWalkerView.layer.shadowRadius = 3
-        
-        dogWalkerImage.layer.cornerRadius = 15
-        dogWalkerImage.layer.masksToBounds = true
-        
-        bookDogWalkerButton.layer.cornerRadius = 15
-        bookDogWalkerButton.layer.masksToBounds = true
+
         // Do any additional setup after loading the view.
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 25 // Spacing between items in the same row
     }
     
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
+

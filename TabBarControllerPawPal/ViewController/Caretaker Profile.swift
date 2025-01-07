@@ -10,18 +10,23 @@ import FirebaseFirestore
 
 class Caretaker_Profile: UIViewController {
 
-    @IBOutlet weak var backgroundImage: UIImageView!
+//    @IBOutlet weak var backgroundImage: UIImageView!
     @IBOutlet weak var profileImage: UIImageView!
     @IBOutlet weak var caretakerName: UILabel!
     @IBOutlet weak var caretakerAddress: UILabel!
     @IBOutlet weak var caretakerRating: UILabel!
-    @IBOutlet weak var experience: UILabel!
+//    @IBOutlet weak var experience: UILabel!
     @IBOutlet weak var price: UILabel!
     @IBOutlet weak var petsSitted: UILabel!
     @IBOutlet weak var distanceAway: UILabel!
     @IBOutlet weak var aboutCaretaker: UILabel!
     @IBOutlet weak var scheduleBooking: UIButton!
     @IBOutlet weak var caretakerGallery: UICollectionView!
+    
+    @IBOutlet weak var priceView: UIView!
+    @IBOutlet weak var petSittedView: UIView!
+    @IBOutlet weak var distanceView: UIView!
+    
     var caretakerId: String?
     var caretakerNameForProfile: String?
     var galleryImages: [String] = []
@@ -32,6 +37,20 @@ class Caretaker_Profile: UIViewController {
         caretakerGallery.delegate = self
         caretakerGallery.dataSource = self
         fetchCaretakerProfile()
+        
+        priceView.layer.cornerRadius = 5
+        priceView.layer.masksToBounds = true
+        
+        petSittedView.layer.cornerRadius = 5
+        petSittedView.layer.masksToBounds = true
+        
+        distanceView.layer.cornerRadius = 5
+        distanceView.layer.masksToBounds = true
+        
+        scheduleBooking.layer.cornerRadius = 8
+        scheduleBooking.layer.masksToBounds = true
+        
+        
     //  setupGalleryView()
     }
 
@@ -59,12 +78,12 @@ class Caretaker_Profile: UIViewController {
         
         
     private func updateUI(with caretaker: Caretakers) {
-        backgroundImage.image = UIImage(named: caretaker.coverImage ?? "background image")
+//        backgroundImage.image = UIImage(named: caretaker.coverImage ?? "background image")
         profileImage.image = UIImage(named: caretaker.profileImageName)
         caretakerName.text = caretaker.name
         caretakerAddress.text = caretaker.address
         caretakerRating.text = caretaker.rating
-        experience.text = caretaker.experience
+//        experience.text = caretaker.experience
         price.text = caretaker.price
         petsSitted.text = caretaker.petSitted
         distanceAway.text = caretaker.distance
@@ -88,6 +107,8 @@ extension Caretaker_Profile: UICollectionViewDelegate, UICollectionViewDataSourc
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GalleryCell", for: indexPath) as! Caretaker_Profile_Gallery
         let imageName = galleryImages[indexPath.item]
         cell.galleryImage.image = UIImage(named: imageName)
+        cell.galleryImage.layer.cornerRadius = 10
+        cell.galleryImage.layer.masksToBounds = true
         return cell
     }
     
