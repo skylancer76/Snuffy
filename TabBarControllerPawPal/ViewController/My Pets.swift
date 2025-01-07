@@ -38,7 +38,12 @@ class My_Pets: UIViewController {
         // Perform segue to AddNewPetViewController
         performSegue(withIdentifier: "AddNewPetSegue", sender: self)
     }
-    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "AddNewPetSegue",
+           let destinationVC = segue.destination as? AddNewPetViewController {
+            destinationVC.delegate = self
+        }
+    }
     func fetchPetsFromFirestore() {
         let db = Firestore.firestore()
         db.collection("Pets").getDocuments { snapshot, error in

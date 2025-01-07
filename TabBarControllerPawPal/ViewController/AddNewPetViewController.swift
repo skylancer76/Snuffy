@@ -7,6 +7,9 @@
 
 import UIKit
 import FirebaseStorage
+protocol AddNewPetDelegate: AnyObject {
+    func didAddNewPet(_ pet: PetData)
+}
 
 class AddNewPetViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
@@ -17,7 +20,7 @@ class AddNewPetViewController: UIViewController, UIImagePickerControllerDelegate
     @IBOutlet weak var petWeightTextField: UITextField!
     @IBOutlet weak var petImageView: UIImageView!
     @IBOutlet weak var submitButton: UIButton!
-    
+    weak var delegate: AddNewPetDelegate?
     
     var selectedImage: UIImage?
     
@@ -87,8 +90,12 @@ class AddNewPetViewController: UIViewController, UIImagePickerControllerDelegate
                     self?.showAlert(title: "Error", message: "Failed to save pet data: \(error.localizedDescription)")
                 } else {
                     self?.showAlert(title: "Success", message: "Pet data saved successfully!") {
-                        self?.clearFields()
-                        self?.dismiss(animated: true, completion: nil)
+                        guard let self else { return }
+                        let newPet = PetData(petImage: imageURL, petName: petName, petBreed: petBreed)
+                        self.delegate?.didAddNewPet(newPet)
+                        
+                        self.clearFields()
+                        self.dismiss(animated: true, completion: nil)
                     }
                 }
             }
@@ -134,5 +141,17 @@ class AddNewPetViewController: UIViewController, UIImagePickerControllerDelegate
             completion?()
         }))
         present(alert, animated: true, completion: nil)
+    }
+}
+
+extension My_Pets: AddNewPetDelegate {
+    func didAddNewPet(_ pet: PetData) {
+        
+        pets.append(pet)
+        
+      
+        DispatchQueue.main.async {
+            self.myPets.reloadData()
+        }
     }
 }
