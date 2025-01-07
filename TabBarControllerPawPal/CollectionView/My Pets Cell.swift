@@ -17,35 +17,40 @@ class My_Pets_Cell: UICollectionViewCell {
     func configure(with pet: PetData) {
         petName.text = pet.petName
         petBreed.text = pet.petBreed
-        
-        // Ensure petImage is a valid, unwrapped string
-        guard let petImageName = pet.petImage else {
-            print("Pet image name is nil or invalid")
+
+        guard let petImageURL = pet.petImage else {
+            print("Pet image URL is nil or invalid")
             self.petImage.image = UIImage(named: "placeholder_image")
             return
         }
-        
-        // Fetch the pet image from Firebase Storage
-        let storage = Storage.storage()
-        let imageRef = storage.reference().child("pet_images/\(petImageName)")
-        
-        imageRef.downloadURL { [weak self] url, error in
-            guard let self = self else { return } // Prevent retain cycle
-            
-            if let error = error {
-                print("Error fetching image: \(error.localizedDescription)")
-                DispatchQueue.main.async {
-                    self.petImage.image = UIImage(named: "placeholder_image")
+
+        // Extract the file name from the URL
+        if let urlComponents = URLComponents(string: petImageURL),
+           let path = urlComponents.path.split(separator: "/").last {
+            let fileName = String(path)
+            let storage = Storage.storage()
+            let imageRef = storage.reference().child("pet_images/\(fileName)")
+
+            imageRef.downloadURL { [weak self] url, error in
+                guard let self = self else { return }
+
+                if let error = error {
+                    print("Error fetching image: \(error.localizedDescription)")
+                    DispatchQueue.main.async {
+                        self.petImage.image = UIImage(named: "placeholder_image")
+                    }
+                    return
                 }
-                return
+
+                if let url = url {
+                    self.loadImage(from: url)
+                }
             }
-            
-            if let url = url {
-                self.loadImage(from: url)
-            }
+        } else {
+            print("Invalid petImage URL: \(petImageURL)")
         }
     }
-    
+
     private func loadImage(from url: URL) {
         // Use a background thread to fetch the image
         DispatchQueue.global().async {
