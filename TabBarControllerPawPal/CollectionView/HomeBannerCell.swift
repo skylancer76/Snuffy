@@ -12,4 +12,6 @@ class HomeBannerCell: UICollectionViewCell {
     
     @IBOutlet var bannerImage: UIImageView!
     
+    @IBOutlet var ViewAllButton: UIButton!
+    
 }

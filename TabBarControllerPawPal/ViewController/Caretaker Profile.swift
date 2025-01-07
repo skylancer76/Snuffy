@@ -54,6 +54,11 @@ class Caretaker_Profile: UIViewController {
     //  setupGalleryView()
     }
 
+    
+    @IBAction func backButtonTapped(_ sender: UIBarButtonItem) {
+        self.navigationController?.popViewController(animated: true)
+    }
+    
     private func fetchCaretakerProfile() {
         guard let selectedName = caretakerNameForProfile else { return }
             

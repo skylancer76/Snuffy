@@ -34,11 +34,14 @@ class Search_Caretakers: UIViewController, UITableViewDataSource, UITableViewDel
       
     }
     
-    
     @IBAction func backButtonTapped(_ sender: UIBarButtonItem) {
         
-        
+        if let tabBarController = self.tabBarController {
+            tabBarController.selectedIndex = 0
+        }
+        self.dismiss(animated: true, completion: nil)
     }
+    
     
     
 

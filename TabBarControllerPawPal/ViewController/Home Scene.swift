@@ -22,6 +22,8 @@ class Home_Scene: UIViewController, UICollectionViewDelegate, UICollectionViewDa
         cell.bannerImage.image = UIImage(named: bannerImages[indexPath.row])
         cell.bannerImage.layer.cornerRadius = 15
         
+        cell.ViewAllButton.layer.cornerRadius = 7.5
+        
         return cell
     }
     

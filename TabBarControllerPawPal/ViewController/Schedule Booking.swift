@@ -174,14 +174,46 @@ class Schedule_Booking: UIViewController {
             if let error = error {
                 self.showAlert(title: "Error", message: "Failed to send request: \(error.localizedDescription)")
             } else {
-                self.showAlert(title: "Success", message: "Your request has been sent!")
+                self.showAlert(title: "Success", message: "Your request has been sent!",completion: {
+                    self.clearFields()
+                    self.navigateToMyBookings()
+                })
             }
         }
     }
 
-    private func showAlert(title: String, message: String) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle:.alert)
-        alert.addAction(UIAlertAction(title:"OK", style:.default))
-        present(alert, animated:true)
+    private func showAlert(title: String, message: String, completion: (() -> Void)? = nil) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
+            completion?()
+        })
+        present(alert, animated: true)
+    }
+    
+    private func clearFields() {
+        startDate = nil
+        endDate = nil
+        selectedPets.removeAll()
+        pickUpRequired = false
+        dropOffRequired = false
+        caretakerInstructions = ""
+
+        datePickerView.setDate(Date(), animated: false)
+        selectPetButton.setTitle("Select Pets", for: .normal)
+        pickUpButton.setTitle("Pick-Up Required?", for: .normal)
+        dropOffButton.setTitle("Drop-Off Required?", for: .normal)
+        startTime.setDate(Date(), animated: false)
+        instructionsTextView.text = ""
+    }
+    private func navigateToMyBookings() {
+        guard let tabBarController = self.storyboard?.instantiateViewController(withIdentifier: "TabBarControllerID") as? UITabBarController else {
+            print("Error: Could not instantiate UITabBarController.")
+            return
+        }
+        
+        tabBarController.selectedIndex = 1 // Replace 1 with the index of the "My Bookings" tab
+        self.view.window?.rootViewController = tabBarController
+        self.view.window?.makeKeyAndVisible()
     }
 }
+
