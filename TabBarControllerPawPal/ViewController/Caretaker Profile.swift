@@ -27,13 +27,14 @@ class Caretaker_Profile: UIViewController {
     @IBOutlet weak var petSittedView: UIView!
     @IBOutlet weak var distanceView: UIView!
     
+    @IBOutlet var headerLabel: UILabel!
     var caretakerId: String?
     var caretakerNameForProfile: String?
     var galleryImages: [String] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
-          
+
         caretakerGallery.delegate = self
         caretakerGallery.dataSource = self
         fetchCaretakerProfile()
@@ -93,6 +94,7 @@ class Caretaker_Profile: UIViewController {
         petsSitted.text = caretaker.petSitted
         distanceAway.text = caretaker.distance
         aboutCaretaker.text = caretaker.about
+        headerLabel.text = caretaker.name
     }
         
     
