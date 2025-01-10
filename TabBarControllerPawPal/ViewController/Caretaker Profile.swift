@@ -10,12 +10,10 @@ import FirebaseFirestore
 
 class Caretaker_Profile: UIViewController {
 
-//    @IBOutlet weak var backgroundImage: UIImageView!
     @IBOutlet weak var profileImage: UIImageView!
     @IBOutlet weak var caretakerName: UILabel!
     @IBOutlet weak var caretakerAddress: UILabel!
     @IBOutlet weak var caretakerRating: UILabel!
-//    @IBOutlet weak var experience: UILabel!
     @IBOutlet weak var price: UILabel!
     @IBOutlet weak var petsSitted: UILabel!
     @IBOutlet weak var distanceAway: UILabel!
@@ -38,9 +36,9 @@ class Caretaker_Profile: UIViewController {
     }
 
     
-//    @IBAction func backButtonTapped(_ sender: UIBarButtonItem) {
-//        self.navigationController?.popViewController(animated: true)
-//    }
+    @IBAction func backButtonTapped(_ sender: UIBarButtonItem) {
+        self.navigationController?.popViewController(animated: true)
+    }
     
     private func fetchCaretakerProfile() {
         guard let selectedName = caretakerNameForProfile else { return }
@@ -66,12 +64,10 @@ class Caretaker_Profile: UIViewController {
         
         
     private func updateUI(with caretaker: Caretakers) {
-//        backgroundImage.image = UIImage(named: caretaker.coverImage ?? "background image")
         profileImage.image = UIImage(named: caretaker.profileImageName)
         caretakerName.text = caretaker.name
         caretakerAddress.text = caretaker.address
         caretakerRating.text = caretaker.rating
-//        experience.text = caretaker.experience
         price.text = caretaker.price
         petsSitted.text = caretaker.petSitted
         distanceAway.text = caretaker.distance

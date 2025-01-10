@@ -100,7 +100,7 @@ class Search_Caretakers: UIViewController, UITableViewDataSource, UITableViewDel
         cell.caretakerImage.image = UIImage(named: caretaker.profileImageName)
         cell.cellView.layer.cornerRadius = 12
         cell.cellView.layer.shadowOffset = CGSize(width: 2, height: 2)
-        cell.cellView.layer.shadowOpacity = 0.05
+        cell.cellView.layer.shadowOpacity = 0.06
         cell.cellView.layer.shadowRadius = 2
             
         return cell

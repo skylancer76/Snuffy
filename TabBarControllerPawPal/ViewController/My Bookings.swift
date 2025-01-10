@@ -58,12 +58,17 @@ class My_Bookings: UIViewController, UITableViewDelegate, UITableViewDataSource{
                 cell.cellView.layer.shadowOffset = CGSize(width: 2, height: 2)
                 cell.cellView.layer.shadowOpacity = 0.1
                 cell.cellView.layer.shadowRadius = 3
-
-
-                // Adjust status label color
-                cell.statusLabel.textColor = booking.status == "Completed" ? .systemBlue : .systemGreen
+                if booking.status == "Pending" {
+                    cell.statusLabel.textColor = .red
+                } else if booking.status == "Completed" {
+                    cell.statusLabel.textColor = .systemBlue
+                } else {
+                    cell.statusLabel.textColor = .systemGreen
+                }
             }
+        
             return cell
+                               
         }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
             return 100
