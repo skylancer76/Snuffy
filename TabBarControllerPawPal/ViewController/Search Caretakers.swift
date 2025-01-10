@@ -9,6 +9,15 @@ import UIKit
 
 class Search_Caretakers: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
+    @IBOutlet weak var allButton: UIButton!
+    
+    @IBOutlet weak var closestButton: UIButton!
+    
+    @IBOutlet weak var topRatedButton: UIButton!
+    
+    @IBOutlet weak var lowestPriceButton: UIButton!
+    
+    
     @IBOutlet weak var myTable: UITableView!
     
     var caretakerList = [Caretakers]()
@@ -16,7 +25,7 @@ class Search_Caretakers: UIViewController, UITableViewDataSource, UITableViewDel
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+    
         myTable.dataSource = self
         myTable.delegate = self
         myTable.allowsSelection = true
@@ -63,8 +72,6 @@ class Search_Caretakers: UIViewController, UITableViewDataSource, UITableViewDel
             }
         }
     }
-
-        
     
     
     private func setupTableView() {
@@ -72,16 +79,12 @@ class Search_Caretakers: UIViewController, UITableViewDataSource, UITableViewDel
         myTable.register(UITableViewCell.self, forCellReuseIdentifier: "CaretakerCell")
         myTable.tableFooterView = UIView(frame: .zero) // Removes empty rows
     }
-        
-        
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return caretakerList.count
     }
 
-        
-    
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -93,18 +96,16 @@ class Search_Caretakers: UIViewController, UITableViewDataSource, UITableViewDel
         cell.nameLabel.text = caretaker.name
         cell.AddressLabel.text = caretaker.address
         cell.PriceLabel.text = caretaker.price
+        cell.ratingLabel.text = caretaker.rating
         cell.caretakerImage.image = UIImage(named: caretaker.profileImageName)
-        cell.cellView.layer.cornerRadius = 15
+        cell.cellView.layer.cornerRadius = 12
         cell.cellView.layer.shadowOffset = CGSize(width: 2, height: 2)
-        cell.cellView.layer.shadowOpacity = 0.1
-        cell.cellView.layer.shadowRadius = 3
+        cell.cellView.layer.shadowOpacity = 0.05
+        cell.cellView.layer.shadowRadius = 2
             
         return cell
     }
         
-        
-    
-    
     
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -114,6 +115,7 @@ class Search_Caretakers: UIViewController, UITableViewDataSource, UITableViewDel
         // Instantiate the destination view controller
         if let profileVC = storyboard?.instantiateViewController(withIdentifier: "CaretakerProfileVC") as? Caretaker_Profile {
             profileVC.caretakerNameForProfile = selectedCaretaker.name
+            profileVC.navigationItem.hidesBackButton = true
                 
             // Push the view controller to the navigation stack
             navigationController?.pushViewController(profileVC, animated: true)

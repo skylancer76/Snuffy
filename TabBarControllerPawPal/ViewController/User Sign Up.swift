@@ -33,7 +33,7 @@ class User_Sign_Up: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        signUpButton.layer.cornerRadius = 30
+        signUpButton.layer.cornerRadius = 10
         signUpButton.layer.masksToBounds = true
     }
     

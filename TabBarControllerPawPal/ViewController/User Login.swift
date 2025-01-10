@@ -19,7 +19,7 @@ class User_Login: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        loginButton.layer.cornerRadius = 30
+        loginButton.layer.cornerRadius = 10
         loginButton.layer.masksToBounds = true
         
     }

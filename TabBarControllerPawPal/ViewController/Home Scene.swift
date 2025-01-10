@@ -7,41 +7,60 @@
 
 import UIKit
 
-class Home_Scene: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
+class Home_Scene: UIViewController {
 
-    @IBOutlet weak var servicesCollectionView: UICollectionView!
-   
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return bannerImages.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = servicesCollectionView.dequeueReusableCell(withReuseIdentifier: "Banner", for: indexPath) as! HomeBannerCell
-        
-        
-        cell.bannerImage.image = UIImage(named: bannerImages[indexPath.row])
-        cell.bannerImage.layer.cornerRadius = 15
-        
-        cell.ViewAllButton.layer.cornerRadius = 7.5
-        
-        return cell
-    }
-    
-
-    
-    var bannerImages:[String] = ["Home1" , "Home2"]
+    @IBOutlet weak var caretakerImage: UIImageView!
+    @IBOutlet weak var dogwalkerImage: UIImageView!
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
-    }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 25 // Spacing between items in the same row
+        caretakerImage.layer.cornerRadius = 12
+        caretakerImage.layer.masksToBounds = true
+        
+        dogwalkerImage.layer.cornerRadius = 12
+        dogwalkerImage.layer.masksToBounds = true
+        
+//        // Set Gradient View
+//        let gradientView = UIView(frame: view.bounds)
+//            gradientView.translatesAutoresizingMaskIntoConstraints = false
+//            view.addSubview(gradientView)
+//            view.sendSubviewToBack(gradientView)
+//        
+//        // Set Gradient inside the view
+//        let gradientLayer = CAGradientLayer()
+//            gradientLayer.frame = view.bounds // Match the frame of the view
+//            gradientLayer.colors = [
+//                UIColor.systemPurple.withAlphaComponent(0.3).cgColor, // Start color
+//                UIColor.clear.cgColor       // End color
+//            ]
+//            gradientLayer.locations = [0.0, 1.0] // Gradually fade
+//            gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0) // Top-center
+//            gradientLayer.endPoint = CGPoint(x: 0.5, y: 1.0)   // Bottom-center
+//                
+//            // Apply the gradient to the gradientView
+//            gradientView.layer.insertSublayer(gradientLayer, at: 0)
+        
     }
     
-
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        let accessoryView = UIButton()
+        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 34, weight: .regular, scale: .medium)
+        let image = UIImage(systemName: "person.crop.circle.fill", withConfiguration: symbolConfig)?
+            .withTintColor(.gray, renderingMode: .alwaysOriginal) // Apply gray color
+        
+        accessoryView.setImage(image, for: .normal)
+        accessoryView.frame.size = CGSize(width: 34, height: 34)
+        
+        let largeTitleView = navigationController?.navigationBar.subviews.first { subview in
+            return String(describing: type(of: subview)) == "_UINavigationBarLargeTitleView"
+        }
+        largeTitleView?.perform(Selector(("setAccessoryView:")), with: accessoryView)
+        largeTitleView?.perform(Selector(("setAlignAccessoryViewToTitleBaseline:")), with: nil)
+        largeTitleView?.perform(Selector(("updateContent")))
+    }
 }
 

@@ -67,29 +67,30 @@ class My_Pets: UIViewController {
     }
 }
 
+
 extension My_Pets: UICollectionViewDataSource , UICollectionViewDelegate{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return pets.count
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PetCell", for: indexPath) as! My_Pets_Cell
         let pet = pets[indexPath.item]
-        
         cell.configure(with: pet)
-        
-        // Round corners for the content view
-        cell.contentView.layer.cornerRadius = 10
+        cell.contentView.layer.cornerRadius = 12
         cell.contentView.layer.masksToBounds = true
+        cell.petImage.layer.cornerRadius = 8
+        cell.petImage.layer.masksToBounds = true
         
         return cell
     }
+    
     func createLayout() -> UICollectionViewLayout {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.5), heightDimension: .fractionalHeight(1.0))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         item.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8)
 
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(260))
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(250))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item, item])
 
         let section = NSCollectionLayoutSection(group: group)

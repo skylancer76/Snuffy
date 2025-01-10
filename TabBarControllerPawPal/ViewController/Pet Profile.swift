@@ -6,13 +6,53 @@
 //
 
 import UIKit
+import SwiftUICore
 
 class Pet_Profile: UIViewController {
 
+    @IBOutlet weak var petImage: UIImageView!
+    
+    @IBOutlet weak var ageView: UIView!
+    
+    @IBOutlet weak var genderView: UIView!
+    
+    @IBOutlet weak var weightView: UIView!
+    
+    @IBOutlet weak var vaccinationDetailsView: UIView!
+    
+    @IBOutlet weak var petMedicationsView: UIView!
+    
+    @IBOutlet weak var petDietView: UIView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        petImage.layer.cornerRadius = 12
+        petImage.layer.masksToBounds = true
+        petImage.layer.borderColor = UIColor.purple.cgColor
+        petImage.layer.borderWidth = 2
+        
+        genderView.layer.cornerRadius = 10
+        genderView.layer.masksToBounds = true
+        
+        ageView.layer.cornerRadius = 10
+        ageView.layer.masksToBounds = true
+        
+        weightView.layer.cornerRadius = 10
+        weightView.layer.masksToBounds = true
+        
+        vaccinationDetailsView.layer.cornerRadius = 10
+        vaccinationDetailsView.layer.masksToBounds = true
+        
+        petMedicationsView.layer.cornerRadius = 10
+        petMedicationsView.layer.masksToBounds = true
+        
+        petDietView.layer.cornerRadius = 10
+        petDietView.layer.masksToBounds = true
+        
+        
+        
+        
     }
     
 

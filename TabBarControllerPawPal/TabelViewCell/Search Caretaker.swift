@@ -13,6 +13,9 @@ class Search_CaretakerCell: UITableViewCell {
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var AddressLabel: UILabel!
     @IBOutlet weak var PriceLabel: UILabel!
+    
+    @IBOutlet weak var ratingLabel: UILabel!
+    
     @IBOutlet weak var cellView: UIView!
     
     override func awakeFromNib() {

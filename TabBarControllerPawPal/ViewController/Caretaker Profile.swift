@@ -20,14 +20,10 @@ class Caretaker_Profile: UIViewController {
     @IBOutlet weak var petsSitted: UILabel!
     @IBOutlet weak var distanceAway: UILabel!
     @IBOutlet weak var aboutCaretaker: UILabel!
-    @IBOutlet weak var scheduleBooking: UIButton!
     @IBOutlet weak var caretakerGallery: UICollectionView!
     
-    @IBOutlet weak var priceView: UIView!
-    @IBOutlet weak var petSittedView: UIView!
-    @IBOutlet weak var distanceView: UIView!
+//    @IBOutlet var headerLabel: UILabel!
     
-    @IBOutlet var headerLabel: UILabel!
     var caretakerId: String?
     var caretakerNameForProfile: String?
     var galleryImages: [String] = []
@@ -38,27 +34,13 @@ class Caretaker_Profile: UIViewController {
         caretakerGallery.delegate = self
         caretakerGallery.dataSource = self
         fetchCaretakerProfile()
-        
-        priceView.layer.cornerRadius = 5
-        priceView.layer.masksToBounds = true
-        
-        petSittedView.layer.cornerRadius = 5
-        petSittedView.layer.masksToBounds = true
-        
-        distanceView.layer.cornerRadius = 5
-        distanceView.layer.masksToBounds = true
-        
-        scheduleBooking.layer.cornerRadius = 8
-        scheduleBooking.layer.masksToBounds = true
-        
-        
-    //  setupGalleryView()
+
     }
 
     
-    @IBAction func backButtonTapped(_ sender: UIBarButtonItem) {
-        self.navigationController?.popViewController(animated: true)
-    }
+//    @IBAction func backButtonTapped(_ sender: UIBarButtonItem) {
+//        self.navigationController?.popViewController(animated: true)
+//    }
     
     private func fetchCaretakerProfile() {
         guard let selectedName = caretakerNameForProfile else { return }
@@ -94,7 +76,7 @@ class Caretaker_Profile: UIViewController {
         petsSitted.text = caretaker.petSitted
         distanceAway.text = caretaker.distance
         aboutCaretaker.text = caretaker.about
-        headerLabel.text = caretaker.name
+//        headerLabel.text = caretaker.name
     }
         
     
