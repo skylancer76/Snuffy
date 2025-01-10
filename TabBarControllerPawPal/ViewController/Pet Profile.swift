@@ -9,9 +9,15 @@ import UIKit
 import SwiftUICore
 
 class Pet_Profile: UIViewController {
-
+    var petData: PetData?
     @IBOutlet weak var petImage: UIImageView!
     
+    @IBOutlet var weigthLabel: UILabel!
+    @IBOutlet var genderLabel: UILabel!
+ 
+    @IBOutlet var ageLabel: UILabel!
+    @IBOutlet var breedLabel: UILabel!
+    @IBOutlet var nameLabel: UILabel!
     @IBOutlet weak var ageView: UIView!
     
     @IBOutlet weak var genderView: UIView!
@@ -26,7 +32,7 @@ class Pet_Profile: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+      
         petImage.layer.cornerRadius = 12
         petImage.layer.masksToBounds = true
         petImage.layer.borderColor = UIColor.purple.cgColor
@@ -51,7 +57,20 @@ class Pet_Profile: UIViewController {
         petDietView.layer.masksToBounds = true
         
         
-        
+        if let petData = petData {
+                   // Assuming PetData includes these properties
+                   if let imageUrl = petData.petImage {
+                       petImage.loadImageFromUrl(imageUrl)
+                   }
+            nameLabel.text = petData.petName
+            breedLabel.text =  petData.petBreed
+            ageLabel.text = petData.petAge
+            genderLabel.text = petData.petGender
+            weigthLabel.text = petData.petWeight
+                   
+   
+               }
+           
         
     }
     

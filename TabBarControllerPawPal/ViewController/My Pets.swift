@@ -9,7 +9,7 @@ import UIKit
 import FirebaseFirestore
 
 class My_Pets: UIViewController {
-    
+    var selectedPet: PetData?
     @IBOutlet weak var addButtonView: UIView!
     @IBOutlet weak var addPetButton: UIButton!
     @IBOutlet weak var myPets: UICollectionView!
@@ -38,12 +38,14 @@ class My_Pets: UIViewController {
         // Perform segue to AddNewPetViewController
         performSegue(withIdentifier: "AddNewPetSegue", sender: self)
     }
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "AddNewPetSegue",
-           let destinationVC = segue.destination as? AddNewPetViewController {
-            destinationVC.delegate = self
-        }
-    }
+    
+    
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if segue.identifier == "AddNewPetSegue",
+//           let destinationVC = segue.destination as? AddNewPetViewController {
+//            destinationVC.delegate = self
+//        }
+//    }
     func fetchPetsFromFirestore() {
         let db = Firestore.firestore()
         db.collection("Pets").getDocuments { snapshot, error in
@@ -57,9 +59,19 @@ class My_Pets: UIViewController {
                 let name = data["petName"] as? String
                 let breed = data["petBreed"] as? String
                 let image = data["petImage"] as? String
-                return PetData(petImage: image, petName: name, petBreed: breed)
-            } ?? []
+                let age = data["petAge"] as? String
+                let gender = data["petGender"] as? String
+                let weight = data["petWeight"] as? String
             
+                return PetData(
+                              petImage: image,
+                              petName: name,
+                              petBreed: breed,
+                              petGender: gender,
+                              petAge: age,
+                              petWeight: weight
+                          )
+                      } ?? []
             DispatchQueue.main.async {
                 self.myPets.reloadData()
             }
@@ -97,6 +109,23 @@ extension My_Pets: UICollectionViewDataSource , UICollectionViewDelegate{
         section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 16)
 
         return UICollectionViewCompositionalLayout(section: section)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+            selectedPet = pets[indexPath.item]
+            
+        }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "AddNewPetSegue",
+           let destinationVC = segue.destination as? AddNewPetViewController {
+            destinationVC.delegate = self
+        } else if segue.identifier == "ShowPetProfileSegue",
+                  let destinationVC = segue.destination
+                    as? Pet_Profile {
+            destinationVC.petData = selectedPet
+            destinationVC.hidesBottomBarWhenPushed = true
+        }
     }
 }
 
