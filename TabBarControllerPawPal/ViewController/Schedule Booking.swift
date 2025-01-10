@@ -114,9 +114,11 @@ class Schedule_Booking: UIViewController {
         if startDate == nil {
             startDate = sender.date
             print("Start Date Selected: \(startDate!)")
+            showAlert(title: "Date Selected", message: "Start date has been selected: \(formatDate(startDate!))")
         } else {
             endDate = sender.date
             print("End Date Selected: \(endDate!)")
+            showAlert(title: "Date Selected", message: "End date has been selected: \(formatDate(endDate!))")
             
             if let start = startDate, let end = endDate, end < start {
                 print("End date cannot be earlier than the start date!")
@@ -124,7 +126,12 @@ class Schedule_Booking: UIViewController {
             }
         }
     }
-
+    private func formatDate(_ date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .none
+        return dateFormatter.string(from: date)
+    }
     
     @IBAction func dissMissButtonTapped(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
