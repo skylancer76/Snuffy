@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23094" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="67Q-lV-hh9">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="67Q-lV-hh9">
     <device id="retina6_3" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23084"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Map view configurations" minToolsVersion="14.0"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
@@ -759,10 +759,10 @@
                             <constraint firstItem="nLF-3V-MQ2" firstAttribute="top" secondItem="0vS-sD-AiG" secondAttribute="bottom" constant="20" id="K43-ut-5xb"/>
                             <constraint firstItem="Gvi-8s-VSi" firstAttribute="trailing" secondItem="5Cp-WP-Dbj" secondAttribute="trailing" constant="16" id="Y52-js-Vyn"/>
                             <constraint firstItem="5Cp-WP-Dbj" firstAttribute="top" secondItem="Gvi-8s-VSi" secondAttribute="top" constant="15" id="YcQ-8f-ygD"/>
-                            <constraint firstItem="nLF-3V-MQ2" firstAttribute="bottom" secondItem="Gvi-8s-VSi" secondAttribute="bottom" id="djX-hN-CBt"/>
                             <constraint firstItem="0vS-sD-AiG" firstAttribute="leading" secondItem="Gvi-8s-VSi" secondAttribute="leading" constant="16" id="ghG-PF-2hp"/>
                             <constraint firstItem="5Cp-WP-Dbj" firstAttribute="leading" secondItem="bLB-b5-1eh" secondAttribute="leading" constant="16" id="suW-pH-pXL"/>
                             <constraint firstItem="nLF-3V-MQ2" firstAttribute="leading" secondItem="Gvi-8s-VSi" secondAttribute="leading" id="vOO-TA-H5B"/>
+                            <constraint firstItem="Gvi-8s-VSi" firstAttribute="bottom" secondItem="nLF-3V-MQ2" secondAttribute="bottom" id="vWQ-Va-nPZ"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Search Caretakers" id="gVa-xW-9iS">
@@ -1196,7 +1196,7 @@
         <!--Tab Bar Controller-->
         <scene sceneID="XyQ-ZD-2kQ">
             <objects>
-                <tabBarController storyboardIdentifier="TabBarControllerID" id="67Q-lV-hh9" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="TabBarControllerID" extendedLayoutIncludesOpaqueBars="YES" id="67Q-lV-hh9" sceneMemberID="viewController">
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="ATH-sb-gF5">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="49"/>
@@ -2088,7 +2088,7 @@
                                 </connections>
                             </segmentedControl>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="Eho-Yq-1V5">
-                                <rect key="frame" x="0.0" y="239" width="402" height="565"/>
+                                <rect key="frame" x="0.0" y="239" width="402" height="552"/>
                                 <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="MyBooking" rowHeight="120" id="ijJ-p7-xte" customClass="My_Bookings_Cell" customModule="TabBarControllerPawPal" customModuleProvider="target">
@@ -2194,8 +2194,8 @@
                             <constraint firstItem="hCW-36-SY1" firstAttribute="top" secondItem="NUk-7L-bNP" secondAttribute="top" constant="20" id="43L-9A-fM9"/>
                             <constraint firstItem="Eho-Yq-1V5" firstAttribute="leading" secondItem="NUk-7L-bNP" secondAttribute="leading" id="9hS-2Y-J6p"/>
                             <constraint firstItem="Eho-Yq-1V5" firstAttribute="top" secondItem="hCW-36-SY1" secondAttribute="bottom" constant="30" id="CUx-qQ-iuv"/>
+                            <constraint firstItem="NUk-7L-bNP" firstAttribute="bottom" secondItem="Eho-Yq-1V5" secondAttribute="bottom" id="KBQ-H7-bl5"/>
                             <constraint firstItem="Eho-Yq-1V5" firstAttribute="trailing" secondItem="NUk-7L-bNP" secondAttribute="trailing" id="O6h-my-mTd"/>
-                            <constraint firstAttribute="bottom" secondItem="Eho-Yq-1V5" secondAttribute="bottom" constant="70" id="ZOP-86-0D0"/>
                             <constraint firstItem="hCW-36-SY1" firstAttribute="leading" secondItem="NUk-7L-bNP" secondAttribute="leading" constant="50" id="mtR-9S-mGk"/>
                         </constraints>
                     </view>
@@ -2206,7 +2206,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xhW-dm-nw5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4549" y="842"/>
+            <point key="canvasLocation" x="4547.7611940298502" y="841.64759725400449"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="pWf-G0-a0X">
@@ -3272,7 +3272,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="nk6-Mb-UvU" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Home" id="qkW-Oo-bC6">
-                        <imageReference key="image" image="pawprint.fill" catalog="system" symbolScale="large"/>
+                        <imageReference key="image" image="pawprint.fill" catalog="system" symbolScale="medium"/>
                         <color key="badgeColor" systemColor="tintColor"/>
                     </tabBarItem>
                     <toolbarItems/>
