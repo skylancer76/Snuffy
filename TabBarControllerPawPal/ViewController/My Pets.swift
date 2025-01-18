@@ -20,12 +20,31 @@ class My_Pets: UIViewController {
         super.viewDidLoad()
         
         // Round corners for add button view
-        addButtonView.layer.cornerRadius = 15
-//        addButtonView.layer.masksToBounds = true
-        addButtonView.layer.shadowOffset = CGSize(width: 2, height: 2)
-        addButtonView.layer.shadowOpacity = 0.05
-        addButtonView.layer.shadowRadius = 3
+        addButtonView.layer.cornerRadius = 10
+        addButtonView.layer.masksToBounds = true
+
         
+        // Set Gradient View
+        let gradientView = UIView(frame: view.bounds)
+        gradientView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(gradientView)
+        view.sendSubviewToBack(gradientView)
+        // Set Gradient inside the view
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.frame = view.bounds                          // Match the frame of the view
+        gradientLayer.colors = [
+            UIColor.systemPurple.withAlphaComponent(0.3).cgColor,  // Start color
+            UIColor.clear.cgColor                                  // End color
+        ]
+        gradientLayer.locations = [0.0, 1.0]                       // Gradually fade
+        gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)         // Top-center
+        gradientLayer.endPoint = CGPoint(x: 0.5, y: 0.5)           // Bottom-center
+        gradientView.layer.insertSublayer(gradientLayer, at: 0)
+        // Claer background colour of collection view
+        myPets.backgroundColor = .clear
+        
+        
+        // Collection View delegates
         myPets.delegate = self
         myPets.dataSource = self
         
@@ -37,46 +56,13 @@ class My_Pets: UIViewController {
         myPets.collectionViewLayout = createLayout()
         
         
-        
-        // Set Gradient View
-        let gradientView = UIView(frame: view.bounds)
-            gradientView.translatesAutoresizingMaskIntoConstraints = false
-            view.addSubview(gradientView)
-            view.sendSubviewToBack(gradientView)
-        
-        // Set Gradient inside the view
-        let gradientLayer = CAGradientLayer()
-            gradientLayer.frame = view.bounds // Match the frame of the view
-            gradientLayer.colors = [
-                UIColor.systemPurple.withAlphaComponent(0.3).cgColor, // Start color
-                UIColor.clear.cgColor       // End color
-            ]
-            gradientLayer.locations = [0.0, 1.0] // Gradually fade
-            gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0) // Top-center
-            gradientLayer.endPoint = CGPoint(x: 0.5, y: 0.5)   // Bottom-center
-        
-            // Apply the gradient to the gradientView
-            gradientView.layer.insertSublayer(gradientLayer, at: 0)
-        
-        // Clear the background of collection view
-        myPets.backgroundColor = .clear
-        
-        
     }
     
     
     @objc func addPetButtonTapped() {
-        // Perform segue to AddNewPetViewController
         performSegue(withIdentifier: "AddNewPetSegue", sender: self)
     }
     
-    
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if segue.identifier == "AddNewPetSegue",
-//           let destinationVC = segue.destination as? AddNewPetViewController {
-//            destinationVC.delegate = self
-//        }
-//    }
     
     func fetchPetsFromFirestore() {
         let db = Firestore.firestore()
@@ -85,7 +71,7 @@ class My_Pets: UIViewController {
                 print("Error fetching pet data: \(error.localizedDescription)")
                 return
             }
-            
+
             self.pets = snapshot?.documents.compactMap { document in
                 let data = document.data()
                 let name = data["petName"] as? String
@@ -95,77 +81,71 @@ class My_Pets: UIViewController {
                 let gender = data["petGender"] as? String
                 let weight = data["petWeight"] as? String
             
-                return PetData(
-                              petImage: image,
-                              petName: name,
-                              petBreed: breed,
-                              petGender: gender,
-                              petAge: age,
-                              petWeight: weight
-                          )
-                      } ?? []
+                return PetData (
+                    petImage: image,
+                    petName: name,
+                    petBreed: breed,
+                    petGender: gender,
+                    petAge: age,
+                    petWeight: weight
+                )
+                
+            } ?? []
+            
             DispatchQueue.main.async {
                 self.myPets.reloadData()
             }
+            
         }
     }
 }
 
 
+
 extension My_Pets: UICollectionViewDataSource , UICollectionViewDelegate{
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return pets.count
     }
-    
-    
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PetCell", for: indexPath) as! My_Pets_Cell
         let pet = pets[indexPath.item]
         cell.configure(with: pet)
-        cell.contentView.layer.cornerRadius = 10
-        cell.layer.shadowOffset = CGSize(width: 3, height: 3)
-        cell.layer.shadowOpacity = 0.07
-        cell.layer.shadowRadius = 3
-        cell.layer.masksToBounds = false
+        cell.contentView.layer.cornerRadius = 8
+        cell.contentView.layer.borderWidth = 2
+        cell.contentView.layer.borderColor = UIColor.systemPurple.withAlphaComponent(1).cgColor
+        cell.contentView.layer.masksToBounds = true
         cell.backgroundColor = .clear
-        cell.petImage.layer.cornerRadius = 4
-        cell.petImage.layer.masksToBounds = true
-        
         return cell
     }
     
-    
-    
     func createLayout() -> UICollectionViewLayout {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.5), heightDimension: .fractionalHeight(1.0))
+        
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         item.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8)
-
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(250))
+        
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(235))
+        
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item, item])
-
+        
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 16)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 16, bottom: 20, trailing: 16)
 
         return UICollectionViewCompositionalLayout(section: section)
     }
     
     
-    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
             selectedPet = pets[indexPath.item]
-            
-        }
+    }
     
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "AddNewPetSegue",
-           let destinationVC = segue.destination as? AddNewPetViewController {
+        if segue.identifier == "AddNewPetSegue", let destinationVC = segue.destination as? AddNewPetViewController {
             destinationVC.delegate = self
-        } else if segue.identifier == "ShowPetProfileSegue",
-                  let destinationVC = segue.destination
-                    as? Pet_Profile {
+        } else if segue.identifier == "ShowPetProfileSegue", let destinationVC = segue.destination as? Pet_Profile {
             destinationVC.petData = selectedPet
             destinationVC.hidesBottomBarWhenPushed = true
         }
