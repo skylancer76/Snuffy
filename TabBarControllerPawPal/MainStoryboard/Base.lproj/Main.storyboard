@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="67Q-lV-hh9">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="izj-4m-zlE">
     <device id="retina6_3" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
@@ -1232,7 +1232,7 @@
                                                         <imageReference key="image" image="chevron.right" catalog="system" symbolScale="medium"/>
                                                     </buttonConfiguration>
                                                     <connections>
-                                                        <segue destination="Yki-Aq-j7M" kind="presentation" modalPresentationStyle="currentContext" id="g6a-Qb-z59"/>
+                                                        <segue destination="Yki-Aq-j7M" kind="presentation" identifier="showVaccinationDetail" modalPresentationStyle="currentContext" id="g6a-Qb-z59"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
@@ -1243,7 +1243,7 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="PetDetailCell" rowHeight="60" id="OIY-qc-O1A">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="60" id="OIY-qc-O1A">
                                         <rect key="frame" x="20" y="115.33333206176758" width="362" height="60"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="OIY-qc-O1A" id="u3f-Dd-Qe3">
@@ -1268,7 +1268,7 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="PetDetailCell" rowHeight="60" id="90x-R9-L4g">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="60" id="90x-R9-L4g">
                                         <rect key="frame" x="20" y="175.33333206176758" width="362" height="60"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="90x-R9-L4g" id="KE5-A7-h7a">
@@ -1496,12 +1496,12 @@
                     <navigationItem key="navigationItem" title="Vaccination Details" id="Q0H-xh-O1L">
                         <barButtonItem key="rightBarButtonItem" image="plus" catalog="system" id="y1F-fe-Q5C">
                             <connections>
-                                <segue destination="Gah-Wy-OGj" kind="presentation" modalPresentationStyle="pageSheet" id="24F-Ep-9hm"/>
+                                <segue destination="Gah-Wy-OGj" kind="presentation" identifier="goToAddVaccination" modalPresentationStyle="pageSheet" id="24F-Ep-9hm"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="tableView" destination="njn-ft-csm" id="U6S-8v-eYG"/>
+                        <outlet property="tableView" destination="njn-ft-csm" id="ugf-fW-47V"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KdV-NR-NPT" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -1677,7 +1677,20 @@
                             <outlet property="delegate" destination="fPk-K3-Bqz" id="7pJ-iN-B7e"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Add Vaccine" id="W4C-zK-Gy7"/>
+                    <navigationItem key="navigationItem" title="Add Vaccine" id="W4C-zK-Gy7">
+                        <barButtonItem key="rightBarButtonItem" title="Save" id="48p-i0-muC">
+                            <connections>
+                                <action selector="saveVaccinationTapped:" destination="fPk-K3-Bqz" id="qay-nj-Tk8"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="dateOfVaccinationPicker" destination="83j-rO-9DT" id="3TY-Nc-VgN"/>
+                        <outlet property="expiryDatePicker" destination="zxh-nh-GM5" id="biS-Fb-awB"/>
+                        <outlet property="nextDueDatePicker" destination="7ON-Mq-VQN" id="NUT-G9-TSc"/>
+                        <outlet property="vaccineNameTextField" destination="0mG-ul-CB4" id="VUj-XN-9nr"/>
+                        <outlet property="vaccineTypeTextField" destination="Ttk-C5-Ag4" id="JLx-i0-hey"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Pp9-TV-GAO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1740,7 +1753,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mZG-kO-11c" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2960" y="800"/>
+            <point key="canvasLocation" x="3833" y="824"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="NnL-y3-CBd">

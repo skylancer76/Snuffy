@@ -137,24 +137,32 @@ class Medication {
 
 // MARK: - Vaccination Details Model
 class VaccinationDetails {
+    
+    var vaccineId : String?
     var vaccineName: String
     var vaccineType: String
     var dateOfVaccination: String
     var expiryDate: String
     var nextDueDate: String
+    var notes: String
 
     init(
+        vaccineId: String = UUID().uuidString,
         vaccineName: String,
         vaccineType: String,
         dateOfVaccination: String,
         expiryDate: String,
-        nextDueDate: String
+        nextDueDate: String,
+        notes: String
+    
     ) {
+        self.vaccineId = vaccineId
         self.vaccineName = vaccineName
         self.vaccineType = vaccineType
         self.dateOfVaccination = dateOfVaccination
         self.expiryDate = expiryDate
         self.nextDueDate = nextDueDate
+        self.notes = notes
     }
 }
 
