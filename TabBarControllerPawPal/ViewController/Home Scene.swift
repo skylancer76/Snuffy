@@ -7,6 +7,8 @@
 
 import UIKit
 import CoreLocation
+import FirebaseFirestore
+import FirebaseAuth
 
 class Home_Scene: UIViewController, CLLocationManagerDelegate {
 
@@ -85,13 +87,24 @@ class Home_Scene: UIViewController, CLLocationManagerDelegate {
         self.present(alert, animated: true, completion: nil)
     }
     
-    
     func enableLocationServices() {
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
+        if !CLLocationManager.locationServicesEnabled() {
+            print("Location services are not enabled. Please enable them in Settings.")
+            return
+        }
     }
-    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+            guard let location = locations.last else { return }
+            
+            // Save location to Firestore
+            saveUserLocationToFirestore(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+            
+            // Stop updating location after the location is fetched
+            locationManager.stopUpdatingLocation()
+        }
     
     // CLLocationManagerDelegate method
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
@@ -102,6 +115,39 @@ class Home_Scene: UIViewController, CLLocationManagerDelegate {
             print("Location access denied.")
         default:
             break
+        }
+    }
+    func saveUserLocationToFirestore(latitude: Double, longitude: Double) {
+           guard let userID = Auth.auth().currentUser?.uid else {
+               print("User not logged in.")
+               return
+           }
+           
+           let locationData: [String: Any] = [
+               "location": [
+                   "latitude": latitude,
+                   "longitude": longitude
+               ]
+           ]
+        Firestore.firestore().collection("users").document(userID).updateData(locationData) { error in
+                   if let error = error {
+                       print("Failed to save user location: \(error.localizedDescription)")
+                   } else {
+                       print("User location saved successfully.")
+                   }
+               }
+           }
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("Failed to fetch location: \(error.localizedDescription)")
+        if let clError = error as? CLError {
+            switch clError.code {
+            case .denied:
+                print("Location access was denied.")
+            case .locationUnknown:
+                print("Location is unknown.")
+            default:
+                print("Location error: \(clError.code.rawValue)")
+            }
         }
     }
     

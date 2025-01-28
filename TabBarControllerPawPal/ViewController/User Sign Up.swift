@@ -98,7 +98,7 @@ class User_Sign_Up: UIViewController {
     
     func navigateToHomeScreen() {
           // Create an instance of the Home screen (Main 3)
-          let storyboard = UIStoryboard(name: "Main 3", bundle: nil) // Ensure this storyboard name is correct
+          let storyboard = UIStoryboard(name: "Main", bundle: nil) // Ensure this storyboard name is correct
           if let homeVC = storyboard.instantiateInitialViewController() {
               homeVC.modalPresentationStyle = .fullScreen
               self.present(homeVC, animated: true, completion: nil)
