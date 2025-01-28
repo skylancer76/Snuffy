@@ -31,7 +31,7 @@ class Pet_Profile: UIViewController {
     @IBOutlet weak var petDetailsTableView: UITableView!
     
     // Data to populate the table
-    let tableOptions = ["Pet Medications", "Pet Diet", "Pet Vaccinations"]
+    let tableOptions = ["Pet Vaccinations", "Pet Diet", "Pet Medications"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
