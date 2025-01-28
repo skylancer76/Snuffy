@@ -9,9 +9,10 @@ import UIKit
 import FirebaseFirestore
 
 class My_Pets: UIViewController {
+    
     var selectedPet: PetData?
-    @IBOutlet weak var addButtonView: UIView!
-    @IBOutlet weak var addPetButton: UIButton!
+    @IBOutlet weak var backgroundView: UIView!
+    @IBOutlet weak var addPetButton: UIBarButtonItem!
     @IBOutlet weak var myPets: UICollectionView!
     
     var pets: [PetData] = []
@@ -19,9 +20,7 @@ class My_Pets: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Round corners for add button view
-        addButtonView.layer.cornerRadius = 10
-        addButtonView.layer.masksToBounds = true
+        backgroundView.backgroundColor = .clear
 
         
         // Set Gradient View
@@ -51,10 +50,12 @@ class My_Pets: UIViewController {
         // Fetch pets from Firestore
         fetchPetsFromFirestore()
         
-        // Add target to Add Pet button
-        addPetButton.addTarget(self, action: #selector(addPetButtonTapped), for: .touchUpInside)
-        myPets.collectionViewLayout = createLayout()
+        // Set action programmatically
+        addPetButton.target = self
+        addPetButton.action = #selector(addPetButtonTapped)
         
+        // Set layout for collection view
+        myPets.collectionViewLayout = createLayout()
         
     }
     
@@ -71,17 +72,19 @@ class My_Pets: UIViewController {
                 print("Error fetching pet data: \(error.localizedDescription)")
                 return
             }
-
             self.pets = snapshot?.documents.compactMap { document in
                 let data = document.data()
+                let petId = data["petId"] as? String ?? ""
                 let name = data["petName"] as? String
                 let breed = data["petBreed"] as? String
                 let image = data["petImage"] as? String
                 let age = data["petAge"] as? String
                 let gender = data["petGender"] as? String
                 let weight = data["petWeight"] as? String
-            
-                return PetData (
+
+                // Store petId properly when creating PetData object
+                return PetData(
+                    petId: petId,  // Make sure petId is included
                     petImage: image,
                     petName: name,
                     petBreed: breed,
@@ -89,13 +92,11 @@ class My_Pets: UIViewController {
                     petAge: age,
                     petWeight: weight
                 )
-                
             } ?? []
-            
+
             DispatchQueue.main.async {
                 self.myPets.reloadData()
             }
-            
         }
     }
 }
@@ -108,48 +109,69 @@ extension My_Pets: UICollectionViewDataSource , UICollectionViewDelegate{
         return pets.count
     }
     
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PetCell", for: indexPath) as! My_Pets_Cell
         let pet = pets[indexPath.item]
         cell.configure(with: pet)
         cell.contentView.layer.cornerRadius = 8
-        cell.contentView.layer.borderWidth = 2
-        cell.contentView.layer.borderColor = UIColor.systemPurple.withAlphaComponent(1).cgColor
         cell.contentView.layer.masksToBounds = true
         cell.backgroundColor = .clear
         return cell
     }
     
+    
     func createLayout() -> UICollectionViewLayout {
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.5), heightDimension: .fractionalHeight(1.0))
-        
+        // Define item size for two cells
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(0.45),  // Adjusted width to fit 2 cells with spacing
+            heightDimension: .fractionalHeight(1.0)
+        )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         item.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8)
-        
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(235))
-        
+        // Define group size to accommodate 2 cells
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0), // 100% of the container width
+            heightDimension: .absolute(235)  // Adjust height as required
+        )
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item, item])
-        
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 16, bottom: 20, trailing: 16)
-
+        section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 16, bottom: 20, trailing: 16) // Adjust section insets
+        // Adjust layout to support only 1 item in case there is only one
+        section.orthogonalScrollingBehavior = .none
+        
         return UICollectionViewCompositionalLayout(section: section)
     }
     
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-            selectedPet = pets[indexPath.item]
+        selectedPet = pets[indexPath.item]
+        print("Selected pet ID: \(selectedPet?.petId ?? "No Pet ID")")  // Debug print
     }
     
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "AddNewPetSegue", let destinationVC = segue.destination as? AddNewPetViewController {
+        if segue.identifier == "AddNewPetSegue", let destinationVC = segue.destination as? Add_New_Pet {
             destinationVC.delegate = self
         } else if segue.identifier == "ShowPetProfileSegue", let destinationVC = segue.destination as? Pet_Profile {
-            destinationVC.petData = selectedPet
-            destinationVC.hidesBottomBarWhenPushed = true
+            if let selectedPet = selectedPet {
+                destinationVC.petId = selectedPet.petId  // Pass the petId, not the whole pet object
+                print("Pet ID passed: \(selectedPet.petId)")  // Debug print
+                destinationVC.hidesBottomBarWhenPushed = true
+            } else {
+                print("Selected Pet is nil!")
+            }
         }
     }
     
 }
 
+extension My_Pets: AddNewPetDelegate {
+    func didAddNewPet(_ pet: PetData) {
+        pets.append(pet)
+        
+        DispatchQueue.main.async {
+            self.myPets.reloadData()
+        }
+    }
+}

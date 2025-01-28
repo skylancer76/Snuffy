@@ -1,13 +1,13 @@
 //
-//  Filters.swift
+//  Pet Diet.swift
 //  TabBarControllerPawPal
 //
-//  Created by admin19 on 24/12/24.
+//  Created by admin19 on 28/01/25.
 //
 
 import UIKit
 
-class Filters: UIViewController {
+class Pet_Diet: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -15,10 +15,7 @@ class Filters: UIViewController {
         // Do any additional setup after loading the view.
     }
     
-    @IBAction func dissMissButton(_ sender: Any) {
-        self.dismiss(animated: true, completion: nil)
-    }
-    
+
     /*
     // MARK: - Navigation
 

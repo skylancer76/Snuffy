@@ -1,20 +1,18 @@
 //
-//  Profile.swift
+//  Vaccination Details.swift
 //  TabBarControllerPawPal
 //
-//  Created by admin19 on 04/01/25.
+//  Created by admin19 on 28/01/25.
 //
 
 import UIKit
 
-class Profile: UIViewController {
+class Vaccination_Details: UIViewController {
 
-    
-    @IBOutlet weak var personalDetails: UITableView!
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        // Do any additional setup after loading the view.
     }
     
 

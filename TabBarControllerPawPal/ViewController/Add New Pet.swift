@@ -1,27 +1,28 @@
 //
-//  AddNewPetViewController.swift
+//  Add New Pet.swift
 //  TabBarControllerPawPal
 //
-//  Created by admin19 on 02/01/25.
+//  Created by admin19 on 27/01/25.
 //
 
 import UIKit
 import FirebaseStorage
+
 protocol AddNewPetDelegate: AnyObject {
     func didAddNewPet(_ pet: PetData)
 }
 
-class AddNewPetViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class Add_New_Pet: UITableViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     @IBOutlet weak var petNameTextField: UITextField!
     @IBOutlet weak var petBreedTextField: UITextField!
-    @IBOutlet weak var petGenderTextField: UITextField!
     @IBOutlet weak var petAgeTextField: UITextField!
+    @IBOutlet weak var petGenderTextField: UITextField!
     @IBOutlet weak var petWeightTextField: UITextField!
     @IBOutlet weak var petImageView: UIImageView!
-    @IBOutlet weak var submitButton: UIButton!
-    weak var delegate: AddNewPetDelegate?
+    @IBOutlet weak var addButton: UIBarButtonItem!
     
+    weak var delegate: AddNewPetDelegate?
     var selectedImage: UIImage?
     
     override func viewDidLoad() {
@@ -50,8 +51,8 @@ class AddNewPetViewController: UIViewController, UIImagePickerControllerDelegate
         }
         dismiss(animated: true, completion: nil)
     }
-    
-    @IBAction func submitButtonTapped(_ sender: UIButton) {
+
+    @IBAction func AddButtonTapped(_ sender: Any) {
         guard let petName = petNameTextField.text, !petName.isEmpty,
               let petBreed = petBreedTextField.text, !petBreed.isEmpty,
               let petGender = petGenderTextField.text, !petGender.isEmpty,
@@ -61,6 +62,9 @@ class AddNewPetViewController: UIViewController, UIImagePickerControllerDelegate
             showAlert(title: "Error", message: "Please fill in all fields and select an image.")
             return
         }
+        
+        // Generate unique pet ID (for the first time the pet is added)
+        let petId = UUID().uuidString
         
         // Upload image and save pet data
         uploadImageToFirebase(image: image) { [weak self] imageURL, error in
@@ -76,6 +80,7 @@ class AddNewPetViewController: UIViewController, UIImagePickerControllerDelegate
             
             // Prepare pet data
             let petData: [String: Any] = [
+                "petId": petId,  // Include unique petId
                 "petName": petName,
                 "petBreed": petBreed,
                 "petGender": petGender,
@@ -85,13 +90,13 @@ class AddNewPetViewController: UIViewController, UIImagePickerControllerDelegate
             ]
             
             // Save pet data to Firestore
-            FirebaseManager.shared.savePetDataToFirebase(data: petData) { error in
+            FirebaseManager.shared.savePetDataToFirebase(data: petData, petId: petId) { error in
                 if let error = error {
                     self?.showAlert(title: "Error", message: "Failed to save pet data: \(error.localizedDescription)")
                 } else {
                     self?.showAlert(title: "Success", message: "Pet data saved successfully!") {
                         guard let self else { return }
-                        let newPet = PetData(petImage: imageURL, petName: petName, petBreed: petBreed)
+                        let newPet = PetData(petId: petId, petImage: imageURL, petName: petName, petBreed: petBreed)
                         self.delegate?.didAddNewPet(newPet)
                         
                         self.clearFields()
@@ -101,7 +106,7 @@ class AddNewPetViewController: UIViewController, UIImagePickerControllerDelegate
             }
         }
     }
-    
+
     func uploadImageToFirebase(image: UIImage, completion: @escaping (String?, Error?) -> Void) {
         guard let imageData = image.jpegData(compressionQuality: 0.8) else {
             completion(nil, NSError(domain: "ImageError", code: 0, userInfo: [NSLocalizedDescriptionKey: "Invalid image data"]))
@@ -124,7 +129,7 @@ class AddNewPetViewController: UIViewController, UIImagePickerControllerDelegate
             }
         }
     }
-    
+
     func clearFields() {
         petNameTextField.text = ""
         petBreedTextField.text = ""
@@ -134,24 +139,12 @@ class AddNewPetViewController: UIViewController, UIImagePickerControllerDelegate
         petImageView.image = UIImage(named: "placeholder_image")
         selectedImage = nil
     }
-    
+
     func showAlert(title: String, message: String, completion: (() -> Void)? = nil) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
             completion?()
         }))
         present(alert, animated: true, completion: nil)
-    }
-}
-
-extension My_Pets: AddNewPetDelegate {
-    func didAddNewPet(_ pet: PetData) {
-        
-        pets.append(pet)
-        
-      
-        DispatchQueue.main.async {
-            self.myPets.reloadData()
-        }
     }
 }

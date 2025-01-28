@@ -72,18 +72,19 @@ struct Bookings: Codable {
 
 // MARK: - Pet Data Model
 class PetData {
+    var petId: String  // New unique identifier for each pet
     var petImage: String?
     var petName: String?
     var petBreed: String?
     var petGender: String?
     var petAge: String?
     var petWeight: String?
-
     var dietaryDetails: DietaryDetails?
     var medications: [Medication]?
     var vaccinationDetails: [VaccinationDetails]?
-
+    
     init(
+        petId: String = UUID().uuidString,  // Use UUID to generate unique ID
         petImage: String? = nil,
         petName: String? = nil,
         petBreed: String? = nil,
@@ -94,6 +95,7 @@ class PetData {
         medications: [Medication]? = nil,
         vaccinationDetails: [VaccinationDetails]? = nil
     ) {
+        self.petId = petId
         self.petImage = petImage
         self.petName = petName
         self.petBreed = petBreed
