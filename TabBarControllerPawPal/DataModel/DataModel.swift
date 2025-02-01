@@ -71,7 +71,7 @@ struct Bookings: Codable {
 }
 
 // MARK: - Pet Data Model
-class PetData {
+class PetData: Codable {
     var petId: String  // New unique identifier for each pet
     var petImage: String?
     var petName: String?
@@ -110,7 +110,7 @@ class PetData {
 
 
 // MARK: - Dietary Details Model
-class DietaryDetails {
+class DietaryDetails: Codable {
     var foodPreferences: String?
     var allergies: String?
     var feedingSchedule: String?
@@ -123,7 +123,7 @@ class DietaryDetails {
 }
 
 // MARK: - Medication Model
-class Medication {
+class Medication: Codable {
     var medicineName: String
     var dosage: String
     var frequency: String
@@ -136,7 +136,7 @@ class Medication {
 }
 
 // MARK: - Vaccination Details Model
-class VaccinationDetails {
+class VaccinationDetails: Codable {
     
     var vaccineId : String?
     var vaccineName: String
@@ -144,7 +144,6 @@ class VaccinationDetails {
     var dateOfVaccination: String
     var expiryDate: String
     var nextDueDate: String
-    var notes: String
 
     init(
         vaccineId: String = UUID().uuidString,
@@ -152,8 +151,7 @@ class VaccinationDetails {
         vaccineType: String,
         dateOfVaccination: String,
         expiryDate: String,
-        nextDueDate: String,
-        notes: String
+        nextDueDate: String
     
     ) {
         self.vaccineId = vaccineId
@@ -162,7 +160,6 @@ class VaccinationDetails {
         self.dateOfVaccination = dateOfVaccination
         self.expiryDate = expiryDate
         self.nextDueDate = nextDueDate
-        self.notes = notes
     }
 }
 

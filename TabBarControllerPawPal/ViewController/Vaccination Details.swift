@@ -3,191 +3,113 @@
 //  TabBarControllerPawPal
 //
 //  Created by admin19 on 28/01/25.
-//
-
-//import UIKit
-//import FirebaseFirestore
-//
-//class Vaccination_Details: UIViewController, UITableViewDelegate, UITableViewDataSource {
-//    
-//    @IBOutlet weak var tableView: UITableView!
-//    
-//    var petId: String?
-//    var vaccinations: [VaccinationDetails] = []
-//
-//    override func viewDidLoad() {
-//        super.viewDidLoad()
-//        tableView.delegate = self
-//        tableView.dataSource = self
-//        fetchVaccinations()
-//    }
-//    
-//    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return vaccinations.count
-//    }
-//    
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        guard let cell = tableView.dequeueReusableCell(withIdentifier: "VaccinationCell", for: indexPath) as? VaccinationTableViewCell else {
-//            return UITableViewCell()
-//        }
-//
-//        let vaccination = vaccinations[indexPath.row]
-//        cell.vaccineNameLabel.text = vaccination.vaccineName
-//        cell.vaccineTypeLabel.text = vaccination.vaccineType
-//        cell.dateOfVaccineLabel.text = vaccination.dateOfVaccination
-//        cell.expiaryDateLabel.text = vaccination.expiryDate
-//        cell.nextDueDateLabel.text = vaccination.nextDueDate
-//
-//        return cell
-//    }
-//    
-//    // Fetch vaccinations from the nested vaccinations field in Firestore
-//    func fetchVaccinations() {
-//        guard let petId = petId else { return }
-//        let db = Firestore.firestore()
-//        
-//        db.collection("Pets").document(petId).getDocument { (document, error) in
-//            if let error = error {
-//                print("Error fetching pet vaccinations: \(error.localizedDescription)")
-//                return
-//            }
-//            
-//            if let document = document, document.exists {
-//                if let vaccinationData = document.data()?["vaccinations"] as? [[String: Any]] {
-//                    self.vaccinations = vaccinationData.compactMap { data in
-//                        return VaccinationDetails(
-//                            vaccineId: data["vaccineId"] as? String ?? UUID().uuidString,
-//                            vaccineName: data["vaccineName"] as? String ?? "",
-//                            vaccineType: data["vaccineType"] as? String ?? "",
-//                            dateOfVaccination: data["dateOfVaccination"] as? String ?? "",
-//                            expiryDate: data["expiryDate"] as? String ?? "",
-//                            nextDueDate: data["nextDueDate"] as? String ?? "",
-//                            notes: data["notes"] as? String ?? ""
-//                        )
-//                    }
-//                    DispatchQueue.main.async {
-//                        self.tableView.reloadData()
-//                    }
-//                }
-//            }
-//        }
-//    }
-//    
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if segue.identifier == "goToAddVaccination",
-//           let destinationVC = segue.destination as? Add_Vaccination {
-//            destinationVC.petId = self.petId 
-//        }
-//    }
-//
-//
-//}
-//
-//// Delegate method to refresh vaccinations when new data is added
-//extension Vaccination_Details: AddVaccinationDelegate {
-//    func didAddVaccination() {
-//        fetchVaccinations()
-//    }
-//}
-
 
 import UIKit
 import FirebaseFirestore
 
-class Vaccination_Details: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    
-    @IBOutlet weak var tableView: UITableView!
+class Vaccination_Details: UIViewController {
     
     var petId: String?
-    var vaccinations: [VaccinationDetails] = []
+    @IBOutlet weak var vaccinationTableView: UITableView!
+    
+    var vaccinationDetails: [VaccinationDetails] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.delegate = self
-        tableView.dataSource = self
+        // Print to verify petId
+        print("Pet ID in Vaccination Details: \(petId ?? "No Pet ID")")
         
-        print("Vaccination_Details Loaded - petId:", petId ?? "nil") // Debugging
+        vaccinationTableView.dataSource = self
+        vaccinationTableView.delegate = self
         
-        fetchVaccinations()
+        if let petId = petId {
+            fetchVaccinationData(petId: petId)
+        }
     }
-    
+
+    // Fetch vaccination data from Firebase for the specific petId
+    func fetchVaccinationData(petId: String) {
+        let db = Firestore.firestore()
+        
+        db.collection("Pets").document(petId).collection("Vaccinations").getDocuments { snapshot, error in
+            if let error = error {
+                print("Error fetching vaccination data: \(error.localizedDescription)")
+                return
+            }
+            
+            self.vaccinationDetails.removeAll()
+            
+            // Map the fetched documents to VaccinationDetails
+            for document in snapshot?.documents ?? [] {
+                let vaccinationData = document.data()
+                
+                // Extract the vaccination data manually
+                let vaccineName = vaccinationData["vaccineName"] as? String ?? ""
+                let vaccineType = vaccinationData["vaccineType"] as? String ?? ""
+                let dateOfVaccination = vaccinationData["dateOfVaccination"] as? String ?? ""
+                let expiryDate = vaccinationData["expiryDate"] as? String ?? ""
+                let nextDueDate = vaccinationData["nextDueDate"] as? String ?? ""
+                
+                // Create a VaccinationDetails object from the data
+                let vaccination = VaccinationDetails(
+                    vaccineName: vaccineName,
+                    vaccineType: vaccineType,
+                    dateOfVaccination: dateOfVaccination,
+                    expiryDate: expiryDate,
+                    nextDueDate: nextDueDate
+                )
+                
+                self.vaccinationDetails.append(vaccination)
+            }
+            
+            // Reload the table view
+            self.vaccinationTableView.reloadData()
+        }
+    }
+
+    // Add Vaccination Button Action
+    @IBAction func addVaccination(_ sender: UIBarButtonItem) {
+        if let petId = petId {
+            // Instantiate the AddVaccination view controller using Storyboard ID
+            if let addVaccinationVC = storyboard?.instantiateViewController(withIdentifier: "AddVaccinationVC") as? Add_Vaccination {
+                // Pass petId to AddVaccination view controller
+                addVaccinationVC.petId = petId
+                // Navigate to the AddVaccination screen
+                navigationController?.pushViewController(addVaccinationVC, animated: true)
+            }
+        }
+    }
+}
+
+extension Vaccination_Details: UITableViewDataSource, UITableViewDelegate {
+    // TableView DataSource Methods
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return vaccinations.count
+        return vaccinationDetails.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "VaccinationCell", for: indexPath) as? VaccinationTableViewCell else {
-            return UITableViewCell()
-        }
-
-        let vaccination = vaccinations[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: "VaccinationTableViewCell", for: indexPath) as! VaccinationTableViewCell
+        
+        let vaccination = vaccinationDetails[indexPath.row]
+        
+        // Populate cell labels with actual vaccination data
         cell.vaccineNameLabel.text = vaccination.vaccineName
         cell.vaccineTypeLabel.text = vaccination.vaccineType
         cell.dateOfVaccineLabel.text = vaccination.dateOfVaccination
         cell.expiaryDateLabel.text = vaccination.expiryDate
         cell.nextDueDateLabel.text = vaccination.nextDueDate
-
+        
         return cell
     }
     
-    // Fetch vaccinations from the nested vaccinations field in Firestore
-    func fetchVaccinations() {
-        guard let petId = petId else {
-            print(" Error: petId is nil while fetching vaccinations")
-            return
-        }
-        
-        let db = Firestore.firestore()
-        
-        db.collection("Pets").document(petId).getDocument { (document, error) in
-            if let error = error {
-                print(" Error fetching pet vaccinations: \(error.localizedDescription)")
-                return
-            }
-            
-            if let document = document, document.exists {
-                print(" Document found for petId:", petId)
-                
-                if let vaccinationData = document.data()?["vaccinations"] as? [[String: Any]] {
-                    self.vaccinations = vaccinationData.compactMap { data in
-                        return VaccinationDetails(
-                            vaccineId: data["vaccineId"] as? String ?? UUID().uuidString,
-                            vaccineName: data["vaccineName"] as? String ?? "",
-                            vaccineType: data["vaccineType"] as? String ?? "",
-                            dateOfVaccination: data["dateOfVaccination"] as? String ?? "",
-                            expiryDate: data["expiryDate"] as? String ?? "",
-                            nextDueDate: data["nextDueDate"] as? String ?? "",
-                            notes: data["notes"] as? String ?? ""
-                        )
-                    }
-                    DispatchQueue.main.async {
-                        self.tableView.reloadData()
-                        print("Vaccination data loaded successfully.")
-                    }
-                } else {
-                    print(" No vaccinations found for this pet.")
-                }
-            } else {
-                print(" No document found for petId:", petId)
-            }
-        }
+    // Set the height of each cell to 230 points
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 230
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "goToAddVaccination",
-           let destinationVC = segue.destination as? Add_Vaccination {
-            destinationVC.petId = self.petId
-            destinationVC.delegate = self
-            print(" Passing petId to Add_Vaccination:", petId ?? "nil") // Debugging
-        }
-    }
-}
-
-// Delegate method to refresh vaccinations when new data is added
-extension Vaccination_Details: AddVaccinationDelegate {
-    func didAddVaccination() {
-        print(" Reloading vaccinations after addition")
-        fetchVaccinations()
+    // TableView Delegate Methods
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // Handle vaccination detail selection if needed
     }
 }

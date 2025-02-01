@@ -115,8 +115,10 @@ extension My_Pets: UICollectionViewDataSource , UICollectionViewDelegate{
         let pet = pets[indexPath.item]
         cell.configure(with: pet)
         cell.contentView.layer.cornerRadius = 8
-        cell.contentView.layer.masksToBounds = true
         cell.backgroundColor = .clear
+        cell.layer.masksToBounds = false
+        cell.layer.shadowRadius = 5
+        cell.layer.shadowOpacity = 0.1
         return cell
     }
     
@@ -124,7 +126,7 @@ extension My_Pets: UICollectionViewDataSource , UICollectionViewDelegate{
     func createLayout() -> UICollectionViewLayout {
         // Define item size for two cells
         let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(0.45),  // Adjusted width to fit 2 cells with spacing
+            widthDimension: .fractionalWidth(0.5),  // Adjusted width to fit 2 cells with spacing
             heightDimension: .fractionalHeight(1.0)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)

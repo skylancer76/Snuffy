@@ -10,14 +10,9 @@ import UIKit
 class VaccinationTableViewCell: UITableViewCell {
     
     @IBOutlet weak var vaccineNameLabel: UILabel!
-    
     @IBOutlet weak var vaccineTypeLabel: UILabel!
-    
     @IBOutlet weak var dateOfVaccineLabel: UILabel!
-    
     @IBOutlet weak var expiaryDateLabel: UILabel!
-    
-    
     @IBOutlet weak var nextDueDateLabel: UILabel!
     
     override func awakeFromNib() {

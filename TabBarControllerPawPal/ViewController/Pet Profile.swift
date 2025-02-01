@@ -4,10 +4,8 @@
 //
 //  Created by admin19 on 01/01/25.
 //
-
 import UIKit
 import FirebaseFirestore
-import FirebaseStorage
 
 class Pet_Profile: UIViewController {
     
@@ -21,11 +19,7 @@ class Pet_Profile: UIViewController {
     @IBOutlet var ageLabel: UILabel!
     @IBOutlet var breedLabel: UILabel!
     @IBOutlet var nameLabel: UILabel!
-    
-    // Outlets for view styling
-    @IBOutlet weak var ageView: UIView!
-    @IBOutlet weak var genderView: UIView!
-    @IBOutlet weak var weightView: UIView!
+    @IBOutlet weak var petInfo: UIView!
     
     // Outlets for TableView
     @IBOutlet weak var petDetailsTableView: UITableView!
@@ -39,9 +33,6 @@ class Pet_Profile: UIViewController {
         // Debug print to check if petId is received correctly
         print("Received Pet ID: \(petId ?? "No Pet ID")")
         
-        // Set up UI styles
-        setupUI()
-        
         // Set TableView dataSource and delegate
         petDetailsTableView.dataSource = self
         petDetailsTableView.delegate = self
@@ -52,19 +43,12 @@ class Pet_Profile: UIViewController {
         } else {
             print("Pet ID is missing!")
         }
-    }
-    
-    // Function to set up UI components
-    func setupUI() {
-        // Apply corner radius for styling the views
-        genderView.layer.cornerRadius = 10
-        genderView.layer.masksToBounds = true
         
-        ageView.layer.cornerRadius = 10
-        ageView.layer.masksToBounds = true
+        petImage.layer.cornerRadius = 20
+        petImage.layer.masksToBounds = true
         
-        weightView.layer.cornerRadius = 10
-        weightView.layer.masksToBounds = true
+        petInfo.layer.cornerRadius = 12
+        petInfo.layer.masksToBounds = true
     }
     
     // Function to fetch pet data from Firestore using petId
@@ -102,6 +86,18 @@ class Pet_Profile: UIViewController {
             }
         }
     }
+    
+    @IBAction func goToVaccinationDetails(_ sender: UIButton) {
+        if let petId = petId {
+            // Instantiate the VaccinationDetails view controller using Storyboard ID
+            if let vaccinationDetailsVC = storyboard?.instantiateViewController(withIdentifier: "VaccinationDetailsVC") as? Vaccination_Details {
+                // Pass petId to VaccinationDetails view controller
+                vaccinationDetailsVC.petId = petId
+                // Navigate to the VaccinationDetails screen
+                navigationController?.pushViewController(vaccinationDetailsVC, animated: true)
+            }
+        }
+    }
 }
 
 
@@ -128,23 +124,43 @@ extension Pet_Profile: UITableViewDataSource, UITableViewDelegate {
         return tableOptions.count
     }
     
-    // Create cell and populate it with data
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "PetDetailCell", for: indexPath)
         cell.textLabel?.text = tableOptions[indexPath.row]
         
-        // Optionally, add icons based on the labels (e.g. food, pills, etc.)
-        let icon = UIImage(systemName: "pawprint") // Example symbol, can customize per option
-        cell.imageView?.image = icon
+        // Set icons based on the row
+        let icon: UIImage?
+        
+        switch tableOptions[indexPath.row] {
+        case "Pet Vaccinations":
+            icon = UIImage(systemName: "syringe.fill")
+        case "Pet Diet":
+            icon = UIImage(systemName: "fork.knife")
+        case "Pet Medications":
+            icon = UIImage(systemName: "pills.fill")
+        default:
+            icon = nil
+        }
+        
+        if let icon = icon {
+            // Apply system purple color with 70% opacity
+            let tintedIcon = icon.withRenderingMode(.alwaysTemplate)
+            cell.imageView?.image = tintedIcon
+            cell.imageView?.tintColor = UIColor.systemPurple.withAlphaComponent(0.7)
+        }
         
         return cell
     }
+    
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 70  // Set height of the cell to 70 points
+    }
+    
     
     // Handling row selection
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // Handle selection (for now, just print the option selected)
         print("Selected: \(tableOptions[indexPath.row])")
-        
-        // Here you could navigate to the relevant view controller (e.g. for medications, diet, etc.)
     }
 }

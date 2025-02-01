@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ScheduleRequestViewController: UITableViewController {
+class Schedule_Request: UITableViewController {
     
     // MARK: - Outlets
     
