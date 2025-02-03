@@ -34,11 +34,10 @@ class Schedule_Request: UITableViewController {
     // MARK: - Actions
     
 
-    
     @IBAction func sendButtonTapped(_ sender: UIBarButtonItem) {
         saveScheduleRequest()
     }
-    
+  
     // MARK: - Fetch Pet Names
     
     private func fetchPetNames() {
@@ -95,53 +94,58 @@ class Schedule_Request: UITableViewController {
     // MARK: - Save Schedule Request
     
     func saveScheduleRequest() {
-        // Ensure the user is logged in
         guard let currentUser = Auth.auth().currentUser else {
             self.showAlert(title: "Error", message: "You must be logged in to send a schedule request.")
             return
         }
         
         let userId = currentUser.uid
-        let startDate = startDatePicker.date // Date object
-        let endDate = endDatePicker.date     // Date object
+        let startDate = startDatePicker.date
+        let endDate = endDatePicker.date
         
-        // Validation: End date cannot be earlier than start date
         guard endDate >= startDate else {
             self.showAlert(title: "Error", message: "End date cannot be earlier than the start date.")
             return
         }
         
-        // If the dates are valid, fetch additional data and proceed
         fetchUserName(userId: userId) { [weak self] userName in
             guard let self = self else { return }
             
-            let pet = self.petPickerButton.title(for: .normal) ?? "Unknown Pet"
+            let petName = self.petPickerButton.title(for: .normal) ?? "Unknown Pet"
             let petPickup = self.petPickupSwitch.isOn
             let petDropoff = self.petDropoffSwitch.isOn
             let instructions = self.caretakingInstructionsTextField.text ?? ""
-            let requestId = UUID().uuidString // Generate a unique request ID
+            let requestId = UUID().uuidString
             
-            // Prepare data for Firestore
             let requestData: [String: Any] = [
                 "requestId": requestId,
                 "userId": userId,
-                "userName": userName, // Fetched from the database
-                "pet": pet,
-                "startDate": startDate,
-                "endDate": endDate,
+                "userName": userName,
+                "petName": petName,
+                "startDate": Timestamp(date: startDate),
+                "endDate": Timestamp(date: endDate),
                 "petPickup": petPickup,
                 "petDropoff": petDropoff,
                 "instructions": instructions,
-                "timestamp": Date() // Current date and time
+                "status": "available", // Initially available before assigning caretaker
+                "timestamp": Timestamp(date: Date())
             ]
             
-            // Save to Firestore
             FirebaseManager.shared.saveScheduleRequestData(data: requestData) { error in
                 if let error = error {
                     print("Failed to save schedule request: \(error.localizedDescription)")
                     self.showAlert(title: "Error", message: "Failed to save the schedule request.")
                 } else {
-                    self.showAlert(title: "Success", message: "Schedule request saved successfully!")
+                    print("Schedule request saved successfully! Now auto-assigning caretaker...")
+                    
+                  
+                    FirebaseManager.shared.autoAssignCaretaker(petName: petName, requestId: requestId) { error in
+                        if let error = error {
+                            print("Failed to auto-assign caretaker: \(error.localizedDescription)")
+                        } else {
+                            print("Caretaker successfully assigned for request: \(requestId)")
+                        }
+                    }
                 }
             }
         }

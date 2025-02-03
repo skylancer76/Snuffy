@@ -113,99 +113,155 @@ class FirebaseManager {
     }
     
 
-    func fetchPetNames(completion: @escaping ([String]) -> Void) {
-        db.collection("Pets").getDocuments { snapshot, error in
-            if let error = error {
-                completion([])
-                return
-            }
-            
-            guard let documents = snapshot?.documents else {
-                completion([])
-                return
-            }
-            
-            let petNames: [String] = documents.compactMap { doc in
-                return doc.data()["petName"] as? String
-            }
-            
-            completion(petNames)
-        }
-    }
-    
-    
-    func autoAssignCaretaker(petId: String, requestData: [String: Any], completion: @escaping (Error?) -> Void) {
-        let db = Firestore.firestore()
+ 
 
-        // Fetch caretakers
-        db.collection("caretakers").whereField("status", isEqualTo: "available").getDocuments { (snapshot, error) in
+    func autoAssignCaretaker(petName: String, requestId: String, completion: @escaping (Error?) -> Void) {
+        let db = Firestore.firestore()
+        
+        
+        db.collection("Pets").whereField("petName", isEqualTo: petName).getDocuments { (snapshot, error) in
             if let error = error {
                 completion(error)
                 return
             }
             
-            guard let documents = snapshot?.documents else {
-                completion(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No available caretakers found"]))
+            guard let petDoc = snapshot?.documents.first else {
+                completion(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Pet not found"]))
                 return
             }
-
-            // Map caretakers and calculate suitability score
-            let caretakers = documents.compactMap { doc -> (DocumentReference, Caretakers, Double)? in
-                let data = doc.data()
-                guard let caretaker = try? Firestore.Decoder().decode(Caretakers.self, from: data) else {
-                    return nil
-                }
-                
-                // Directly use the non-optional properties
-                let experience = caretaker.experience
-                let distance = caretaker.distanceAway
-                
-                // Ensure distance is greater than zero to avoid division by zero
-                guard distance > 0 else { return nil }
-                
-                // Calculate suitability score: higher experience and lower distance are better
-                let score = Double(experience) / distance
-                return (doc.reference, caretaker, score)
-            }
-
-
-            // Sort caretakers by score (descending order)
-            let sortedCaretakers = caretakers.sorted { $0.2 > $1.2 }
-
-            // Assign the first suitable caretaker
-            guard let (caretakerRef, caretaker, _) = sortedCaretakers.first else {
-                completion(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No suitable caretakers found"]))
-                return
-            }
-
-            // Prepare updated request data
-            var updatedRequestData = requestData
-            updatedRequestData["caretakerId"] = caretaker.caretakerId
-            updatedRequestData["status"] = "pending"
-
-            // Save request to scheduleRequests collection
-            let requestRef = db.collection("scheduleRequests").document()
-            requestRef.setData(updatedRequestData) { error in
+            
+            let petId = petDoc.documentID
+            
+           
+            db.collection("caretakers").whereField("status", isEqualTo: "available").getDocuments { (caretakerSnapshot, error) in
                 if let error = error {
                     completion(error)
                     return
                 }
+                
+                guard let caretakers = caretakerSnapshot?.documents else {
+                    completion(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No available caretakers found"]))
+                    return
+                }
 
-                // Update caretaker's pendingRequests
-                caretakerRef.updateData([
-                    "pendingRequests": FieldValue.arrayUnion([requestRef.documentID])
+              
+                let sortedCaretakers = caretakers.compactMap { doc -> (DocumentReference, Caretakers, Double)? in
+                    let data = doc.data()
+                    guard let caretaker = try? Firestore.Decoder().decode(Caretakers.self, from: data) else { return nil }
+                    
+                    let experience = caretaker.experience
+                    let distance = caretaker.distanceAway
+                    
+                    guard distance > 0 else { return nil } // Avoid division by zero
+                    
+                    let score = Double(experience) / distance
+                    return (doc.reference, caretaker, score)
+                }.sorted { $0.2 > $1.2 } // Sort by highest score
+
+                
+                guard let (caretakerRef, caretaker, _) = sortedCaretakers.first else {
+                    completion(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No suitable caretakers found"]))
+                    return
+                }
+
+                print("Assigning request \(requestId) to caretaker: \(caretaker.name) (Exp: \(caretaker.experience), Distance: \(caretaker.distanceAway))")
+                
+              
+                let requestRef = db.collection("scheduleRequests").document(requestId)
+                requestRef.updateData([
+                    "caretakerId": caretaker.caretakerId,
+                    "status": "pending"
                 ]) { error in
                     if let error = error {
                         completion(error)
-                    } else {
-                        print("Request sent to caretaker: \(caretaker.name)")
-                        completion(nil)
+                        return
+                    }
+
+                   
+                    caretakerRef.updateData([
+                        "pendingRequests": FieldValue.arrayUnion([requestId])
+                    ]) { error in
+                        if let error = error {
+                            completion(error)
+                        } else {
+                            print("Request successfully assigned to \(caretaker.name)")
+                            completion(nil)
+                        }
                     }
                 }
             }
         }
     }
-    
+
+    func fetchAssignedRequests(for caretakerId: String, completion: @escaping ([ScheduleRequest]) -> Void) {
+        db.collection("scheduleRequests")
+            .whereField("caretakerId", isEqualTo: caretakerId)
+            .whereField("status", isEqualTo: "pending")
+            .getDocuments { snapshot, error in
+                if let error = error {
+                    print("Error fetching schedule requests: \(error.localizedDescription)")
+                    completion([])
+                    return
+                }
+                
+                var requests: [ScheduleRequest] = []
+                let group = DispatchGroup() // To handle async calls
+                
+                for document in snapshot?.documents ?? [] {
+                    var requestData = document.data()
+                    requestData["requestId"] = document.documentID
+                    
+                    guard let petName = requestData["petName"] as? String else { continue }
+                    
+                    group.enter()
+                    
+                    // Fetch petId using petName
+                    self.db.collection("Pets")
+                        .whereField("petName", isEqualTo: petName)
+                        .getDocuments { petSnapshot, error in
+                            if let error = error {
+                                print("Error fetching pet ID for \(petName): \(error.localizedDescription)")
+                                group.leave()
+                                return
+                            }
+                            
+                            guard let petDocument = petSnapshot?.documents.first else {
+                                print("No pet found for name: \(petName)")
+                                group.leave()
+                                return
+                            }
+                            
+                            let petId = petDocument.documentID
+                            requestData["petId"] = petId
+                            let petData = petDocument.data()
+                            
+                            // Fetch Pet Details
+                            requestData["petBreed"] = petData["petBreed"] as? String ?? "Unknown"
+                            requestData["petImageUrl"] = petData["petImage"] as? String ?? ""
+                            
+                            // Convert to ScheduleRequest model
+                            if let scheduleRequest = ScheduleRequest(from: requestData) {
+                                requests.append(scheduleRequest)
+                            }
+                            
+                            group.leave()
+                        }
+                }
+                
+                group.notify(queue: .main) {
+                    completion(requests)
+                }
+            }
+    }
+
+
+
+    func formatDate(timestamp: Timestamp) -> String {
+            let date = timestamp.dateValue()
+            let formatter = DateFormatter()
+            formatter.dateFormat = "dd MMM" // Example: "12 Feb"
+            return formatter.string(from: date)
+        }
     
     func acceptRequest(caretakerId: String, requestId: String, completion: @escaping (Error?) -> Void) {
         let db = Firestore.firestore()
@@ -226,7 +282,32 @@ class FirebaseManager {
         }
     }
     
-    
+    func fetchAvailableCaretakers(completion: @escaping ([(DocumentReference, Caretakers, Double)]) -> Void) {
+        let db = Firestore.firestore()
+        db.collection("caretakers").whereField("status", isEqualTo: "available").getDocuments { snapshot, error in
+            if let error = error {
+                print("Error fetching available caretakers: \(error.localizedDescription)")
+                completion([])
+                return
+            }
+
+            let caretakers = snapshot?.documents.compactMap { doc -> (DocumentReference, Caretakers, Double)? in
+                let data = doc.data()
+                guard let caretaker = try? Firestore.Decoder().decode(Caretakers.self, from: data) else { return nil }
+                
+                let experience = caretaker.experience
+                let distance = caretaker.distanceAway
+                
+                guard distance > 0 else { return nil }
+                
+                let score = Double(experience) / distance
+                return (doc.reference, caretaker, score)
+            }.sorted { $0.2 > $1.2 } ?? []
+
+            completion(caretakers)
+        }
+    }
+
     func rejectRequest(caretakerId: String, requestId: String, sortedCaretakers: [(DocumentReference, Caretakers, Double)], completion: @escaping (Error?) -> Void) {
         let db = Firestore.firestore()
         let requestRef = db.collection("scheduleRequests").document(requestId)
@@ -243,7 +324,7 @@ class FirebaseManager {
 
             if let (caretakerRef, nextCaretaker, _) = remainingCaretakers.first {
                 // Update request with the next caretaker
-                requestRef.updateData(["caretakerId": nextCaretaker.caretakerId]) { error in
+                requestRef.updateData(["caretakerId": nextCaretaker.caretakerId, "status": "pending"]) { error in
                     if let error = error {
                         completion(error)
                         return
@@ -266,7 +347,7 @@ class FirebaseManager {
             }
         }
     }
-    
+
     
     // Save vaccination data for a specific pet.
     // The vaccineId is not included in the data dictionary so Firestore will auto‑generate it.
@@ -394,7 +475,30 @@ class FirebaseManager {
             }
         }
     }
-    
+    func fetchPetNames(completion: @escaping ([String]) -> Void) {
+            db.collection("Pets").getDocuments { snapshot, error in
+                if let error = error {
+                    print("Error fetching pets: \(error.localizedDescription)")
+                    completion([])
+                    return
+                }
+
+                guard let documents = snapshot?.documents else {
+                    print("No pet documents found in Firestore.")
+                    completion([])
+                    return
+                }
+
+                let petNames: [String] = documents.compactMap { doc in
+                    return doc.data()["petName"] as? String
+                }
+
+                DispatchQueue.main.async {
+                    completion(petNames)
+                }
+            }
+        }
+
 }
     
     

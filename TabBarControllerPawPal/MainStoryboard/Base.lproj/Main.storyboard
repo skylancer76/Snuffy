@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="bQG-b3-b8U">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="6fy-Vc-4CS">
     <device id="retina6_3" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
@@ -573,14 +573,14 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" showsMenuAsPrimaryAction="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" changesSelectionAsPrimaryAction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QoG-VN-5Dk">
-                                                    <rect key="frame" x="301" y="7" width="41" height="30"/>
-                                                    <menu key="menu" id="Yib-u4-GjQ">
+                                                    <rect key="frame" x="298" y="7" width="44" height="30"/>
+                                                    <menu key="menu" title="Select" id="Yib-u4-GjQ">
                                                         <children>
-                                                            <command title="Item 1" id="Q1N-0A-PE0"/>
+                                                            <command title="Select" id="Q1N-0A-PE0"/>
                                                             <command title="Item 2" id="RxB-at-oSr"/>
                                                         </children>
                                                     </menu>
-                                                    <state key="normal" title="Button"/>
+                                                    <state key="normal" title="Select"/>
                                                     <connections>
                                                         <action selector="petPickerButtonTapped:" destination="Cwp-fV-E38" eventType="touchUpInside" id="fhI-yo-CyU"/>
                                                     </connections>
@@ -752,7 +752,7 @@
                     <navigationItem key="navigationItem" title="Schedule Request" largeTitleDisplayMode="never" id="ftJ-pa-ZAu">
                         <barButtonItem key="rightBarButtonItem" title="Send" id="7q4-m1-Qoq">
                             <connections>
-                                <action selector="sendButtonTappes:" destination="Cwp-fV-E38" id="gfS-YB-pCF"/>
+                                <action selector="sendButtonTapped:" destination="Cwp-fV-E38" id="92Q-qn-iua"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -3058,7 +3058,7 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" estimatedSectionHeaderHeight="-1" sectionFooterHeight="28" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="GxN-wV-Fsv">
                                 <rect key="frame" x="0.0" y="159" width="402" height="632"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="130" id="3OZ-5E-2dE">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="RequestCell" rowHeight="130" id="3OZ-5E-2dE" customClass="RequestTableViewCell" customModule="TabBarControllerPawPal" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="50" width="402" height="130"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="3OZ-5E-2dE" id="Gzd-mC-y9d">
@@ -3175,6 +3175,15 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
+                                        <connections>
+                                            <outlet property="acceptButton" destination="GgG-qX-bRH" id="w4K-eq-2hS"/>
+                                            <outlet property="durationLabel" destination="dtG-VY-bRU" id="HVG-d3-mVs"/>
+                                            <outlet property="ownerNameLabel" destination="Xqk-Eh-Vlq" id="6rv-vX-5U8"/>
+                                            <outlet property="petBreedLabel" destination="Xzg-XZ-GFM" id="VRm-sD-Gft"/>
+                                            <outlet property="petImageView" destination="IQe-rb-Is6" id="SsI-bb-xLo"/>
+                                            <outlet property="petNameLabel" destination="WAx-GM-5tM" id="QrT-eg-vvz"/>
+                                            <outlet property="rejectButton" destination="J0U-C9-IQG" id="Q7r-2j-dP2"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
@@ -3197,7 +3206,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="Summary" id="KrP-Ym-jF8"/>
                     <connections>
-                        <outlet property="upcomingBookingTable" destination="GxN-wV-Fsv" id="LhN-b7-sUr"/>
+                        <outlet property="tableView" destination="GxN-wV-Fsv" id="bum-m2-RWX"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qtL-z6-bzT" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
