@@ -33,20 +33,20 @@ class Schedule_Request: UITableViewController {
     
     // MARK: - Actions
     
-
+    
     @IBAction func sendButtonTapped(_ sender: UIBarButtonItem) {
         saveScheduleRequest()
     }
-  
+    
     // MARK: - Fetch Pet Names
     
     private func fetchPetNames() {
-            FirebaseManager.shared.fetchPetNames { names in
-                self.petNames = names
-                print("Fetched Pet Names: \(self.petNames)")
-                self.configurePetPickerMenu()
-            }
+        FirebaseManager.shared.fetchPetNames { names in
+            self.petNames = names
+            print("Fetched Pet Names: \(self.petNames)")
+            self.configurePetPickerMenu()
         }
+    }
     private func configurePetPickerMenu() {
         // If there are no pet names, disable the button.
         guard !petNames.isEmpty else {
@@ -89,7 +89,7 @@ class Schedule_Request: UITableViewController {
         }
     }
     
-   
+    
     
     // MARK: - Save Schedule Request
     
@@ -137,8 +137,11 @@ class Schedule_Request: UITableViewController {
                     self.showAlert(title: "Error", message: "Failed to save the schedule request.")
                 } else {
                     print("Schedule request saved successfully! Now auto-assigning caretaker...")
+                    // Show success alert here
+                    DispatchQueue.main.async {
+                        self.showAlert(title: "Success", message: "Your request is sent!")
+                    }
                     
-                  
                     FirebaseManager.shared.autoAssignCaretaker(petName: petName, requestId: requestId) { error in
                         if let error = error {
                             print("Failed to auto-assign caretaker: \(error.localizedDescription)")
@@ -148,25 +151,27 @@ class Schedule_Request: UITableViewController {
                     }
                 }
             }
+            
         }
-    }
-    func fetchUserName(userId: String, completion: @escaping (String) -> Void) {
-        let usersCollection = Firestore.firestore().collection("users")
-        usersCollection.document(userId).getDocument { document, error in
-            if let error = error {
-                print("Failed to fetch user name: \(error.localizedDescription)")
-                completion("Anonymous User") // Fallback if fetching fails
-            } else if let document = document, let data = document.data(), let name = data["name"] as? String {
-                completion(name) // Pass the user's name to the completion handler
-            } else {
-                completion("Anonymous User") // Fallback if no data is found
+        func fetchUserName(userId: String, completion: @escaping (String) -> Void) {
+            let usersCollection = Firestore.firestore().collection("users")
+            usersCollection.document(userId).getDocument { document, error in
+                if let error = error {
+                    print("Failed to fetch user name: \(error.localizedDescription)")
+                    completion("Anonymous User") // Fallback if fetching fails
+                } else if let document = document, let data = document.data(), let name = data["name"] as? String {
+                    completion(name) // Pass the user's name to the completion handler
+                } else {
+                    completion("Anonymous User") // Fallback if no data is found
+                }
             }
         }
+        
+        
+        // MARK: - Alert Helper
+        
+        
     }
-
-    
-    // MARK: - Alert Helper
-    
     func showAlert(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default))
