@@ -96,15 +96,15 @@ class Home_Scene: UIViewController, CLLocationManagerDelegate {
             return
         }
     }
+    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-            guard let location = locations.last else { return }
+        guard let location = locations.last else { return }
+        // Save location to Firestore
+        saveUserLocationToFirestore(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
             
-            // Save location to Firestore
-            saveUserLocationToFirestore(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
-            
-            // Stop updating location after the location is fetched
-            locationManager.stopUpdatingLocation()
-        }
+        // Stop updating location after the location is fetched
+        locationManager.stopUpdatingLocation()
+    }
     
     // CLLocationManagerDelegate method
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {

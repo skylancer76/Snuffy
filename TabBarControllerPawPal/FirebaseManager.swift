@@ -253,9 +253,42 @@ class FirebaseManager {
                 }
             }
     }
-
-
-
+    
+    func updateBookingStatus(requestId: String, newStatus: String, completion: @escaping (Error?) -> Void) {
+        let db = Firestore.firestore()
+        db.collection("scheduleRequests").document(requestId).updateData([
+            "status": newStatus
+        ]) { error in
+            completion(error)
+        }
+    }
+    
+    //fetching booking details for petowner
+    func fetchOwnerBookings(for userId: String, completion: @escaping ([ScheduleRequest]) -> Void) {
+        let db = Firestore.firestore()
+            
+        db.collection("scheduleRequests")
+            .whereField("userId", isEqualTo: userId)
+            .getDocuments { snapshot, error in
+                if let error = error {
+                    print("Error fetching bookings: \(error.localizedDescription)")
+                    completion([])
+                    return
+                }
+                    
+                var requests: [ScheduleRequest] = []
+                for document in snapshot?.documents ?? [] {
+                    var requestData = document.data()
+                    requestData["requestId"] = document.documentID
+                    // Convert to ScheduleRequest model
+                    if let scheduleRequest = ScheduleRequest(from: requestData) {
+                        requests.append(scheduleRequest)
+                    }
+                }
+                completion(requests)
+            }
+    }
+    
     func formatDate(timestamp: Timestamp) -> String {
             let date = timestamp.dateValue()
             let formatter = DateFormatter()
@@ -475,6 +508,8 @@ class FirebaseManager {
             }
         }
     }
+    
+    
     func fetchPetNames(completion: @escaping ([String]) -> Void) {
             db.collection("Pets").getDocuments { snapshot, error in
                 if let error = error {

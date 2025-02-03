@@ -21,7 +21,7 @@ class Pet_Profile: UIViewController {
     @IBOutlet var nameLabel: UILabel!
     @IBOutlet weak var petInfo: UIView!
     
-    // Outlets for TableView
+    // Outlet for TableView
     @IBOutlet weak var petDetailsTableView: UITableView!
     
     // Data to populate the table
@@ -77,29 +77,8 @@ class Pet_Profile: UIViewController {
         }
     }
     
-    @IBAction func goToVaccinationDetails(_ sender: UIButton) {
-        if let petId = petId,
-           let vaccinationDetailsVC = storyboard?.instantiateViewController(withIdentifier: "VaccinationDetailsVC") as? Vaccination_Details {
-            vaccinationDetailsVC.petId = petId
-            navigationController?.pushViewController(vaccinationDetailsVC, animated: true)
-        }
-    }
-    
-    @IBAction func goToPetDiet(_ sender: UIButton) {
-        if let petId = petId,
-           let petDietVC = storyboard?.instantiateViewController(withIdentifier: "PetDietVC") as? Pet_Diet {
-            petDietVC.petId = petId
-            navigationController?.pushViewController(petDietVC, animated: true)
-        }
-    }
-    
-    @IBAction func goToPetMedications(_ sender: UIButton) {
-        if let petId = petId,
-           let petMedicationVC = storyboard?.instantiateViewController(withIdentifier: "PetMedicationVC") as? Pet_Medications {
-            petMedicationVC.petId = petId
-            navigationController?.pushViewController(petMedicationVC, animated: true)
-        }
-    }
+    // Remove any IBAction segues attached directly to the cell.
+    // We will handle navigation in didSelectRowAt.
 }
 
 extension UIImageView {
@@ -118,14 +97,16 @@ extension UIImageView {
 
 extension Pet_Profile: UITableViewDataSource, UITableViewDelegate {
     
-    // Number of rows in the table (1 row for each option)
+    // Number of rows in the table (one row for each option)
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tableOptions.count
     }
     
+    // Configure each cell with the corresponding option and icon.
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "PetDetailCell", for: indexPath)
         cell.textLabel?.text = tableOptions[indexPath.row]
+        
         let icon: UIImage?
         switch tableOptions[indexPath.row] {
         case "Pet Vaccinations":
@@ -140,18 +121,39 @@ extension Pet_Profile: UITableViewDataSource, UITableViewDelegate {
         if let icon = icon {
             let tintedIcon = icon.withRenderingMode(.alwaysTemplate)
             cell.imageView?.image = tintedIcon
-            cell.imageView?.tintColor = UIColor.systemPurple.withAlphaComponent(0.7)
+            cell.imageView?.tintColor = UIColor.systemPurple.withAlphaComponent(0.6)
         }
         return cell
     }
     
+    // Set cell height.
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 70
     }
     
-    // Handling row selection
+    // Handle cell selection to navigate to the proper screen.
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("Selected: \(tableOptions[indexPath.row])")
+        guard let petId = petId else { return }
+        let option = tableOptions[indexPath.row]
+        
+        switch option {
+        case "Pet Vaccinations":
+            if let vaccinationDetailsVC = storyboard?.instantiateViewController(withIdentifier: "VaccinationDetailsVC") as? Vaccination_Details {
+                vaccinationDetailsVC.petId = petId
+                navigationController?.pushViewController(vaccinationDetailsVC, animated: true)
+            }
+        case "Pet Diet":
+            if let petDietVC = storyboard?.instantiateViewController(withIdentifier: "PetDietVC") as? Pet_Diet {
+                petDietVC.petId = petId
+                navigationController?.pushViewController(petDietVC, animated: true)
+            }
+        case "Pet Medications":
+            if let petMedicationVC = storyboard?.instantiateViewController(withIdentifier: "PetMedicationVC") as? Pet_Medications {
+                petMedicationVC.petId = petId
+                navigationController?.pushViewController(petMedicationVC, animated: true)
+            }
+        default:
+            break
+        }
     }
-    
 }

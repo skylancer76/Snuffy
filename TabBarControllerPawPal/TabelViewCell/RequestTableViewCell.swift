@@ -15,8 +15,8 @@ class RequestTableViewCell: UITableViewCell {
     @IBOutlet weak var durationLabel: UILabel!
     @IBOutlet weak var acceptButton: UIButton!
     @IBOutlet weak var rejectButton: UIButton!
+    @IBOutlet weak var bgView: UIView!
     
-
 
     override func awakeFromNib() {
         super.awakeFromNib()

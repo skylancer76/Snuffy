@@ -201,7 +201,7 @@ struct ScheduleRequest: Codable {
     var requestId: String
     var userId: String
     var userName: String
-    var petName: String // Renamed from `pet` to `petName`
+    var petName: String // Renamed from ⁠ pet ⁠ to ⁠ petName ⁠
     var petId: String? // Optional, because it's assigned later
     var petImageUrl: String?
     var petBreed: String?
@@ -212,17 +212,19 @@ struct ScheduleRequest: Codable {
     var petDropoff: Bool
     var instructions: String
     var status: String
+    var caretakerId: String
     
     init?(from data: [String: Any]) {
         guard let requestId = data["requestId"] as? String,
               let userId = data["userId"] as? String,
               let userName = data["userName"] as? String,
-              let petName = data["petName"] as? String, // Updated key name to `petName`
+              let petName = data["petName"] as? String, // Updated key name to ⁠ petName ⁠
               let startTimestamp = data["startDate"] as? Timestamp,
               let endTimestamp = data["endDate"] as? Timestamp,
               let petPickup = data["petPickup"] as? Bool,
               let petDropoff = data["petDropoff"] as? Bool,
               let instructions = data["instructions"] as? String,
+              let caretakerId = data["caretakerId"] as? String,
               let status = data["status"] as? String else {
             return nil
         }
@@ -240,6 +242,7 @@ struct ScheduleRequest: Codable {
         self.petDropoff = petDropoff
         self.instructions = instructions
         self.status = status
+        self.caretakerId = caretakerId
         self.duration = ScheduleRequest.formatDateRange(start: startTimestamp, end: endTimestamp)
     }
     

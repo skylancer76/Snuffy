@@ -14,7 +14,7 @@ class Add_Pet_Medications: UITableViewController {
     
     // Outlets for the static table cells.
     @IBOutlet weak var medicineNameTextField: UITextField!
-    @IBOutlet weak var medicineTypeButton: UIButton!  // Pop-up button for medicine type.
+    @IBOutlet weak var medicineTypeButton: UIButton!
     @IBOutlet weak var purposeTextField: UITextField!
     @IBOutlet weak var frequencyTextField: UITextField!
     @IBOutlet weak var dosageTextField: UITextField!
