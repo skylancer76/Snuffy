@@ -4,15 +4,15 @@
 //
 //  Created by admin19 on 01/01/25.
 //
+
 import UIKit
 import FirebaseFirestore
+import FirebaseStorage
 
 class Pet_Profile: UIViewController {
     
     // The petId passed from My_Pets view controller
-    var petId: String? // Receive petId from the previous screen
-    
-    // Outlets for pet data
+    var petId: String?
     @IBOutlet weak var petImage: UIImageView!
     @IBOutlet var weightLabel: UILabel!
     @IBOutlet var genderLabel: UILabel!
@@ -30,14 +30,10 @@ class Pet_Profile: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Debug print to check if petId is received correctly
         print("Received Pet ID: \(petId ?? "No Pet ID")")
-        
-        // Set TableView dataSource and delegate
         petDetailsTableView.dataSource = self
         petDetailsTableView.delegate = self
         
-        // Check if petId is available and then fetch pet data
         if let petId = petId {
             fetchPetData(petId: petId)
         } else {
@@ -51,17 +47,14 @@ class Pet_Profile: UIViewController {
         petInfo.layer.masksToBounds = true
     }
     
-    // Function to fetch pet data from Firestore using petId
+    // Fetch pet data from Firestore using petId
     func fetchPetData(petId: String) {
         let db = Firestore.firestore()
-        
-        // Fetch pet data from Firestore using the petId
         db.collection("Pets").document(petId).getDocument { document, error in
             if let error = error {
                 print("Error fetching pet data: \(error.localizedDescription)")
                 return
             }
-
             if let document = document, document.exists, let data = document.data() {
                 let petName = data["petName"] as? String ?? "Unknown"
                 let petBreed = data["petBreed"] as? String ?? "Unknown"
@@ -70,15 +63,12 @@ class Pet_Profile: UIViewController {
                 let petWeight = data["petWeight"] as? String ?? "Unknown"
                 let petImageUrl = data["petImage"] as? String ?? ""
                 
-                // Update the UI with the fetched pet data
                 DispatchQueue.main.async {
                     self.nameLabel.text = petName
                     self.breedLabel.text = petBreed
                     self.ageLabel.text = petAge
                     self.genderLabel.text = petGender
                     self.weightLabel.text = petWeight
-                    
-                    // Load the pet image using URL (optional)
                     self.petImage.loadImageFromUrl(petImageUrl)
                 }
             } else {
@@ -88,25 +78,36 @@ class Pet_Profile: UIViewController {
     }
     
     @IBAction func goToVaccinationDetails(_ sender: UIButton) {
-        if let petId = petId {
-            // Instantiate the VaccinationDetails view controller using Storyboard ID
-            if let vaccinationDetailsVC = storyboard?.instantiateViewController(withIdentifier: "VaccinationDetailsVC") as? Vaccination_Details {
-                // Pass petId to VaccinationDetails view controller
-                vaccinationDetailsVC.petId = petId
-                // Navigate to the VaccinationDetails screen
-                navigationController?.pushViewController(vaccinationDetailsVC, animated: true)
-            }
+        if let petId = petId,
+           let vaccinationDetailsVC = storyboard?.instantiateViewController(withIdentifier: "VaccinationDetailsVC") as? Vaccination_Details {
+            vaccinationDetailsVC.petId = petId
+            navigationController?.pushViewController(vaccinationDetailsVC, animated: true)
+        }
+    }
+    
+    @IBAction func goToPetDiet(_ sender: UIButton) {
+        if let petId = petId,
+           let petDietVC = storyboard?.instantiateViewController(withIdentifier: "PetDietVC") as? Pet_Diet {
+            petDietVC.petId = petId
+            navigationController?.pushViewController(petDietVC, animated: true)
+        }
+    }
+    
+    @IBAction func goToPetMedications(_ sender: UIButton) {
+        if let petId = petId,
+           let petMedicationVC = storyboard?.instantiateViewController(withIdentifier: "PetMedicationVC") as? Pet_Medications {
+            petMedicationVC.petId = petId
+            navigationController?.pushViewController(petMedicationVC, animated: true)
         }
     }
 }
 
-
-// Extension to load image from URL (used for the pet image)
 extension UIImageView {
     func loadImageFromUrl(_ urlString: String) {
         guard let url = URL(string: urlString) else { return }
         DispatchQueue.global().async {
-            if let data = try? Data(contentsOf: url), let image = UIImage(data: data) {
+            if let data = try? Data(contentsOf: url),
+               let image = UIImage(data: data) {
                 DispatchQueue.main.async {
                     self.image = image
                 }
@@ -115,8 +116,6 @@ extension UIImageView {
     }
 }
 
-
-// MARK: - Table View Methods
 extension Pet_Profile: UITableViewDataSource, UITableViewDelegate {
     
     // Number of rows in the table (1 row for each option)
@@ -127,10 +126,7 @@ extension Pet_Profile: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "PetDetailCell", for: indexPath)
         cell.textLabel?.text = tableOptions[indexPath.row]
-        
-        // Set icons based on the row
         let icon: UIImage?
-        
         switch tableOptions[indexPath.row] {
         case "Pet Vaccinations":
             icon = UIImage(systemName: "syringe.fill")
@@ -141,26 +137,21 @@ extension Pet_Profile: UITableViewDataSource, UITableViewDelegate {
         default:
             icon = nil
         }
-        
         if let icon = icon {
-            // Apply system purple color with 70% opacity
             let tintedIcon = icon.withRenderingMode(.alwaysTemplate)
             cell.imageView?.image = tintedIcon
             cell.imageView?.tintColor = UIColor.systemPurple.withAlphaComponent(0.7)
         }
-        
         return cell
     }
     
-    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 70  // Set height of the cell to 70 points
+        return 70
     }
-    
     
     // Handling row selection
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // Handle selection (for now, just print the option selected)
         print("Selected: \(tableOptions[indexPath.row])")
     }
+    
 }

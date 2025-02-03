@@ -12,12 +12,13 @@ class Vaccination_Details: UIViewController {
     var petId: String?
     @IBOutlet weak var vaccinationTableView: UITableView!
     
+    // The array of vaccination records fetched from Firestore.
+    // Each record now includes a 'vaccineId' (the document ID).
     var vaccinationDetails: [VaccinationDetails] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Print to verify petId
         print("Pet ID in Vaccination Details: \(petId ?? "No Pet ID")")
         
         vaccinationTableView.dataSource = self
@@ -27,8 +28,15 @@ class Vaccination_Details: UIViewController {
             fetchVaccinationData(petId: petId)
         }
     }
-
-    // Fetch vaccination data from Firebase for the specific petId
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if let petId = petId {
+            fetchVaccinationData(petId: petId)
+        }
+    }
+    
+    // Fetch vaccination data from Firestore for the given petId.
     func fetchVaccinationData(petId: String) {
         let db = Firestore.firestore()
         
@@ -40,19 +48,19 @@ class Vaccination_Details: UIViewController {
             
             self.vaccinationDetails.removeAll()
             
-            // Map the fetched documents to VaccinationDetails
+            // Iterate through the returned documents.
             for document in snapshot?.documents ?? [] {
                 let vaccinationData = document.data()
                 
-                // Extract the vaccination data manually
                 let vaccineName = vaccinationData["vaccineName"] as? String ?? ""
                 let vaccineType = vaccinationData["vaccineType"] as? String ?? ""
                 let dateOfVaccination = vaccinationData["dateOfVaccination"] as? String ?? ""
                 let expiryDate = vaccinationData["expiryDate"] as? String ?? ""
                 let nextDueDate = vaccinationData["nextDueDate"] as? String ?? ""
                 
-                // Create a VaccinationDetails object from the data
+                // Initialize VaccinationDetails using the Firestore document ID.
                 let vaccination = VaccinationDetails(
+                    vaccineId: document.documentID,
                     vaccineName: vaccineName,
                     vaccineType: vaccineType,
                     dateOfVaccination: dateOfVaccination,
@@ -63,53 +71,79 @@ class Vaccination_Details: UIViewController {
                 self.vaccinationDetails.append(vaccination)
             }
             
-            // Reload the table view
-            self.vaccinationTableView.reloadData()
+            DispatchQueue.main.async {
+                self.vaccinationTableView.reloadData()
+            }
         }
     }
 
-    // Add Vaccination Button Action
+    // Action to push the Add Vaccination screen.
     @IBAction func addVaccination(_ sender: UIBarButtonItem) {
         if let petId = petId {
-            // Instantiate the AddVaccination view controller using Storyboard ID
             if let addVaccinationVC = storyboard?.instantiateViewController(withIdentifier: "AddVaccinationVC") as? Add_Vaccination {
-                // Pass petId to AddVaccination view controller
                 addVaccinationVC.petId = petId
-                // Navigate to the AddVaccination screen
                 navigationController?.pushViewController(addVaccinationVC, animated: true)
+            }
+        }
+    }
+    
+    // This function is triggered when a cell's delete button is pressed.
+    @objc func deleteButtonTapped(_ sender: UIButton) {
+        let index = sender.tag
+        let vaccination = vaccinationDetails[index]
+        guard let petId = petId, let vaccineId = vaccination.vaccineId else { return }
+        
+        let db = Firestore.firestore()
+        // Delete the document using the vaccineId.
+        db.collection("Pets").document(petId).collection("Vaccinations").document(vaccineId).delete { error in
+            if let error = error {
+                print("Error deleting document: \(error.localizedDescription)")
+            } else {
+                print("Document successfully deleted")
+                // Update the local array and table view.
+                self.vaccinationDetails.remove(at: index)
+                DispatchQueue.main.async {
+                    self.vaccinationTableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+                }
             }
         }
     }
 }
 
+// MARK: - UITableViewDataSource & UITableViewDelegate
 extension Vaccination_Details: UITableViewDataSource, UITableViewDelegate {
-    // TableView DataSource Methods
+    
+    // Number of rows equals the number of vaccination records.
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return vaccinationDetails.count
     }
     
+    // Configure the cell and add the delete button action.
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "VaccinationTableViewCell", for: indexPath) as! VaccinationTableViewCell
         
         let vaccination = vaccinationDetails[indexPath.row]
         
-        // Populate cell labels with actual vaccination data
         cell.vaccineNameLabel.text = vaccination.vaccineName
         cell.vaccineTypeLabel.text = vaccination.vaccineType
         cell.dateOfVaccineLabel.text = vaccination.dateOfVaccination
         cell.expiaryDateLabel.text = vaccination.expiryDate
         cell.nextDueDateLabel.text = vaccination.nextDueDate
         
+        // Set the button's tag to the row index to identify which record to delete.
+        cell.deleteButton.tag = indexPath.row
+        cell.deleteButton.addTarget(self, action: #selector(deleteButtonTapped(_:)), for: .touchUpInside)
+        
         return cell
     }
     
-    // Set the height of each cell to 230 points
+    // Set the cell height to 230 points.
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 230
     }
     
-    // TableView Delegate Methods
+    // Optionally, handle cell selection.
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // Handle vaccination detail selection if needed
+        // Handle selection if needed.
     }
 }

@@ -4,6 +4,7 @@
 //
 //  Created by admin19 on 16/12/24.
 //
+
 import FirebaseFirestore
 import FirebaseStorage
 
@@ -14,8 +15,6 @@ class FirebaseManager {
     // Save pet data to Firestore with unique petId
     func savePetDataToFirebase(data: [String: Any], petId: String, completion: @escaping (Error?) -> Void) {
         let collection = db.collection("Pets")
-        
-        // Use the petId as the document ID for this pet
         collection.document(petId).setData(data) { error in
             if let error = error {
                 print("Failed to save pet data: \(error.localizedDescription)")
@@ -28,52 +27,259 @@ class FirebaseManager {
     
     // Save caretaker data to Firestore
     func saveCaretakerData(caretakers: [Caretakers], completion: @escaping (Error?) -> Void) {
-        let collection = db.collection("Caretakers")
+        let group = DispatchGroup()
         
         for caretaker in caretakers {
-            do {
-                let data = try Firestore.Encoder().encode(caretaker)
-                collection.document(caretaker.id.uuidString).setData(data) { error in
-                    if let error = error {
-                        print("Failed to save caretaker: \(error.localizedDescription)")
-                    }
+            let caretakerRef = db.collection("caretakers").document(caretaker.caretakerId)
+            group.enter()
+            
+            // Upload Profile Picture
+            uploadProfileImage(imageName: caretaker.profilePic, caretakerId: caretaker.caretakerId) { profileImageUrl, error in
+                if let error = error {
+                    completion(error)
+                    group.leave()
+                    return
                 }
-            } catch {
-                completion(error)
+                
+                let updatedCaretaker = caretaker
+                updatedCaretaker.profilePic = profileImageUrl ?? ""
+                
+                self.saveCaretakerToFirestore(caretaker: updatedCaretaker, caretakerRef: caretakerRef) { error in
+                    completion(error)
+                    group.leave()
+                }
             }
         }
-        completion(nil)
+        
+        group.notify(queue: .main) {
+            completion(nil)
+        }
+    }
+    
+    // MARK: - Save Caretaker to Firestore
+    func saveCaretakerToFirestore(caretaker: Caretakers, caretakerRef: DocumentReference, completion: @escaping (Error?) -> Void) {
+        do {
+            let data = try Firestore.Encoder().encode(caretaker)
+            caretakerRef.setData(data) { error in
+                completion(error)
+            }
+        } catch {
+            completion(error)
+        }
     }
     
     
-    // Save schedule request data to Firestore
+    // MARK: - Upload Profile Image
+    func uploadProfileImage(imageName: String, caretakerId: String, completion: @escaping (String?, Error?) -> Void) {
+        guard let image = UIImage(named: imageName) else {
+            completion(nil, NSError(domain: "ImageError", code: 404, userInfo: [NSLocalizedDescriptionKey: "Image not found in assets"]))
+            return
+        }
+        
+        let storageRef = Storage.storage().reference().child("profile_pictures/\(caretakerId).jpg")
+        
+        if let imageData = image.jpegData(compressionQuality: 0.8) {
+            storageRef.putData(imageData, metadata: nil) { _, error in
+                if let error = error {
+                    completion(nil, error)
+                    return
+                }
+                
+                storageRef.downloadURL { url, error in
+                    if let error = error {
+                        completion(nil, error)
+                    } else {
+                        completion(url?.absoluteString, nil)
+                    }
+                }
+            }
+        } else {
+            completion(nil, NSError(domain: "ImageError", code: 500, userInfo: [NSLocalizedDescriptionKey: "Failed to convert image to data"]))
+        }
+    }
+    
+    
+    // MARK: - Save Schedule Request Data
     func saveScheduleRequestData(data: [String: Any], completion: @escaping (Error?) -> Void) {
         let collection = db.collection("scheduleRequests")
         
-        // Add a new document to the "scheduleRequests" collection
-        collection.addDocument(data: data) { error in
-            if let error = error {
-                print("Failed to save schedule request: \(error.localizedDescription)")
+        if let requestId = data["requestId"] as? String {
+            collection.document(requestId).setData(data) { error in
                 completion(error)
-            } else {
-                print("Schedule request successfully saved!")
-                completion(nil)
+            }
+        } else {
+            completion(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Missing requestId in data"]))
+        }
+    }
+    
+
+    func fetchPetNames(completion: @escaping ([String]) -> Void) {
+        db.collection("Pets").getDocuments { snapshot, error in
+            if let error = error {
+                completion([])
+                return
+            }
+            
+            guard let documents = snapshot?.documents else {
+                completion([])
+                return
+            }
+            
+            let petNames: [String] = documents.compactMap { doc in
+                return doc.data()["petName"] as? String
+            }
+            
+            completion(petNames)
+        }
+    }
+    
+    
+    func autoAssignCaretaker(petId: String, requestData: [String: Any], completion: @escaping (Error?) -> Void) {
+        let db = Firestore.firestore()
+
+        // Fetch caretakers
+        db.collection("caretakers").whereField("status", isEqualTo: "available").getDocuments { (snapshot, error) in
+            if let error = error {
+                completion(error)
+                return
+            }
+            
+            guard let documents = snapshot?.documents else {
+                completion(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No available caretakers found"]))
+                return
+            }
+
+            // Map caretakers and calculate suitability score
+            let caretakers = documents.compactMap { doc -> (DocumentReference, Caretakers, Double)? in
+                let data = doc.data()
+                guard let caretaker = try? Firestore.Decoder().decode(Caretakers.self, from: data) else {
+                    return nil
+                }
+                
+                // Directly use the non-optional properties
+                let experience = caretaker.experience
+                let distance = caretaker.distanceAway
+                
+                // Ensure distance is greater than zero to avoid division by zero
+                guard distance > 0 else { return nil }
+                
+                // Calculate suitability score: higher experience and lower distance are better
+                let score = Double(experience) / distance
+                return (doc.reference, caretaker, score)
+            }
+
+
+            // Sort caretakers by score (descending order)
+            let sortedCaretakers = caretakers.sorted { $0.2 > $1.2 }
+
+            // Assign the first suitable caretaker
+            guard let (caretakerRef, caretaker, _) = sortedCaretakers.first else {
+                completion(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No suitable caretakers found"]))
+                return
+            }
+
+            // Prepare updated request data
+            var updatedRequestData = requestData
+            updatedRequestData["caretakerId"] = caretaker.caretakerId
+            updatedRequestData["status"] = "pending"
+
+            // Save request to scheduleRequests collection
+            let requestRef = db.collection("scheduleRequests").document()
+            requestRef.setData(updatedRequestData) { error in
+                if let error = error {
+                    completion(error)
+                    return
+                }
+
+                // Update caretaker's pendingRequests
+                caretakerRef.updateData([
+                    "pendingRequests": FieldValue.arrayUnion([requestRef.documentID])
+                ]) { error in
+                    if let error = error {
+                        completion(error)
+                    } else {
+                        print("Request sent to caretaker: \(caretaker.name)")
+                        completion(nil)
+                    }
+                }
             }
         }
     }
     
-    // save vaccination data
+    
+    func acceptRequest(caretakerId: String, requestId: String, completion: @escaping (Error?) -> Void) {
+        let db = Firestore.firestore()
+        let caretakerRef = db.collection("caretakers").document(caretakerId)
+        let requestRef = db.collection("scheduleRequests").document(requestId)
+        
+        // Update request status
+        requestRef.updateData(["status": "accepted"]) { error in
+            if let error = error {
+                completion(error)
+                return
+            }
+            
+            // Update caretaker status to "assigned"
+            caretakerRef.updateData(["status": "assigned"]) { error in
+                completion(error)
+            }
+        }
+    }
+    
+    
+    func rejectRequest(caretakerId: String, requestId: String, sortedCaretakers: [(DocumentReference, Caretakers, Double)], completion: @escaping (Error?) -> Void) {
+        let db = Firestore.firestore()
+        let requestRef = db.collection("scheduleRequests").document(requestId)
+        
+        requestRef.updateData(["status": "rejected"]) { error in
+            if let error = error {
+                completion(error)
+                return
+            }
+
+            // Remove the rejected caretaker and reassign the request
+            var remainingCaretakers = sortedCaretakers
+            remainingCaretakers.removeFirst()
+
+            if let (caretakerRef, nextCaretaker, _) = remainingCaretakers.first {
+                // Update request with the next caretaker
+                requestRef.updateData(["caretakerId": nextCaretaker.caretakerId]) { error in
+                    if let error = error {
+                        completion(error)
+                        return
+                    }
+
+                    caretakerRef.updateData([
+                        "pendingRequests": FieldValue.arrayUnion([requestId])
+                    ]) { error in
+                        if let error = error {
+                            completion(error)
+                        } else {
+                            print("Request reassigned to caretaker: \(nextCaretaker.name)")
+                            completion(nil)
+                        }
+                    }
+                }
+            } else {
+                print("No more caretakers available.")
+                completion(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No caretakers available."]))
+            }
+        }
+    }
+    
+    
+    // Save vaccination data for a specific pet.
+    // The vaccineId is not included in the data dictionary so Firestore will auto‑generate it.
     func saveVaccinationData(petId: String, vaccination: VaccinationDetails, completion: @escaping (Error?) -> Void) {
         let data: [String: Any] = [
             "vaccineName": vaccination.vaccineName,
             "vaccineType": vaccination.vaccineType,
             "dateOfVaccination": vaccination.dateOfVaccination,
             "expiryDate": vaccination.expiryDate,
-            "nextDueDate": vaccination.nextDueDate,
+            "nextDueDate": vaccination.nextDueDate
         ]
         
         print("Saving vaccination data to Firestore...")
-        
         db.collection("Pets").document(petId).collection("Vaccinations").addDocument(data: data) { error in
             if let error = error {
                 print("Error saving vaccination: \(error.localizedDescription)")
@@ -85,18 +291,27 @@ class FirebaseManager {
         }
     }
     
+    // Delete a vaccination document using petId and the document ID (vaccineId)
+    func deleteVaccinationData(petId: String, vaccineId: String, completion: @escaping (Error?) -> Void) {
+        db.collection("Pets").document(petId).collection("Vaccinations").document(vaccineId).delete { error in
+            if let error = error {
+                print("Error deleting vaccination: \(error.localizedDescription)")
+                completion(error)
+            } else {
+                print("Vaccination deleted successfully!")
+                completion(nil)
+            }
+        }
+    }
     
-    // Fetch pets from Firestore
+    // Fetch pets from Firestore (unchanged)
     func fetchPets(completion: @escaping ([PetLiveUpdate]) -> Void) {
-        let db = Firestore.firestore()
-        
         db.collection("petsLive").getDocuments { (querySnapshot, error) in
             if let error = error {
                 print("Error fetching documents: \(error.localizedDescription)")
                 completion([])
                 return
             }
-            
             var pets: [PetLiveUpdate] = []
             for document in querySnapshot?.documents ?? [] {
                 if let pet = PetLiveUpdate(from: document.data()) {
@@ -107,7 +322,79 @@ class FirebaseManager {
             }
             completion(pets)
         }
+    }
+    
+    func savePetDietData(petId: String, diet: PetDietDetails, completion: @escaping (Error?) -> Void) {
+        let data: [String: Any] = [
+            "mealType": diet.mealType,
+            "foodName": diet.foodName,
+            "foodCategory": diet.foodCategory,
+            "portionSize": diet.portionSize,
+            "feedingFrequency": diet.feedingFrequency,
+            "servingTime": diet.servingTime
+        ]
         
+        print("Saving pet diet data to Firestore...")
+        db.collection("Pets").document(petId).collection("PetDiet").addDocument(data: data) { error in
+            if let error = error {
+                print("Error saving pet diet: \(error.localizedDescription)")
+                completion(error)
+            } else {
+                print("Pet diet saved successfully!")
+                completion(nil)
+            }
+        }
+    }
+    
+    // Delete a pet diet document using its document ID.
+    func deletePetDietData(petId: String, dietId: String, completion: @escaping (Error?) -> Void) {
+        db.collection("Pets").document(petId).collection("PetDiet").document(dietId).delete { error in
+            if let error = error {
+                print("Error deleting pet diet: \(error.localizedDescription)")
+                completion(error)
+            } else {
+                print("Pet diet deleted successfully!")
+                completion(nil)
+            }
+        }
+    }
+    
+    func savePetMedicationData(petId: String, medication: PetMedicationDetails, completion: @escaping (Error?) -> Void) {
+        let data: [String: Any] = [
+            "medicineName": medication.medicineName,
+            "medicineType": medication.medicineType,
+            "purpose": medication.purpose,
+            "frequency": medication.frequency,
+            "dosage": medication.dosage,
+            "startDate": medication.startDate,
+            "endDate": medication.endDate
+        ]
+        
+        print("Saving pet medication data to Firestore...")
+        db.collection("Pets").document(petId).collection("PetMedication").addDocument(data: data) { error in
+            if let error = error {
+                print("Error saving pet medication: \(error.localizedDescription)")
+                completion(error)
+            } else {
+                print("Pet medication saved successfully!")
+                completion(nil)
+            }
+        }
+    }
+    
+    // Delete a pet medication document using its document ID.
+    func deletePetMedicationData(petId: String, medicationId: String, completion: @escaping (Error?) -> Void) {
+        db.collection("Pets").document(petId).collection("PetMedication").document(medicationId).delete { error in
+            if let error = error {
+                print("Error deleting pet medication: \(error.localizedDescription)")
+                completion(error)
+            } else {
+                print("Pet medication deleted successfully!")
+                completion(nil)
+            }
+        }
+    }
+    
 }
     
     
@@ -130,7 +417,7 @@ class FirebaseManager {
     //        }
     //    }
     
-}
+//}
 
 
 

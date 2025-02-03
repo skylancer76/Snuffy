@@ -14,6 +14,7 @@ class VaccinationTableViewCell: UITableViewCell {
     @IBOutlet weak var dateOfVaccineLabel: UILabel!
     @IBOutlet weak var expiaryDateLabel: UILabel!
     @IBOutlet weak var nextDueDateLabel: UILabel!
+    @IBOutlet weak var deleteButton: UIButton!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -23,7 +24,6 @@ class VaccinationTableViewCell: UITableViewCell {
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
-        // Configure the view for the selected state
     }
 
 }

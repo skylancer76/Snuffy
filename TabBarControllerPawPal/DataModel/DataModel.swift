@@ -7,56 +7,51 @@
 
 import Foundation
 
-
 // MARK: - Unified Caretaker Model
-class Caretakers : Codable {
-    var id: UUID
+class Caretakers: Codable {
+    var caretakerId: String
     var name: String
-    var price: String
+    var email: String
+    var password: String
+    var profilePic: String
+    var bio: String
+    var experience: Int
     var address: String
-    var profileImageName: String
-    var rating: String?
-    var coverImage: String?
-    var distance : String?
-    var isRecommended: Bool?
-    var about: String?
-    var experience : String?
-    var petSitted : String?
-    var galleryImages: [String]
-    var bookings: [Bookings]?
+    var location: [Double] // [latitude, longitude]
+    var distanceAway: Double
+    var status: String
+    var pendingRequests: [String] // List of pending request IDs
+    var completedRequests: Int
 
     // Initialization
     init(
-        id: UUID = UUID(),
+        caretakerId: String,
         name: String,
-        price: String,
+        email: String,
+        password: String,
+        profilePic: String,
+        bio: String,
+        experience: Int,
         address: String,
-        profileImageName: String,
-        rating: String? = nil,
-        coverImage: String? = nil,
-        distance : String? = nil,
-        isRecommended: Bool? = nil,
-        experience:String? = nil,
-        petSitted : String? = nil,
-        about: String? = nil,
-        galleryImages: [String],
-        bookings: [Bookings]? = nil )
-    {
-        self.id = id
+        location: [Double],
+        distanceAway: Double = 0.0,
+        status: String = "available",
+        pendingRequests: [String] = [],
+        completedRequests: Int = 0
+    ) {
+        self.caretakerId = caretakerId
         self.name = name
-        self.price = price
-        self.address = address
-        self.profileImageName = profileImageName
-        self.rating = rating
-        self.coverImage = coverImage
-        self.isRecommended = isRecommended
-        self.about = about
-        self.distance = distance
+        self.email = email
+        self.password = password
+        self.profilePic = profilePic
+        self.bio = bio
         self.experience = experience
-        self.petSitted = petSitted
-        self.galleryImages = galleryImages
-        self.bookings = bookings
-
+        self.address = address
+        self.location = location
+        self.distanceAway = distanceAway
+        self.status = status
+        self.pendingRequests = pendingRequests
+        self.completedRequests = completedRequests
     }
 }
 
@@ -72,28 +67,29 @@ struct Bookings: Codable {
 
 // MARK: - Pet Data Model
 class PetData: Codable {
-    var petId: String  // New unique identifier for each pet
+    var petId: String
     var petImage: String?
     var petName: String?
     var petBreed: String?
     var petGender: String?
     var petAge: String?
     var petWeight: String?
-    var dietaryDetails: DietaryDetails?
-    var medications: [Medication]?
+    var medications: [PetMedicationDetails]?
     var vaccinationDetails: [VaccinationDetails]?
+    var dietaryDetails: [PetDietDetails]?
     
     init(
-        petId: String = UUID().uuidString,  // Use UUID to generate unique ID
+        petId: String = UUID().uuidString,
         petImage: String? = nil,
         petName: String? = nil,
         petBreed: String? = nil,
         petGender: String? = nil,
         petAge: String? = nil,
         petWeight: String? = nil,
-        dietaryDetails: DietaryDetails? = nil,
-        medications: [Medication]? = nil,
-        vaccinationDetails: [VaccinationDetails]? = nil
+        medications: [PetMedicationDetails]? = nil,
+        vaccinationDetails: [VaccinationDetails]? = nil,
+        dietaryDetails: [PetDietDetails]? = nil
+
     ) {
         self.petId = petId
         self.petImage = petImage
@@ -102,43 +98,80 @@ class PetData: Codable {
         self.petGender = petGender
         self.petAge = petAge
         self.petWeight = petWeight
-        self.dietaryDetails = dietaryDetails
         self.medications = medications
         self.vaccinationDetails = vaccinationDetails
+        self.dietaryDetails = dietaryDetails
     }
 }
-
 
 // MARK: - Dietary Details Model
-class DietaryDetails: Codable {
-    var foodPreferences: String?
-    var allergies: String?
-    var feedingSchedule: String?
+class PetDietDetails: Codable {
+    
+    var dietId: String?
+    var mealType: String
+    var foodName: String
+    var foodCategory: String
+    var portionSize: String
+    var feedingFrequency: String
+    var servingTime: String
 
-    init(foodPreferences: String? = nil, allergies: String? = nil, feedingSchedule: String? = nil) {
-        self.foodPreferences = foodPreferences
-        self.allergies = allergies
-        self.feedingSchedule = feedingSchedule
+    init(
+        dietId: String? = nil,
+        mealType: String,
+        foodName: String,
+        foodCategory: String,
+        portionSize: String,
+        feedingFrequency: String,
+        servingTime: String
+    ) {
+        self.dietId = dietId
+        self.mealType = mealType
+        self.foodName = foodName
+        self.foodCategory = foodCategory
+        self.portionSize = portionSize
+        self.feedingFrequency = feedingFrequency
+        self.servingTime = servingTime
     }
 }
 
-// MARK: - Medication Model
-class Medication: Codable {
-    var medicineName: String
-    var dosage: String
-    var frequency: String
 
-    init(medicineName: String, dosage: String, frequency: String) {
+// MARK: - Medication Model
+class PetMedicationDetails: Codable {
+    
+    var medicationId: String?
+    var medicineName: String
+    var medicineType: String
+    var purpose: String
+    var frequency: String
+    var dosage: String
+    var startDate: String
+    var endDate: String
+
+    init(
+        medicationId: String? = nil,
+        medicineName: String,
+        medicineType: String,
+        purpose: String,
+        frequency: String,
+        dosage: String,
+        startDate: String,
+        endDate: String
+    ) {
+        self.medicationId = medicationId
         self.medicineName = medicineName
-        self.dosage = dosage
+        self.medicineType = medicineType
+        self.purpose = purpose
         self.frequency = frequency
+        self.dosage = dosage
+        self.startDate = startDate
+        self.endDate = endDate
     }
 }
 
 // MARK: - Vaccination Details Model
 class VaccinationDetails: Codable {
     
-    var vaccineId : String?
+    var vaccineId: String?
     var vaccineName: String
     var vaccineType: String
     var dateOfVaccination: String
@@ -146,13 +179,12 @@ class VaccinationDetails: Codable {
     var nextDueDate: String
 
     init(
-        vaccineId: String = UUID().uuidString,
+        vaccineId: String? = nil,
         vaccineName: String,
         vaccineType: String,
         dateOfVaccination: String,
         expiryDate: String,
         nextDueDate: String
-    
     ) {
         self.vaccineId = vaccineId
         self.vaccineName = vaccineName

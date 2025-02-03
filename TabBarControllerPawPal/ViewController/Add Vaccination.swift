@@ -16,11 +16,7 @@ class Add_Vaccination: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // Debug print to check if petId is being passed
         print("Pet ID: \(petId ?? "No Pet ID passed")")
-        
-        // Set the initial date pickers to the current date if needed
         let currentDate = Date()
         dateOfVaccinePicker.date = currentDate
         expiryDatePicker.date = currentDate
@@ -29,15 +25,12 @@ class Add_Vaccination: UITableViewController {
     
     // Save the vaccination details to Firebase
     @IBAction func saveVaccination(_ sender: UIBarButtonItem) {
-        
         print("Save Button Clicked")
-        
         guard let petId = petId else {
             print("Pet ID is missing!")
             return
         }
         
-        // Get the dates from the date pickers and format them to strings
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd/MM/yyyy"
         
@@ -45,7 +38,7 @@ class Add_Vaccination: UITableViewController {
         let expiryDate = dateFormatter.string(from: expiryDatePicker.date)
         let nextDueDate = dateFormatter.string(from: nextDueDatePicker.date)
         
-        // Creating a VaccinationDetails object with the form input data
+        // Create a VaccinationDetails object without specifying vaccineId (it remains nil)
         let vaccination = VaccinationDetails(
             vaccineName: vaccineNameTextField.text ?? "",
             vaccineType: vaccineTypeTextField.text ?? "",
@@ -54,13 +47,20 @@ class Add_Vaccination: UITableViewController {
             nextDueDate: nextDueDate
         )
         
-        // Save vaccination data using FirebaseManager
         FirebaseManager.shared.saveVaccinationData(petId: petId, vaccination: vaccination) { error in
             if let error = error {
                 print("Failed to save vaccination: \(error.localizedDescription)")
             } else {
                 print("Vaccination saved successfully!")
-                self.navigationController?.popViewController(animated: true)
+                let alertController = UIAlertController(title: nil, message: "Vaccination Data Added", preferredStyle: .alert)
+                self.present(alertController, animated: true, completion: nil)
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                    alertController.dismiss(animated: true, completion: {
+                        NotificationCenter.default.post(name: NSNotification.Name("VaccinationDataAdded"), object: nil)
+                        self.navigationController?.popViewController(animated: true)
+                    })
+                }
             }
         }
     }
