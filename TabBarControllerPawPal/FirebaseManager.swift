@@ -55,8 +55,8 @@ class FirebaseManager {
             completion(nil)
         }
     }
+
     
-    // MARK: - Save Caretaker to Firestore
     func saveCaretakerToFirestore(caretaker: Caretakers, caretakerRef: DocumentReference, completion: @escaping (Error?) -> Void) {
         do {
             let data = try Firestore.Encoder().encode(caretaker)
@@ -68,8 +68,8 @@ class FirebaseManager {
         }
     }
     
+
     
-    // MARK: - Upload Profile Image
     func uploadProfileImage(imageName: String, caretakerId: String, completion: @escaping (String?, Error?) -> Void) {
         guard let image = UIImage(named: imageName) else {
             completion(nil, NSError(domain: "ImageError", code: 404, userInfo: [NSLocalizedDescriptionKey: "Image not found in assets"]))

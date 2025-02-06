@@ -16,9 +16,12 @@ class My_Bookings: UIViewController , UITableViewDelegate, UITableViewDataSource
     
     var upcomingBookings: [ScheduleRequest] = []
     var completedBookings: [ScheduleRequest] = []
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Segemented Control Configuration
         bookingSegmentedControl.selectedSegmentIndex = 0
         bookingSegmentedControl.addTarget(self, action: #selector(segmentChanged(_:)), for: .valueChanged)
                
@@ -27,7 +30,8 @@ class My_Bookings: UIViewController , UITableViewDelegate, UITableViewDataSource
             print("No user logged in")
             return
         }
-                       
+        
+        
         let ownerId = currentUser.uid
         print("Fetching bookings for owner ID: \(ownerId)")
         
@@ -37,7 +41,6 @@ class My_Bookings: UIViewController , UITableViewDelegate, UITableViewDataSource
             self.tableView.reloadData()
         }
         
-        backgroundView.backgroundColor = .clear
         
         // Set Gradient View
         let gradientView = UIView(frame: view.bounds)
@@ -46,22 +49,23 @@ class My_Bookings: UIViewController , UITableViewDelegate, UITableViewDataSource
         view.sendSubviewToBack(gradientView)
         // Set Gradient inside the view
         let gradientLayer = CAGradientLayer()
-        gradientLayer.frame = view.bounds                          // Match the frame of the view
+        gradientLayer.frame = view.bounds                           // Match the frame of the view
         gradientLayer.colors = [
-            UIColor.systemPurple.withAlphaComponent(0.3).cgColor,  // Start color
-            UIColor.clear.cgColor                                  // End color
+            UIColor.systemPink.withAlphaComponent(0.3).cgColor,     // Start color
+            UIColor.clear.cgColor                                   // End color
         ]
-        gradientLayer.locations = [0.0, 1.0]                       // Gradually fade
-        gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)         // Top-center
-        gradientLayer.endPoint = CGPoint(x: 0.5, y: 0.5)           // Bottom-center
+        gradientLayer.locations = [0.0, 1.0]                        // Gradually fade
+        gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)          // Top-center
+        gradientLayer.endPoint = CGPoint(x: 0.5, y: 0.5)            // Bottom-center
         gradientView.layer.insertSublayer(gradientLayer, at: 0)
         
+        // Table View Delegate and dataSource
         tableView.delegate = self
         tableView.dataSource = self
         
+        // Remove Background Colour
+        backgroundView.backgroundColor = .clear
         tableView.backgroundColor = .clear
-
-
         
     }
     
@@ -74,6 +78,7 @@ class My_Bookings: UIViewController , UITableViewDelegate, UITableViewDataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return bookingSegmentedControl.selectedSegmentIndex == 0 ? upcomingBookings.count : completedBookings.count
     }
+    
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "BookingCell", for: indexPath) as! BookingsTableViewCell
@@ -123,6 +128,7 @@ class My_Bookings: UIViewController , UITableViewDelegate, UITableViewDataSource
         return cell
     }
     
+    
     @objc func updateStatus(_ sender: UIButton) {
         let index = sender.tag
         var request = bookingSegmentedControl.selectedSegmentIndex == 0 ? upcomingBookings[index] : completedBookings[index]
@@ -148,6 +154,7 @@ class My_Bookings: UIViewController , UITableViewDelegate, UITableViewDataSource
         }
     }
     
+    
     func reloadBookingData() {
         guard let currentUser = Auth.auth().currentUser else { return }
             
@@ -159,9 +166,11 @@ class My_Bookings: UIViewController , UITableViewDelegate, UITableViewDataSource
         }
     }
     
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 150
     }
+    
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let request = bookingSegmentedControl.selectedSegmentIndex == 0 ? upcomingBookings[indexPath.row] : completedBookings[indexPath.row]

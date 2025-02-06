@@ -13,16 +13,13 @@ class My_Pets: UIViewController {
     
     var selectedPet: PetData?
     @IBOutlet weak var backgroundView: UIView!
-    @IBOutlet weak var addPetButton: UIBarButtonItem!
+    @IBOutlet weak var addPetButton: UIButton!
     @IBOutlet weak var myPets: UICollectionView!
     
     var pets: [PetData] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        backgroundView.backgroundColor = .clear
-
         
         // Set Gradient View
         let gradientView = UIView(frame: view.bounds)
@@ -31,14 +28,14 @@ class My_Pets: UIViewController {
         view.sendSubviewToBack(gradientView)
         // Set Gradient inside the view
         let gradientLayer = CAGradientLayer()
-        gradientLayer.frame = view.bounds                          // Match the frame of the view
+        gradientLayer.frame = view.bounds                           // Match the frame of the view
         gradientLayer.colors = [
-            UIColor.systemPurple.withAlphaComponent(0.3).cgColor,  // Start color
-            UIColor.clear.cgColor                                  // End color
+            UIColor.systemPink.withAlphaComponent(0.3).cgColor,     // Start color
+            UIColor.clear.cgColor                                   // End color
         ]
-        gradientLayer.locations = [0.0, 1.0]                       // Gradually fade
-        gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)         // Top-center
-        gradientLayer.endPoint = CGPoint(x: 0.5, y: 0.5)           // Bottom-center
+        gradientLayer.locations = [0.0, 1.0]                        // Gradually fade
+        gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)          // Top-center
+        gradientLayer.endPoint = CGPoint(x: 0.5, y: 0.5)            // Bottom-center
         gradientView.layer.insertSublayer(gradientLayer, at: 0)
         // Claer background colour of collection view
         myPets.backgroundColor = .clear
@@ -51,39 +48,39 @@ class My_Pets: UIViewController {
         // Fetch pets from Firestore
         fetchPetsFromFirestore()
         
-        // Set action programmatically
-        addPetButton.target = self
-        addPetButton.action = #selector(addPetButtonTapped)
-        
         // Set layout for collection view
         myPets.collectionViewLayout = createLayout()
         fetchPetsFromFirestore()
         
+        // Clear Background
+        backgroundView.backgroundColor = .clear
+        
     }
     
-    
-    @objc func addPetButtonTapped() {
+    // Add Pet Buttton function
+    @IBAction func addPetButtonTapped(_ sender: UIButton) {
         performSegue(withIdentifier: "AddNewPetSegue", sender: self)
     }
     
     
     func fetchPetsFromFirestore() {
-           let db = Firestore.firestore()
+        
+        let db = Firestore.firestore()
+        // Ensure the user is logged in
+        guard let currentUser = Auth.auth().currentUser else {
+            print("User is not logged in")
+            return
+        }
            
-           // Ensure the user is logged in
-           guard let currentUser = Auth.auth().currentUser else {
-               print("User is not logged in")
-               return
-           }
-           
-           // asking the pets db where the ownerid mathc the currentUser logged in
-           db.collection("Pets")
-               .whereField("ownerID", isEqualTo: currentUser.uid)
-               .getDocuments { snapshot, error in
-                   if let error = error {
-                       print("Error fetching pet data: \(error.localizedDescription)")
-                       return
-                   }
+        // asking the pets db where the ownerid mathc the currentUser logged in
+        db.collection("Pets")
+            .whereField("ownerID", isEqualTo: currentUser.uid)
+            .getDocuments { snapshot, error in
+                if let error = error {
+                    print("Error fetching pet data: \(error.localizedDescription)")
+                    return
+                }
+                
             self.pets = snapshot?.documents.compactMap { document in
                 let data = document.data()
                 let petId = data["petId"] as? String ?? ""
@@ -94,9 +91,8 @@ class My_Pets: UIViewController {
                 let gender = data["petGender"] as? String
                 let weight = data["petWeight"] as? String
 
-                // Store petId properly when creating PetData object
                 return PetData(
-                    petId: petId,  // Make sure petId is included
+                    petId: petId,
                     petImage: image,
                     petName: name,
                     petBreed: breed,
@@ -112,20 +108,22 @@ class My_Pets: UIViewController {
             }
         }
     }
+    
+    
     func prefetchImages(for pets: [PetData]) {
-            for pet in pets {
-                if let imageUrlString = pet.petImage, let url = URL(string: imageUrlString) {
-                    // Check if already cached
-                    if ImageCacheManager.shared.image(forKey: imageUrlString) == nil {
-                        URLSession.shared.dataTask(with: url) { data, response, error in
-                            if let data = data, let image = UIImage(data: data) {
-                                ImageCacheManager.shared.setImage(image, forKey: imageUrlString)
-                            }
-                        }.resume()
-                    }
+        for pet in pets {
+            if let imageUrlString = pet.petImage, let url = URL(string: imageUrlString) {
+                // Check if already cached
+                if ImageCacheManager.shared.image(forKey: imageUrlString) == nil {
+                    URLSession.shared.dataTask(with: url) { data, response, error in
+                        if let data = data, let image = UIImage(data: data) {
+                            ImageCacheManager.shared.setImage(image, forKey: imageUrlString)
+                        }
+                    }.resume()
                 }
             }
         }
+    }
 
 }
 

@@ -35,7 +35,7 @@ class User_Sign_Up: UIViewController {
     
     @IBAction func passwordViewTapped(_ sender: UIButton) {
         passwordTextField.isSecureTextEntry.toggle()
-        let imageName = passwordTextField.isSelected ? "eye.slash.fill" : "eye.fill"
+        let imageName = passwordTextField.isSecureTextEntry ? "eye.slash.fill" : "eye.fill"
         sender.setImage(UIImage(systemName: imageName), for: .normal)
     }
     

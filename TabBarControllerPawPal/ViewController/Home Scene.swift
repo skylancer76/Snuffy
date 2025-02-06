@@ -24,19 +24,10 @@ class Home_Scene: UIViewController, CLLocationManagerDelegate {
         caretakerImage.layer.cornerRadius = 12
         caretakerImage.layer.masksToBounds = true
         
-        // Background Shadow of Caretaker Image
-        caretakerImage.layer.shadowOffset = CGSize(width: 2, height: 2)
-        caretakerImage.layer.shadowRadius = 2
-        caretakerImage.layer.shadowOpacity = 0.6
         
         // Corner Radius of Dogwalker Image
         dogwalkerImage.layer.cornerRadius = 12
         dogwalkerImage.layer.masksToBounds = true
-        
-        // Background Shadow of Dogwalker Image
-        dogwalkerImage.layer.shadowOffset = CGSize(width: 2, height: 2)
-        dogwalkerImage.layer.shadowRadius = 2
-        dogwalkerImage.layer.shadowOpacity = 0.6
         
         
         // Set Gradient View
@@ -44,7 +35,6 @@ class Home_Scene: UIViewController, CLLocationManagerDelegate {
         gradientView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(gradientView)
         view.sendSubviewToBack(gradientView)
-        
         // Set Gradient inside the view
         let gradientLayer = CAGradientLayer()
         gradientLayer.frame = view.bounds                           // Match the frame of the view
@@ -52,21 +42,20 @@ class Home_Scene: UIViewController, CLLocationManagerDelegate {
             UIColor.systemPurple.withAlphaComponent(0.3).cgColor,   // Start color
             UIColor.clear.cgColor                                   // End color
         ]
-        
         gradientLayer.locations = [0.0, 1.0]                        // Gradually fade
         gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)          // Top-center
         gradientLayer.endPoint = CGPoint(x: 0.5, y: 0.5)            // Bottom-center
-                
         // Apply the gradient to the gradientView
         gradientView.layer.insertSublayer(gradientLayer, at: 0)
         
+        
         // Request location access
         requestLocationAccess()
-        
-        
+    
     }
     
     
+    // Notification Altert to access location
     func requestLocationAccess() {
         // Create the alert controller
         let alert = UIAlertController(
@@ -74,19 +63,18 @@ class Home_Scene: UIViewController, CLLocationManagerDelegate {
             message: "We need your location to show you nearby caretakers.",
             preferredStyle: .alert
         )
-        
         // Add "Allow" action
         alert.addAction(UIAlertAction(title: "Allow", style: .default, handler: { _ in
             self.enableLocationServices()
         }))
-        
         // Add "Don't Allow" action
         alert.addAction(UIAlertAction(title: "Don't Allow", style: .default, handler: nil))
-        
         // Present the alert
         self.present(alert, animated: true, completion: nil)
     }
     
+    
+    // Enable Location Service
     func enableLocationServices() {
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
@@ -97,16 +85,18 @@ class Home_Scene: UIViewController, CLLocationManagerDelegate {
         }
     }
     
+    
+    // Handle Location Updates
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
         // Save location to Firestore
         saveUserLocationToFirestore(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
-            
         // Stop updating location after the location is fetched
         locationManager.stopUpdatingLocation()
     }
     
-    // CLLocationManagerDelegate method
+    
+    // Handle Location Authorization Changers
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         switch status {
         case .authorizedWhenInUse, .authorizedAlways:
@@ -117,26 +107,33 @@ class Home_Scene: UIViewController, CLLocationManagerDelegate {
             break
         }
     }
+    
+    
+    // Save user location to Firebase
     func saveUserLocationToFirestore(latitude: Double, longitude: Double) {
-           guard let userID = Auth.auth().currentUser?.uid else {
-               print("User not logged in.")
-               return
-           }
-           
-           let locationData: [String: Any] = [
-               "location": [
-                   "latitude": latitude,
-                   "longitude": longitude
-               ]
-           ]
+        guard let userID = Auth.auth().currentUser?.uid else {
+            print("User not logged in.")
+            return
+        }
+    
+        let locationData: [String: Any] = [
+            "location": [
+            "latitude": latitude,
+            "longitude": longitude
+            ]
+        ]
+        
         Firestore.firestore().collection("users").document(userID).updateData(locationData) { error in
-                   if let error = error {
-                       print("Failed to save user location: \(error.localizedDescription)")
-                   } else {
-                       print("User location saved successfully.")
-                   }
-               }
-           }
+            if let error = error {
+                print("Failed to save user location: \(error.localizedDescription)")
+            } else {
+                print("User location saved successfully.")
+            }
+        }
+    }
+    
+    
+    // Handle Any Location Errors
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print("Failed to fetch location: \(error.localizedDescription)")
         if let clError = error as? CLError {
