@@ -7,6 +7,8 @@
 
 import UIKit
 import FirebaseStorage
+import FirebaseFirestore
+import FirebaseAuth
 
 protocol AddNewPetDelegate: AnyObject {
     func didAddNewPet(_ pet: PetData)
@@ -63,49 +65,66 @@ class Add_New_Pet: UITableViewController, UIImagePickerControllerDelegate, UINav
             return
         }
         
-        // Generate unique pet ID (for the first time the pet is added)
-        let petId = UUID().uuidString
+    //Get the current user logged in
+    guard let currentUser = Auth.auth().currentUser else {
+            showAlert(title: "Error", message: "Please log in first.")
+            return
+        }
         
-        // Upload image and save pet data
-        uploadImageToFirebase(image: image) { [weak self] imageURL, error in
-            if let error = error {
-                self?.showAlert(title: "Error", message: "Failed to upload image: \(error.localizedDescription)")
-                return
-            }
+    let ownerId = currentUser.uid
+    // Generate unique pet ID (for the first time the pet is added)
+    let petId = UUID().uuidString
+        
+    // Upload image and save pet data
+    uploadImageToFirebase(image: image) { [weak self] imageURL, error in
+        if let error = error {
+            self?.showAlert(title: "Error", message: "Failed to upload image: \(error.localizedDescription)")
+            return
+        }
             
-            guard let imageURL = imageURL else {
-                self?.showAlert(title: "Error", message: "Failed to get image URL.")
-                return
-            }
+        guard let imageURL = imageURL else {
+            self?.showAlert(title: "Error", message: "Failed to get image URL.")
+            return
+        }
             
             // Prepare pet data
-            let petData: [String: Any] = [
-                "petId": petId,  // Include unique petId
-                "petName": petName,
-                "petBreed": petBreed,
-                "petGender": petGender,
-                "petAge": petAge,
-                "petWeight": petWeight,
-                "petImage": imageURL
-            ]
+        let petData: [String: Any] = [
+            "petId": petId,  // Include unique petId
+            "ownerID": ownerId,
+            "petName": petName,
+            "petBreed": petBreed,
+            "petGender": petGender,
+            "petAge": petAge,
+            "petWeight": petWeight,
+            "petImage": imageURL
+        ]
             
-            // Save pet data to Firestore
-            FirebaseManager.shared.savePetDataToFirebase(data: petData, petId: petId) { error in
-                if let error = error {
-                    self?.showAlert(title: "Error", message: "Failed to save pet data: \(error.localizedDescription)")
-                } else {
-                    self?.showAlert(title: "Success", message: "Pet data saved successfully!") {
-                        guard let self else { return }
-                        let newPet = PetData(petId: petId, petImage: imageURL, petName: petName, petBreed: petBreed)
-                        self.delegate?.didAddNewPet(newPet)
-                        
-                        self.clearFields()
-                        self.dismiss(animated: true, completion: nil)
+        // Save pet data to Firestore
+        FirebaseManager.shared.savePetDataToFirebase(data: petData, petId: petId) { error in
+            if let error = error {
+                self?.showAlert(title: "Error", message: "Failed to save pet data: \(error.localizedDescription)")
+            } else {
+                
+                Firestore.firestore().collection("users").document(ownerId).updateData([
+                    "petIds" : FieldValue.arrayUnion([petId])
+                ])  { updateError in
+                    if let updateError = updateError {
+                        print("Error updating user's petIds: \(updateError.localizedDescription)")
+                    }else {
+                        print("User document updated with new pet ID successfully.")
                     }
+                }
+                self?.showAlert(title: "Success", message: "Pet data saved successfully!") {
+                guard let self = self else { return }
+                let newPet = PetData(petId: petId, petImage: imageURL, petName: petName, petBreed: petBreed)
+                self.delegate?.didAddNewPet(newPet)
+                self.clearFields()
+                self.dismiss(animated: true, completion: nil)
                 }
             }
         }
     }
+}
 
     func uploadImageToFirebase(image: UIImage, completion: @escaping (String?, Error?) -> Void) {
         guard let imageData = image.jpegData(compressionQuality: 0.8) else {

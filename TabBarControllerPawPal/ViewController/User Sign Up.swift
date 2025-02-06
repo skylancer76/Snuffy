@@ -29,6 +29,14 @@ class User_Sign_Up: UIViewController {
         
         signUpButton.layer.cornerRadius = 10
         signUpButton.layer.masksToBounds = true
+        passwordTextField.isSecureTextEntry = true
+    }
+    
+    
+    @IBAction func passwordViewTapped(_ sender: UIButton) {
+        passwordTextField.isSecureTextEntry.toggle()
+        let imageName = passwordTextField.isSelected ? "eye.slash.fill" : "eye.fill"
+        sender.setImage(UIImage(systemName: imageName), for: .normal)
     }
     
     
@@ -59,7 +67,8 @@ class User_Sign_Up: UIViewController {
             return
         }
         
-        let role = roleSegmentedControl.selectedSegmentIndex == 0 ? "Pet Owner" : "Pet Caretaker"
+        let selectedIndex = roleSegmentedControl.selectedSegmentIndex
+        
         
         // MARK: - Create User with Firebase Auth
         Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
@@ -68,8 +77,12 @@ class User_Sign_Up: UIViewController {
                 return
             }
             // Save user data to Firestore
-            if let user = authResult?.user {
-                self.saveUserDataToFirestore(uid: user.uid, name: name, email: email, role: role)
+            guard let user = authResult?.user else { return }
+            
+            if selectedIndex == 0 {
+                self.saveUserDataToFirestore(uid: user.uid, name: name, email: email, role: "Pet Owner")
+            } else {
+                self.saveCaretakerDataToFirestore(uid: user.uid, name: name, email: email, password : password)
             }
         }
     }
@@ -95,6 +108,33 @@ class User_Sign_Up: UIViewController {
         }
     }
     
+    func saveCaretakerDataToFirestore(uid: String, name: String, email: String, password: String) {
+        
+        let caretakerData: [String: Any] = [
+                    "caretakerId": uid,
+                    "name": name,
+                    "email": email,
+                    "password": password,
+                    "profilePic": "",
+                    "bio": "",
+                    "experience": 0,
+                    "address": "",
+                    "location": [0.0, 0.0],
+                    "distanceAway": 0.0,
+                    "status": "available",
+                    "pendingRequests": [],
+                    "completedRequests": 0,
+                    "createdAt": Timestamp()
+                ]
+        db.collection("caretakers").document(uid).setData(caretakerData) { error in
+            if let error = error {
+                self.showAlert(title: "Error", message: "Error saving caretaker data to Firestore: \(error.localizedDescription)")
+                
+            }else {
+                self.navigateToHomeScreen()
+            }
+        }
+    }
     
     func navigateToHomeScreen() {
           // Create an instance of the Home screen (Main 3)

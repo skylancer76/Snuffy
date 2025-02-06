@@ -27,24 +27,24 @@ class Bookings_Info: UIViewController, UITableViewDelegate, UITableViewDataSourc
         super.viewDidLoad()
         
         
-        tableView.delegate = self
-        tableView.dataSource = self
-        
-        bgView.layer.cornerRadius = 10
-        caretakerImageView.layer.cornerRadius = 8
-      
-        tableView.register(BookingDetailCell.self, forCellReuseIdentifier: "BookingDetailCell_Pet")
-        tableView.register(BookingDetailCell.self, forCellReuseIdentifier: "BookingDetailCell_StartDate")
-        tableView.register(BookingDetailCell.self, forCellReuseIdentifier: "BookingDetailCell_EndDate")
-        tableView.register(BookingDetailCell.self, forCellReuseIdentifier: "BookingDetailCell_Pickup")
-        tableView.register(BookingDetailCell.self, forCellReuseIdentifier: "BookingDetailCell_Payment")
-        
-        // If we have a schedule request, fetch the caretaker details.
-        if let request = scheduleRequest {
-            print("Fetching caretaker ID for booking ID: \(request.requestId)")
-            fetchCaretakerIdFromBooking(bookingId: request.requestId)
-        }
+    tableView.delegate = self
+    tableView.dataSource = self
+    
+    bgView.layer.cornerRadius = 10
+    caretakerImageView.layer.cornerRadius = 8
+  
+    tableView.register(BookingDetailCell.self, forCellReuseIdentifier: "BookingDetailCell_Pet")
+    tableView.register(BookingDetailCell.self, forCellReuseIdentifier: "BookingDetailCell_StartDate")
+    tableView.register(BookingDetailCell.self, forCellReuseIdentifier: "BookingDetailCell_EndDate")
+    tableView.register(BookingDetailCell.self, forCellReuseIdentifier: "BookingDetailCell_Pickup")
+    tableView.register(BookingDetailCell.self, forCellReuseIdentifier: "BookingDetailCell_Payment")
+    
+    // If we have a schedule request, fetch the caretaker details.
+    if let request = scheduleRequest {
+        print("Fetching caretaker ID for booking ID: \(request.requestId)")
+        fetchCaretakerIdFromBooking(bookingId: request.requestId)
     }
+}
     
     // MARK: - Firestore Fetch Methods
     func fetchCaretakerIdFromBooking(bookingId: String) {

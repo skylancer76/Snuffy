@@ -19,7 +19,7 @@ class PetPin: NSObject, MKAnnotation {
     init(pet: PetLiveUpdate) {
         self.pet = pet
         self.title = pet.name
-        self.subtitle = nil // Example, assuming pet has a breed property
+        self.subtitle = nil 
         self.coordinate = pet.location
     }
 }

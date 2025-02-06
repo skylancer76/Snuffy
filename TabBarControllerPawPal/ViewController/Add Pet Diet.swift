@@ -28,10 +28,10 @@ class Add_Pet_Diet: UITableViewController {
         
         print("Pet ID: \(petId ?? "No Pet ID passed")")
         
-        // Configure the serving time picker to show only time.
+        
         servingTimePicker.datePickerMode = .time
         
-        // Set a default title for the food category button.
+       
         foodCategoryButton.setTitle(foodCategories.first, for: .normal)
     }
     

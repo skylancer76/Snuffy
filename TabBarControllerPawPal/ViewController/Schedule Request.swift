@@ -56,34 +56,33 @@ class Schedule_Request: UITableViewController {
         
         // Create UIActions for each pet name.
         let actions: [UIAction] = petNames.map { petName in
-            // Use a checkmark if the pet is selected.
+            
             let state: UIMenuElement.State = self.selectedPetNames.contains(petName) ? .on : .off
             return UIAction(title: petName, state: state) { action in
-                // Toggle selection with a maximum of 2 selections.
+               
                 if self.selectedPetNames.contains(petName) {
                     self.selectedPetNames.remove(petName)
                 } else {
                     if self.selectedPetNames.count < 2 {
                         self.selectedPetNames.insert(petName)
                     } else {
-                        // Already 2 pets are selected; do nothing.
-                        // Optionally, you could show an alert here.
+                        
                     }
                 }
-                // Update the button title to show all selected pet names.
+               
                 let selectedTitle = self.selectedPetNames.joined(separator: ", ")
                 self.petPickerButton.setTitle(selectedTitle, for: .normal)
-                // Rebuild the menu to update the checkmarks.
+               
                 self.configurePetPickerMenu()
             }
         }
         
-        // Create the menu without using .singleSelection (so our custom logic applies).
+      
         let menu = UIMenu(title: "Select Pet(s)", children: actions)
         petPickerButton.menu = menu
         petPickerButton.showsMenuAsPrimaryAction = true
         
-        // Optionally, set an initial title if none are selected.
+        
         if self.selectedPetNames.isEmpty {
             petPickerButton.setTitle("", for: .normal)
         }
@@ -166,9 +165,6 @@ class Schedule_Request: UITableViewController {
                 }
             }
         }
-        
-        
-        // MARK: - Alert Helper
         
         
     }

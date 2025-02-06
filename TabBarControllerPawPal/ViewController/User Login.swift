@@ -20,7 +20,19 @@ class User_Login: UIViewController {
         
         loginButton.layer.cornerRadius = 10
         loginButton.layer.masksToBounds = true
+        passwordTextField.isSecureTextEntry = true
     }
+    
+    
+    @IBAction func passwordViewTapped(_ sender: UIButton) {
+        passwordTextField.isSecureTextEntry.toggle()
+        let imageName = passwordTextField.isSelected ? "eye.slash.fill" : "eye.fill"
+        sender.setImage(UIImage(systemName: imageName), for: .normal)
+    }
+    
+    
+    
+    
     
     @IBAction func loginClicked(_ sender: Any) {
         guard let email = emailTextField.text, !email.isEmpty,
@@ -91,4 +103,5 @@ class User_Login: UIViewController {
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         present(alert, animated: true, completion: nil)
     }
+    
 }

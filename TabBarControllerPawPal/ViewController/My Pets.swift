@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseFirestore
+import FirebaseAuth
 
 class My_Pets: UIViewController {
     
@@ -56,6 +57,7 @@ class My_Pets: UIViewController {
         
         // Set layout for collection view
         myPets.collectionViewLayout = createLayout()
+        fetchPetsFromFirestore()
         
     }
     
@@ -66,12 +68,22 @@ class My_Pets: UIViewController {
     
     
     func fetchPetsFromFirestore() {
-        let db = Firestore.firestore()
-        db.collection("Pets").getDocuments { snapshot, error in
-            if let error = error {
-                print("Error fetching pet data: \(error.localizedDescription)")
-                return
-            }
+           let db = Firestore.firestore()
+           
+           // Ensure the user is logged in
+           guard let currentUser = Auth.auth().currentUser else {
+               print("User is not logged in")
+               return
+           }
+           
+           // asking the pets db where the ownerid mathc the currentUser logged in
+           db.collection("Pets")
+               .whereField("ownerID", isEqualTo: currentUser.uid)
+               .getDocuments { snapshot, error in
+                   if let error = error {
+                       print("Error fetching pet data: \(error.localizedDescription)")
+                       return
+                   }
             self.pets = snapshot?.documents.compactMap { document in
                 let data = document.data()
                 let petId = data["petId"] as? String ?? ""
@@ -93,12 +105,28 @@ class My_Pets: UIViewController {
                     petWeight: weight
                 )
             } ?? []
-
+                   
+            self.prefetchImages(for: self.pets)
             DispatchQueue.main.async {
                 self.myPets.reloadData()
             }
         }
     }
+    func prefetchImages(for pets: [PetData]) {
+            for pet in pets {
+                if let imageUrlString = pet.petImage, let url = URL(string: imageUrlString) {
+                    // Check if already cached
+                    if ImageCacheManager.shared.image(forKey: imageUrlString) == nil {
+                        URLSession.shared.dataTask(with: url) { data, response, error in
+                            if let data = data, let image = UIImage(data: data) {
+                                ImageCacheManager.shared.setImage(image, forKey: imageUrlString)
+                            }
+                        }.resume()
+                    }
+                }
+            }
+        }
+
 }
 
 

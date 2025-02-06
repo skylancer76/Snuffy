@@ -8,6 +8,7 @@
 import UIKit
 
 class RequestTableViewCell: UITableViewCell {
+    
     @IBOutlet weak var petImageView: UIImageView!
     @IBOutlet weak var petNameLabel: UILabel!
     @IBOutlet weak var petBreedLabel: UILabel!
