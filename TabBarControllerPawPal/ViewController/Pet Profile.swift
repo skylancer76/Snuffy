@@ -69,7 +69,7 @@ class Pet_Profile: UIViewController {
                     self.ageLabel.text = petAge
                     self.genderLabel.text = petGender
                     self.weightLabel.text = petWeight
-                    self.petImage.loadImageFromUrl(petImageUrl)
+                    self.petImage.loadPrefetchedImageFromUrl(petImageUrl)
                 }
             } else {
                 print("No pet data found for this petId.")
@@ -82,17 +82,43 @@ class Pet_Profile: UIViewController {
 }
 
 extension UIImageView {
-    func loadImageFromUrl(_ urlString: String) {
-        guard let url = URL(string: urlString) else { return }
-        DispatchQueue.global().async {
-            if let data = try? Data(contentsOf: url),
-               let image = UIImage(data: data) {
-                DispatchQueue.main.async {
-                    self.image = image
+   
+    func loadPrefetchedImageFromUrl(_ urlString: String) {
+        guard let url = URL(string: urlString) else {
+            DispatchQueue.main.async {
+                self.image = UIImage(named: "placeholder_image")
+            }
+            return
+        }
+        
+        // Use the URL's lastPathComponent as the file name.
+        let fileName = url.lastPathComponent
+        let cachesDirectory = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
+        let localURL = cachesDirectory.appendingPathComponent(fileName)
+        
+        // Check if the image file already exists locally.
+        if FileManager.default.fileExists(atPath: localURL.path),
+           let image = UIImage(contentsOfFile: localURL.path) {
+            DispatchQueue.main.async {
+                self.image = image
+            }
+        } else {
+            // If not, download the image using ImageDownloader.
+            ImageDownloader.shared.downloadImage(from: url) { downloadedLocalURL in
+                if let downloadedLocalURL = downloadedLocalURL,
+                   let image = UIImage(contentsOfFile: downloadedLocalURL.path) {
+                    DispatchQueue.main.async {
+                        self.image = image
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        self.image = UIImage(named: "placeholder_image")
+                    }
                 }
             }
         }
     }
+  
 }
 
 extension Pet_Profile: UITableViewDataSource, UITableViewDelegate {

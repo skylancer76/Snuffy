@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="67Q-lV-hh9">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="6fy-Vc-4CS">
     <device id="retina6_3" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
@@ -787,7 +787,8 @@
                                                         <fontDescription key="titleFontDescription" type="system" weight="medium" pointSize="18"/>
                                                     </buttonConfiguration>
                                                     <connections>
-                                                        <segue destination="g4C-sf-8A2" kind="presentation" modalPresentationStyle="pageSheet" id="MFp-tt-uHV"/>
+                                                        <action selector="addAddressButtonTapped:" destination="Cwp-fV-E38" eventType="touchUpInside" id="VJz-Kt-afp"/>
+                                                        <segue destination="g4C-sf-8A2" kind="presentation" identifier="GoToAddAddress" modalPresentationStyle="pageSheet" id="MFp-tt-uHV"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
@@ -808,15 +809,9 @@
                             <outlet property="delegate" destination="Cwp-fV-E38" id="8Es-Q4-fRX"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Schedule Request" largeTitleDisplayMode="never" id="ftJ-pa-ZAu">
-                        <barButtonItem key="rightBarButtonItem" title="Send" style="done" id="7q4-m1-Qoq">
-                            <connections>
-                                <action selector="sendButtonTapped:" destination="Cwp-fV-E38" id="92Q-qn-iua"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Schedule Request" largeTitleDisplayMode="never" id="ftJ-pa-ZAu"/>
                     <connections>
-                        <outlet property="caretakingInstructionsTextView" destination="cBT-hU-Lzi" id="V43-gF-TTb"/>
+                        <outlet property="caretakingInstructionsTextView" destination="cBT-hU-Lzi" id="duG-Oe-M2Z"/>
                         <outlet property="endDatePicker" destination="3Qv-6v-PEi" id="tYj-Kg-Npg"/>
                         <outlet property="petDropoffSwitch" destination="1wj-9Y-aU6" id="qWE-BN-YBE"/>
                         <outlet property="petPickerButton" destination="QoG-VN-5Dk" id="cxj-Lo-eEe"/>
@@ -831,7 +826,7 @@
         <!--Add Address-->
         <scene sceneID="0VP-8v-LYY">
             <objects>
-                <tableViewController id="W9h-Uu-RBp" sceneMemberID="viewController">
+                <tableViewController id="W9h-Uu-RBp" customClass="Add_Address" customModule="TabBarControllerPawPal" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" id="HtX-PW-ZlZ">
                         <rect key="frame" x="0.0" y="0.0" width="402" height="864"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -951,6 +946,9 @@
                                                     <buttonConfiguration key="configuration" style="filled" title="Schedule Request">
                                                         <fontDescription key="titleFontDescription" type="system" weight="medium" pointSize="18"/>
                                                     </buttonConfiguration>
+                                                    <connections>
+                                                        <action selector="scheduleRequestButtonTapped:" destination="W9h-Uu-RBp" eventType="touchUpInside" id="NyB-S0-c1o"/>
+                                                    </connections>
                                                 </button>
                                             </subviews>
                                             <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
@@ -971,6 +969,12 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Add Address" id="vfx-b2-U9j"/>
+                    <connections>
+                        <outlet property="buildingBlockTextField" destination="Ljx-rL-WbO" id="t2r-zs-dee"/>
+                        <outlet property="houseFloorTextField" destination="672-6W-dhW" id="W2A-EQ-qIj"/>
+                        <outlet property="landmarkAreaTextField" destination="a8q-mS-xPb" id="UUe-Bb-jVr"/>
+                        <outlet property="mapView" destination="GS8-kA-MSn" id="gyw-Wr-4lp"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mAf-ID-mRc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
