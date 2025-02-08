@@ -17,6 +17,7 @@ class My_Pets: UIViewController {
     @IBOutlet weak var myPets: UICollectionView!
     
     var pets: [PetData] = []
+    var petsListener: ListenerRegistration?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,41 +74,45 @@ class My_Pets: UIViewController {
         }
         
         // asking the pets db where the ownerid mathc the currentUser logged in
-        db.collection("Pets")
-            .whereField("ownerID", isEqualTo: currentUser.uid)
-            .getDocuments { snapshot, error in
-                if let error = error {
-                    print("Error fetching pet data: \(error.localizedDescription)")
-                    return
-                }
-                self.pets = snapshot?.documents.compactMap { document in
-                    let data = document.data()
-                    let petId = data["petId"] as? String ?? ""
-                    let name = data["petName"] as? String
-                    let breed = data["petBreed"] as? String
-                    let image = data["petImage"] as? String
-                    let age = data["petAge"] as? String
-                    let gender = data["petGender"] as? String
-                    let weight = data["petWeight"] as? String
+        petsListener = db.collection("Pets")
+                .whereField("ownerID", isEqualTo: currentUser.uid)
+                .addSnapshotListener { [weak self] snapshot, error in
+                    guard let self = self else { return }
                     
-                    // Store petId properly when creating PetData object
-                    return PetData(
-                        petId: petId,  // Make sure petId is included
-                        petImage: image,
-                        petName: name,
-                        petBreed: breed,
-                        petGender: gender,
-                        petAge: age,
-                        petWeight: weight
-                    )
-                } ?? []
-                
-                self.prefetchImages(for: self.pets)
-                DispatchQueue.main.async {
-                    self.myPets.reloadData()
+                    if let error = error {
+                        print("Error fetching pet data: \(error.localizedDescription)")
+                        return
+                    }
+                    
+                    self.pets = snapshot?.documents.compactMap { document in
+                        let data = document.data()
+                        let petId = data["petId"] as? String ?? ""
+                        let name = data["petName"] as? String
+                        let breed = data["petBreed"] as? String
+                        let image = data["petImage"] as? String
+                        let age = data["petAge"] as? String
+                        let gender = data["petGender"] as? String
+                        let weight = data["petWeight"] as? String
+                        
+                        return PetData(
+                            petId: petId,
+                            petImage: image,
+                            petName: name,
+                            petBreed: breed,
+                            petGender: gender,
+                            petAge: age,
+                            petWeight: weight
+                        )
+                    } ?? []
+                    
+                    // Optionally prefetch images for the updated pets array.
+                    self.prefetchImages(for: self.pets)
+                    
+                    DispatchQueue.main.async {
+                        self.myPets.reloadData()
+                    }
                 }
-            }
-    }
+        }
     func prefetchImages(for pets: [PetData]) {
         for pet in pets {
             // Ensure there's a valid image URL string.
