@@ -243,6 +243,7 @@ class Add_Address: UITableViewController, MKMapViewDelegate {
     
     // MARK: - Save Schedule Request to Firebase
     private func saveScheduleRequest(addressData: [String: Any]) {
+        // Ensure the user is logged in.
         guard let currentUser = Auth.auth().currentUser else {
             showAlert(title: "Error", message: "You must be logged in.")
             return
@@ -250,53 +251,79 @@ class Add_Address: UITableViewController, MKMapViewDelegate {
         
         let requestId = UUID().uuidString
         let userId = currentUser.uid
-        let userName = currentUser.displayName ?? "Anonymous User"
-        
-        // Request Data.
-        var requestData: [String: Any] = [
-            "requestId": requestId,
-            "userId": userId,
-            "userName": userName,
-            "petName": selectedPetName,
-            "startDate": Timestamp(date: startDate),
-            "endDate": Timestamp(date: endDate),
-            "petPickup": isPetPickup,
-            "petDropoff": isPetDropoff,
-            "instructions": instructions,
-            "status": "available",
-            "timestamp": Timestamp(date: Date())
-        ]
-        
-        // Merge Address Data.
-        for (key, value) in addressData {
-            requestData[key] = value
-        }
-        
-        // Save to Firebase.
-        FirebaseManager.shared.saveScheduleRequestData(data: requestData) { [weak self] error in
+
+        // Fetch the username from Firestore (users collection)
+        fetchUserName(userId: userId) { [weak self] userName in
             guard let self = self else { return }
-            DispatchQueue.main.async {
-                if let error = error {
-                    print("Error scheduling request: \(error.localizedDescription)")
-                    self.showAlert(title: "Error", message: "Could not schedule request.")
-                } else {
-                    // Create a CLLocation from the selected coordinate (if available)
-                    let userLocation = self.selectedCoordinate.map { CLLocation(latitude: $0.latitude, longitude: $0.longitude) }
-                    
-                    // Auto-assign caretaker immediately after saving the request.
-                    FirebaseManager.shared.autoAssignCaretaker(petName: self.selectedPetName, requestId: requestId, userLocation: userLocation) { assignError in
-                        if let assignError = assignError {
-                            print("Auto-assign caretaker error: \(assignError.localizedDescription)")
-                        } else {
-                            print("Caretaker assigned for request: \(requestId)")
+            
+            // Build the request data with the fetched username.
+            var requestData: [String: Any] = [
+                "requestId": requestId,
+                "userId": userId,
+                "userName": userName,    // Use username from Firestore.
+                "petName": self.selectedPetName,
+                "startDate": Timestamp(date: self.startDate),
+                "endDate": Timestamp(date: self.endDate),
+                "petPickup": self.isPetPickup,
+                "petDropoff": self.isPetDropoff,
+                "instructions": self.instructions,
+                "status": "available",
+                "timestamp": Timestamp(date: Date())
+            ]
+            
+            // Merge any additional address data.
+            for (key, value) in addressData {
+                requestData[key] = value
+            }
+            
+            // Save the request data to Firebase.
+            FirebaseManager.shared.saveScheduleRequestData(data: requestData) { error in
+                DispatchQueue.main.async {
+                    if let error = error {
+                        print("Error scheduling request: \(error.localizedDescription)")
+                        self.showAlert(title: "Error", message: "Could not schedule request.")
+                    } else {
+                        // Create a CLLocation from the selected coordinate (if available)
+                        let userLocation = self.selectedCoordinate.map {
+                            CLLocation(latitude: $0.latitude, longitude: $0.longitude)
                         }
+                        
+                        // Auto-assign caretaker after saving the request.
+                        FirebaseManager.shared.autoAssignCaretaker(
+                            petName: self.selectedPetName,
+                            requestId: requestId,
+                            userLocation: userLocation
+                        ) { assignError in
+                            if let assignError = assignError {
+                                print("Auto-assign caretaker error: \(assignError.localizedDescription)")
+                            } else {
+                                print("Caretaker assigned for request: \(requestId)")
+                            }
+                        }
+                        
+                        // Transition to the Request Scheduled screen.
+                        self.performSegue(withIdentifier: "showRequestScheduled", sender: self)
                     }
-                    
-                    self.performSegue(withIdentifier: "showRequestScheduled", sender: self)
                 }
             }
         }
     }
+    func fetchUserName(userId: String, completion: @escaping (String) -> Void) {
+        let usersCollection = Firestore.firestore().collection("users")
+        usersCollection.document(userId).getDocument { document, error in
+            if let error = error {
+                print("Failed to fetch user name: \(error.localizedDescription)")
+                completion("Anonymous User")
+            } else if let document = document, document.exists,
+                      let data = document.data(),
+                      let name = data["name"] as? String, !name.isEmpty {
+                completion(name)
+            } else {
+                completion("Anonymous User")
+            }
+        }
+    }
+
     
     // MARK: - Show Alert Helper
     private func showAlert(title: String, message: String) {

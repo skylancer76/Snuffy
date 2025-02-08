@@ -178,27 +178,27 @@ class Schedule_Request: UITableViewController {
     
     // MARK: - Fetch User Name
     func fetchUserName(userId: String, completion: @escaping (String) -> Void) {
-        // First, try to get the displayName from FirebaseAuth.
-        if let displayName = Auth.auth().currentUser?.displayName, !displayName.isEmpty {
-            completion(displayName)
-            return
-        }
-        // Fallback: fetch the "name" field from Firestore.
-        Firestore.firestore().collection("users")
-            .document(userId)
-            .getDocument { document, error in
-                if let error = error {
-                    print("Failed to fetch user name: \(error.localizedDescription)")
-                    completion("Anonymous User")
-                } else if let doc = document,
-                          let data = doc.data(),
-                          let name = data["name"] as? String {
+        let usersCollection = Firestore.firestore().collection("users")
+        print("Attempting to fetch user name for userId: \(userId)")
+        usersCollection.document(userId).getDocument { document, error in
+            if let error = error {
+                print("Failed to fetch user name: \(error.localizedDescription)")
+                completion("Anonymous User")
+            } else if let document = document, document.exists {
+                if let data = document.data(), let name = data["name"] as? String, !name.isEmpty {
+                    print("Fetched user name: \(name)")
                     completion(name)
                 } else {
+                    print("Document exists but no valid 'name' field found")
                     completion("Anonymous User")
                 }
+            } else {
+                print("Document does not exist for userId: \(userId)")
+                completion("Anonymous User")
             }
+        }
     }
+
     
     // MARK: - Save Schedule Request
     func saveScheduleRequest(addressData: [String: Any]? = nil,
@@ -221,6 +221,7 @@ class Schedule_Request: UITableViewController {
         
         fetchUserName(userId: userId) { [weak self] userName in
             guard let self = self else { return }
+            print("User name returned from fetchUserName: \(userName)")
             
             // Use the selected pet name if available.
             let petName = (self.petPickerButton.title(for: .normal) != "Select Pet")
