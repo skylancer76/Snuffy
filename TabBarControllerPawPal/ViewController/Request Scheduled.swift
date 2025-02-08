@@ -32,6 +32,11 @@ class Request_Scheduled: UIViewController {
 
     // MARK: - Dismiss Button Action
     @IBAction func dismissButtonTapped(_ sender: UIButton) {
-        view.window?.rootViewController?.dismiss(animated: true, completion: nil)
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            if let tabBarController = storyboard.instantiateViewController(withIdentifier: "TabBarControllerID") as? UITabBarController {
+                tabBarController.selectedIndex = 1
+                tabBarController.modalPresentationStyle = .fullScreen
+                self.present(tabBarController, animated: true, completion: nil)
+            }
     }
 }
