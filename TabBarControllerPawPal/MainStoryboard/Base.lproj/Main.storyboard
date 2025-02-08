@@ -3276,16 +3276,10 @@
                                             <outlet property="deleteButton" destination="6id-v5-5dI" id="7kQ-kf-jp6"/>
                                             <outlet property="dosageLabel" destination="onf-DK-DJg" id="P9c-Jg-1Gh"/>
                                             <outlet property="endDateLabel" destination="uXA-Fe-1zt" id="JiB-WC-alP"/>
-                                            <outlet property="feedingFrequencyLabel" destination="onf-DK-DJg" id="wdi-zo-rSQ"/>
-                                            <outlet property="foodCategoryLabel" destination="XMd-eU-mY1" id="mpL-kc-c2p"/>
-                                            <outlet property="foodNameLabel" destination="uOK-fg-Wwb" id="uY2-tG-gfD"/>
                                             <outlet property="frequencyLabel" destination="xsx-XQ-7RD" id="DgH-bj-44r"/>
-                                            <outlet property="mealTypeLabel" destination="6gh-6m-CuO" id="Kp9-84-eYp"/>
                                             <outlet property="medicineNameLabel" destination="6gh-6m-CuO" id="JbT-gl-HYO"/>
                                             <outlet property="medicineTypeLabel" destination="uOK-fg-Wwb" id="VZ8-Ra-E0J"/>
-                                            <outlet property="portionSizeLabel" destination="xsx-XQ-7RD" id="Mrb-jR-09N"/>
                                             <outlet property="purposeLabel" destination="XMd-eU-mY1" id="DQl-YV-YNl"/>
-                                            <outlet property="servingTimeLabel" destination="gfg-Ji-Jh7" id="IKr-8c-a5N"/>
                                             <outlet property="startDateLabel" destination="gfg-Ji-Jh7" id="40e-t7-u2g"/>
                                         </connections>
                                     </tableViewCell>
