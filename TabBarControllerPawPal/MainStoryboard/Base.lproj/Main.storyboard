@@ -612,9 +612,6 @@
                                                     <state key="normal" title="Select Pet">
                                                         <color key="titleColor" systemColor="labelColor"/>
                                                     </state>
-                                                    <connections>
-                                                        <action selector="petPickerButtonTapped:" destination="Cwp-fV-E38" eventType="touchUpInside" id="fhI-yo-CyU"/>
-                                                    </connections>
                                                 </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select Pet" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="52A-am-dAp">
                                                     <rect key="frame" x="20" y="13" width="70" height="18"/>
@@ -1241,7 +1238,6 @@
                     </view>
                     <navigationItem key="navigationItem" title="My Pets" largeTitleDisplayMode="always" id="CCC-6X-JA2"/>
                     <connections>
-                        <outlet property="BackgroundView" destination="B4G-yI-dSp" id="U0Y-UG-aVq"/>
                         <outlet property="addPetButton" destination="rJ7-v7-DhV" id="49Z-47-xWf"/>
                         <outlet property="backgroundView" destination="B4G-yI-dSp" id="MAE-bD-pK0"/>
                         <outlet property="myPets" destination="2nf-9t-KQw" id="y3w-S6-TYF"/>

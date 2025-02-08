@@ -7,6 +7,8 @@
 
 import UIKit
 import FirebaseAuth
+import FirebaseFirestore
+
 
 class My_Bookings: UIViewController , UITableViewDelegate, UITableViewDataSource {
 
@@ -16,6 +18,7 @@ class My_Bookings: UIViewController , UITableViewDelegate, UITableViewDataSource
     
     var upcomingBookings: [ScheduleRequest] = []
     var completedBookings: [ScheduleRequest] = []
+    var bookingsListener: ListenerRegistration?
     
     
     override func viewDidLoad() {
@@ -33,15 +36,19 @@ class My_Bookings: UIViewController , UITableViewDelegate, UITableViewDataSource
         
         
         let ownerId = currentUser.uid
-        print("Fetching bookings for owner ID: \(ownerId)")
-        
-        FirebaseManager.shared.fetchOwnerBookings(for: ownerId) { requests in
-            self.upcomingBookings = requests.filter { $0.status != "Completed" }
-            self.completedBookings = requests.filter { $0.status == "Completed" }
-            self.tableView.reloadData()
-        }
-        
-        
+               print("Fetching bookings for owner ID: \(ownerId)")
+               
+               // Use the snapshot listener to observe changes.
+               bookingsListener = FirebaseManager.shared.observeOwnerBookings(for: ownerId) { [weak self] requests in
+                   guard let self = self else { return }
+                   self.upcomingBookings = requests.filter { $0.status != "Completed" }
+                   self.completedBookings = requests.filter { $0.status == "Completed" }
+                   
+                   DispatchQueue.main.async {
+                       self.tableView.reloadData()
+                   }
+               }
+       
         // Set Gradient View
         let gradientView = UIView(frame: view.bounds)
         gradientView.translatesAutoresizingMaskIntoConstraints = false
@@ -68,7 +75,7 @@ class My_Bookings: UIViewController , UITableViewDelegate, UITableViewDataSource
         tableView.backgroundColor = .clear
         
     }
-    
+  
     
     @objc func segmentChanged(_ sender: UISegmentedControl) {
             tableView.reloadData()
@@ -91,8 +98,8 @@ class My_Bookings: UIViewController , UITableViewDelegate, UITableViewDataSource
         dateFormatter.dateStyle = .medium
         dateFormatter.timeStyle = .none
         
-        cell.startDateLabel.text = "Start: \(dateFormatter.string(from: request.startDate))"
-        cell.endDateLabel.text = "End: \(dateFormatter.string(from: request.endDate))"
+        cell.startDateLabel.text = dateFormatter.string(from: request.startDate)
+        cell.endDateLabel.text = dateFormatter.string(from: request.endDate)
         
         // Set the title of the status button
         cell.statusButton.setTitle(request.status, for: .normal)
@@ -148,7 +155,7 @@ class My_Bookings: UIViewController , UITableViewDelegate, UITableViewDataSource
         
         FirebaseManager.shared.updateBookingStatus(requestId: request.requestId, newStatus: newStatus) { error in
             if error == nil {
-                request.status = newStatus
+                
                 self.reloadBookingData()
             }
         }

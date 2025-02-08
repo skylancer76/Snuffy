@@ -342,6 +342,29 @@ class FirebaseManager {
             }
     }
     
+    // Keeps check on the bookings and updates at a time 
+    func observeOwnerBookings(for userId: String, completion: @escaping ([ScheduleRequest]) -> Void) -> ListenerRegistration {
+           let query = db.collection("scheduleRequests").whereField("userId", isEqualTo: userId)
+           return query.addSnapshotListener { snapshot, error in
+               if let error = error {
+                   print("Error fetching bookings: \(error.localizedDescription)")
+                   completion([])
+                   return
+               }
+               
+               var requests: [ScheduleRequest] = []
+               for document in snapshot?.documents ?? [] {
+                   var requestData = document.data()
+                   requestData["requestId"] = document.documentID  // Include the document ID
+                   if let scheduleRequest = ScheduleRequest(from: requestData) {
+                       requests.append(scheduleRequest)
+                   }
+               }
+               completion(requests)
+           }
+       }
+   
+
     /// Update the booking status.
     func updateBookingStatus(requestId: String, newStatus: String, completion: @escaping (Error?) -> Void) {
         db.collection("scheduleRequests").document(requestId).updateData([
@@ -370,7 +393,7 @@ class FirebaseManager {
                 return
             }
             
-            caretakerRef.updateData(["status": "assigned"]) { error in
+            caretakerRef.setData(["status": "assigned"], merge: true) { error in
                 completion(error)
             }
         }

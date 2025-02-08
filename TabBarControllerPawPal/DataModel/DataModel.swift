@@ -234,7 +234,7 @@ struct ScheduleRequest: Codable {
         self.userName = userName
         self.petName = petName
         self.petId = data["petId"] as? String // Optional
-        self.petImageUrl = data["petImageUrl"] as? String
+        self.petImageUrl = data["petImageUrl"] as? String ?? data["petImageUrl"] as? String
         self.petBreed = data["petBreed"] as? String
         self.startDate = startTimestamp.dateValue()
         self.endDate = endTimestamp.dateValue()
