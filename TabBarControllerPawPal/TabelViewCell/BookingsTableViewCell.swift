@@ -14,6 +14,9 @@ class BookingsTableViewCell: UITableViewCell {
     @IBOutlet weak var endDateLabel: UILabel!
     @IBOutlet weak var statusButton: UIButton!
     @IBOutlet weak var bgView: UIView!
+    @IBOutlet weak var arrowButton: UIButton!
+    
+    var onArrowTap: (() -> Void)?
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -52,5 +55,9 @@ class BookingsTableViewCell: UITableViewCell {
         default:
             statusButton.tintColor = .systemPink
         }
+    }
+    
+    @IBAction func arrowButtonTapped(_ sender: UIButton) {
+        onArrowTap?()
     }
 }

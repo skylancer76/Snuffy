@@ -24,6 +24,7 @@ class Caretakers: Codable {
     var status: String
     var pendingRequests: [String] // List of pending request IDs
     var completedRequests: Int
+    var phoneNumber: String?
 
     // Initialization
     init(
@@ -39,7 +40,8 @@ class Caretakers: Codable {
         distanceAway: Double = 0.0,
         status: String = "available",
         pendingRequests: [String] = [],
-        completedRequests: Int = 0
+        completedRequests: Int = 0,
+        phoneNumber: String? = nil
     ) {
         self.caretakerId = caretakerId
         self.name = name
@@ -54,6 +56,7 @@ class Caretakers: Codable {
         self.status = status
         self.pendingRequests = pendingRequests
         self.completedRequests = completedRequests
+        self.phoneNumber = phoneNumber
     }
 }
 
@@ -197,35 +200,105 @@ class VaccinationDetails: Codable {
     }
 }
 
+//struct ScheduleRequest: Codable {
+//    var requestId: String
+//    var userId: String
+//    var userName: String
+//    var petName: String // Renamed from ⁠ pet ⁠ to ⁠ petName ⁠
+//    var petId: String? // Optional, because it's assigned later
+//    var petImageUrl: String?
+//    var petBreed: String?
+//    var startDate: Date
+//    var endDate: Date
+//    var duration: String
+//    var petPickup: Bool
+//    var petDropoff: Bool
+//    var instructions: String
+//    var status: String
+//    var caretakerId: String
+//    
+//    init?(from data: [String: Any]) {
+//        guard let requestId = data["requestId"] as? String,
+//              let userId = data["userId"] as? String,
+//              let userName = data["userName"] as? String,
+//              let petName = data["petName"] as? String, // Updated key name to ⁠ petName ⁠
+//              let startTimestamp = data["startDate"] as? Timestamp,
+//              let endTimestamp = data["endDate"] as? Timestamp,
+//              let petPickup = data["petPickup"] as? Bool,
+//              let petDropoff = data["petDropoff"] as? Bool,
+//              let instructions = data["instructions"] as? String,
+//              let caretakerId = data["caretakerId"] as? String,
+//              let status = data["status"] as? String else {
+//            return nil
+//        }
+//        
+//        self.requestId = requestId
+//        self.userId = userId
+//        self.userName = userName
+//        self.petName = petName
+//        self.petId = data["petId"] as? String // Optional
+//        self.petImageUrl = data["petImageUrl"] as? String ?? data["petImageUrl"] as? String
+//        self.petBreed = data["petBreed"] as? String
+//        self.startDate = startTimestamp.dateValue()
+//        self.endDate = endTimestamp.dateValue()
+//        self.petPickup = petPickup
+//        self.petDropoff = petDropoff
+//        self.instructions = instructions
+//        self.status = status
+//        self.caretakerId = caretakerId
+//        self.duration = ScheduleRequest.formatDateRange(start: startTimestamp, end: endTimestamp)
+//    }
+//    
+//    // Format Dates: "12 Feb - 15 Feb"
+//    static func formatDateRange(start: Timestamp, end: Timestamp) -> String {
+//        let formatter = DateFormatter()
+//        formatter.dateFormat = "dd MMM"
+//        return "\(formatter.string(from: start.dateValue())) - \(formatter.string(from: end.dateValue()))"
+//    }
+//}
+
+import FirebaseFirestore
+
 struct ScheduleRequest: Codable {
+    
+    // MARK: - Required Fields
     var requestId: String
     var userId: String
     var userName: String
-    var petName: String // Renamed from ⁠ pet ⁠ to ⁠ petName ⁠
-    var petId: String? // Optional, because it's assigned later
-    var petImageUrl: String?
-    var petBreed: String?
+    var petName: String
     var startDate: Date
     var endDate: Date
-    var duration: String
     var petPickup: Bool
     var petDropoff: Bool
     var instructions: String
     var status: String
     var caretakerId: String
+    var petId: String?
+    var petImageUrl: String?
+    var petBreed: String?
+    var buildingNo: String?
+    var houseNo: String?
+    var landmark: String?
+    var location: String?
+    var latitude: Double?
+    var longitude: Double?
+    var duration: String
+    var timestamp: Date? // If you want to store the Firestore "timestamp" field
     
     init?(from data: [String: Any]) {
+       
         guard let requestId = data["requestId"] as? String,
-              let userId = data["userId"] as? String,
-              let userName = data["userName"] as? String,
-              let petName = data["petName"] as? String, // Updated key name to ⁠ petName ⁠
+              let userId    = data["userId"] as? String,
+              let userName  = data["userName"] as? String,
+              let petName   = data["petName"]  as? String,
               let startTimestamp = data["startDate"] as? Timestamp,
               let endTimestamp = data["endDate"] as? Timestamp,
-              let petPickup = data["petPickup"] as? Bool,
-              let petDropoff = data["petDropoff"] as? Bool,
+              let petPickup   = data["petPickup"] as? Bool,
+              let petDropoff  = data["petDropoff"] as? Bool,
               let instructions = data["instructions"] as? String,
               let caretakerId = data["caretakerId"] as? String,
-              let status = data["status"] as? String else {
+              let status      = data["status"] as? String
+        else {
             return nil
         }
         
@@ -233,27 +306,41 @@ struct ScheduleRequest: Codable {
         self.userId = userId
         self.userName = userName
         self.petName = petName
-        self.petId = data["petId"] as? String // Optional
-        self.petImageUrl = data["petImageUrl"] as? String ?? data["petImageUrl"] as? String
-        self.petBreed = data["petBreed"] as? String
         self.startDate = startTimestamp.dateValue()
         self.endDate = endTimestamp.dateValue()
         self.petPickup = petPickup
         self.petDropoff = petDropoff
         self.instructions = instructions
-        self.status = status
         self.caretakerId = caretakerId
-        self.duration = ScheduleRequest.formatDateRange(start: startTimestamp, end: endTimestamp)
+        self.status = status
+        self.petId  = data["petId"]        as? String
+        self.petImageUrl = data["petImageUrl"]  as? String
+        self.petBreed = data["petBreed"]     as? String
+        self.buildingNo = data["buildingNo"]   as? String
+        self.houseNo = data["houseNo"]      as? String
+        self.landmark = data["landmark"]     as? String
+        self.location = data["location"]     as? String
+        self.latitude = data["latitude"]     as? Double
+        self.longitude = data["longitude"]    as? Double
+        self.duration = ScheduleRequest.formatDateRange(start: startTimestamp,
+                                                            end: endTimestamp)
+        if let rawTimestamp = data["timestamp"] as? Timestamp {
+            self.timestamp = rawTimestamp.dateValue()
+        } else {
+            self.timestamp = nil
+        }
     }
     
-    // Format Dates: "12 Feb - 15 Feb"
     static func formatDateRange(start: Timestamp, end: Timestamp) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "dd MMM"
-        return "\(formatter.string(from: start.dateValue())) - \(formatter.string(from: end.dateValue()))"
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .short
+        
+        let startStr = dateFormatter.string(from: start.dateValue())
+        let endStr   = dateFormatter.string(from: end.dateValue())
+        return "\(startStr) - \(endStr)"
     }
 }
-
 
 
 class PetLiveUpdate  {

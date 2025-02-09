@@ -18,6 +18,7 @@ class My_Bookings: UIViewController, UITableViewDelegate, UITableViewDataSource 
     var upcomingBookings: [ScheduleRequest] = []
     var completedBookings: [ScheduleRequest] = []
     var bookingsListener: ListenerRegistration?
+    var selectedBooking: ScheduleRequest?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -79,6 +80,8 @@ class My_Bookings: UIViewController, UITableViewDelegate, UITableViewDataSource 
         return bookingSegmentedControl.selectedSegmentIndex == 0 ? upcomingBookings.count : completedBookings.count
     }
     
+
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
         let cell = tableView.dequeueReusableCell(withIdentifier: "BookingCell", for: indexPath) as! BookingsTableViewCell
@@ -128,6 +131,8 @@ class My_Bookings: UIViewController, UITableViewDelegate, UITableViewDataSource 
         cell.statusButton.tag = indexPath.row
         cell.statusButton.addTarget(self, action: #selector(updateStatus(_:)), for: .touchUpInside)
         
+
+        
         return cell
     }
     
@@ -170,11 +175,11 @@ class My_Bookings: UIViewController, UITableViewDelegate, UITableViewDataSource 
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let request = bookingSegmentedControl.selectedSegmentIndex == 0 ? upcomingBookings[indexPath.row] : completedBookings[indexPath.row]
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        if let detailsVC = storyboard.instantiateViewController(withIdentifier: "BookingDetailsVC") as? Bookings_Info {
-            detailsVC.scheduleRequest = request
-            navigationController?.pushViewController(detailsVC, animated: true)
+            let request = bookingSegmentedControl.selectedSegmentIndex == 0 ? upcomingBookings[indexPath.row] : completedBookings[indexPath.row]
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        if let detailsVC = storyboard.instantiateViewController(withIdentifier: "BookingDetailsVC") as? Bookings_Information {
+                detailsVC.scheduleRequest = request
+                navigationController?.pushViewController(detailsVC, animated: true)
+            }
         }
-    }
 }

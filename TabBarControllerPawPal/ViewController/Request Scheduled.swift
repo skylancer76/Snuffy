@@ -34,7 +34,7 @@ class Request_Scheduled: UIViewController {
     @IBAction func dismissButtonTapped(_ sender: UIButton) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
             if let tabBarController = storyboard.instantiateViewController(withIdentifier: "TabBarControllerID") as? UITabBarController {
-                tabBarController.selectedIndex = 1
+                tabBarController.selectedIndex = 0
                 tabBarController.modalPresentationStyle = .fullScreen
                 self.present(tabBarController, animated: true, completion: nil)
             }
