@@ -8,6 +8,7 @@
 import Foundation
 import CoreLocation
 import FirebaseCore
+import FirebaseFirestore
 
 // MARK: - Unified Caretaker Model
 class Caretakers: Codable {
@@ -25,7 +26,13 @@ class Caretakers: Codable {
     var pendingRequests: [String] // List of pending request IDs
     var completedRequests: Int
     var phoneNumber: String?
-
+    var latitude: Double? {
+            return location.count > 0 ? location[0] : nil
+        }
+        
+    var longitude: Double? {
+            return location.count > 1 ? location[1] : nil
+        }
     // Initialization
     init(
         caretakerId: String,
@@ -200,66 +207,11 @@ class VaccinationDetails: Codable {
     }
 }
 
-//struct ScheduleRequest: Codable {
-//    var requestId: String
-//    var userId: String
-//    var userName: String
-//    var petName: String // Renamed from ⁠ pet ⁠ to ⁠ petName ⁠
-//    var petId: String? // Optional, because it's assigned later
-//    var petImageUrl: String?
-//    var petBreed: String?
-//    var startDate: Date
-//    var endDate: Date
-//    var duration: String
-//    var petPickup: Bool
-//    var petDropoff: Bool
-//    var instructions: String
-//    var status: String
-//    var caretakerId: String
-//    
-//    init?(from data: [String: Any]) {
-//        guard let requestId = data["requestId"] as? String,
-//              let userId = data["userId"] as? String,
-//              let userName = data["userName"] as? String,
-//              let petName = data["petName"] as? String, // Updated key name to ⁠ petName ⁠
-//              let startTimestamp = data["startDate"] as? Timestamp,
-//              let endTimestamp = data["endDate"] as? Timestamp,
-//              let petPickup = data["petPickup"] as? Bool,
-//              let petDropoff = data["petDropoff"] as? Bool,
-//              let instructions = data["instructions"] as? String,
-//              let caretakerId = data["caretakerId"] as? String,
-//              let status = data["status"] as? String else {
-//            return nil
-//        }
-//        
-//        self.requestId = requestId
-//        self.userId = userId
-//        self.userName = userName
-//        self.petName = petName
-//        self.petId = data["petId"] as? String // Optional
-//        self.petImageUrl = data["petImageUrl"] as? String ?? data["petImageUrl"] as? String
-//        self.petBreed = data["petBreed"] as? String
-//        self.startDate = startTimestamp.dateValue()
-//        self.endDate = endTimestamp.dateValue()
-//        self.petPickup = petPickup
-//        self.petDropoff = petDropoff
-//        self.instructions = instructions
-//        self.status = status
-//        self.caretakerId = caretakerId
-//        self.duration = ScheduleRequest.formatDateRange(start: startTimestamp, end: endTimestamp)
-//    }
-//    
-//    // Format Dates: "12 Feb - 15 Feb"
-//    static func formatDateRange(start: Timestamp, end: Timestamp) -> String {
-//        let formatter = DateFormatter()
-//        formatter.dateFormat = "dd MMM"
-//        return "\(formatter.string(from: start.dateValue())) - \(formatter.string(from: end.dateValue()))"
-//    }
-//}
 
-import FirebaseFirestore
 
-struct ScheduleRequest: Codable {
+
+
+struct ScheduleCaretakerRequest: Codable {
     
     // MARK: - Required Fields
     var requestId: String
@@ -322,7 +274,7 @@ struct ScheduleRequest: Codable {
         self.location = data["location"]     as? String
         self.latitude = data["latitude"]     as? Double
         self.longitude = data["longitude"]    as? Double
-        self.duration = ScheduleRequest.formatDateRange(start: startTimestamp,
+        self.duration = ScheduleCaretakerRequest.formatDateRange(start: startTimestamp,
                                                             end: endTimestamp)
         if let rawTimestamp = data["timestamp"] as? Timestamp {
             self.timestamp = rawTimestamp.dateValue()
@@ -342,6 +294,11 @@ struct ScheduleRequest: Codable {
     }
 }
 
+struct ChatMessage {
+    var senderId: String
+    var text: String
+    var timestamp: Date
+}
 
 class PetLiveUpdate  {
     var name: String

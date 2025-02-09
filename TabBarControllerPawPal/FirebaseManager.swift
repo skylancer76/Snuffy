@@ -261,7 +261,7 @@ class FirebaseManager {
     // MARK: - Fetch Requests & Bookings
     
     /// Fetch assigned requests for a caretaker.
-    func fetchAssignedRequests(for caretakerId: String, completion: @escaping ([ScheduleRequest]) -> Void) {
+    func fetchAssignedRequests(for caretakerId: String, completion: @escaping ([ScheduleCaretakerRequest]) -> Void) {
         db.collection("scheduleRequests")
             .whereField("caretakerId", isEqualTo: caretakerId)
             .whereField("status", isEqualTo: "pending")
@@ -272,7 +272,7 @@ class FirebaseManager {
                     return
                 }
                 
-                var requests: [ScheduleRequest] = []
+                var requests: [ScheduleCaretakerRequest] = []
                 let group = DispatchGroup()
                 
                 for document in snapshot?.documents ?? [] {
@@ -304,7 +304,7 @@ class FirebaseManager {
                             requestData["petBreed"] = petData["petBreed"] as? String ?? "Unknown"
                             requestData["petImageUrl"] = petData["petImage"] as? String ?? ""
                             
-                            if let scheduleRequest = ScheduleRequest(from: requestData) {
+                            if let scheduleRequest = ScheduleCaretakerRequest(from: requestData) {
                                 requests.append(scheduleRequest)
                             }
                             
@@ -319,7 +319,7 @@ class FirebaseManager {
     }
     
     /// Fetch booking details for a pet owner.
-    func fetchOwnerBookings(for userId: String, completion: @escaping ([ScheduleRequest]) -> Void) {
+    func fetchOwnerBookings(for userId: String, completion: @escaping ([ScheduleCaretakerRequest]) -> Void) {
         db.collection("scheduleRequests")
             .whereField("userId", isEqualTo: userId)
             .getDocuments { snapshot, error in
@@ -329,12 +329,12 @@ class FirebaseManager {
                     return
                 }
                 
-                var requests: [ScheduleRequest] = []
+                var requests: [ScheduleCaretakerRequest] = []
                 for document in snapshot?.documents ?? [] {
                     var requestData = document.data()
                     requestData["requestId"] = document.documentID
                     // Convert to ScheduleRequest model
-                    if let scheduleRequest = ScheduleRequest(from: requestData) {
+                    if let scheduleRequest = ScheduleCaretakerRequest(from: requestData) {
                         requests.append(scheduleRequest)
                     }
                 }
@@ -343,7 +343,7 @@ class FirebaseManager {
     }
     
     // Keeps check on the bookings and updates at a time 
-    func observeOwnerBookings(for userId: String, completion: @escaping ([ScheduleRequest]) -> Void) -> ListenerRegistration {
+    func observeOwnerBookings(for userId: String, completion: @escaping ([ScheduleCaretakerRequest]) -> Void) -> ListenerRegistration {
            let query = db.collection("scheduleRequests").whereField("userId", isEqualTo: userId)
            return query.addSnapshotListener { snapshot, error in
                if let error = error {
@@ -352,11 +352,11 @@ class FirebaseManager {
                    return
                }
                
-               var requests: [ScheduleRequest] = []
+               var requests: [ScheduleCaretakerRequest] = []
                for document in snapshot?.documents ?? [] {
                    var requestData = document.data()
                    requestData["requestId"] = document.documentID  // Include the document ID
-                   if let scheduleRequest = ScheduleRequest(from: requestData) {
+                   if let scheduleRequest = ScheduleCaretakerRequest(from: requestData) {
                        requests.append(scheduleRequest)
                    }
                }

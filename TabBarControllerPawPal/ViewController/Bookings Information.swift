@@ -8,6 +8,7 @@
 import UIKit
 import Firebase
 import FirebaseFirestore
+import FirebaseAuth
 
 class Bookings_Information: UITableViewController {
     
@@ -16,7 +17,7 @@ class Bookings_Information: UITableViewController {
     @IBOutlet weak var caretakerNameLabel: UILabel!
     @IBOutlet weak var caretakerExperienceLabel: UILabel!
     @IBOutlet weak var caretakerAddressLabel: UILabel!
-    
+    @IBOutlet var caretakerChatImageView: UIImageView!
     @IBOutlet weak var caretakerCallImageView: UIImageView!
     
     // MARK: - IBOutlets for Booking Section (static cells)
@@ -29,7 +30,7 @@ class Bookings_Information: UITableViewController {
     @IBOutlet weak var pickupLocationLabel: UILabel!
     //    @IBOutlet weak var instructionsLabel: UILabel!
     
-    var scheduleRequest: ScheduleRequest?
+    var scheduleRequest: ScheduleCaretakerRequest?
     var caretaker: Caretakers?
     
     
@@ -46,12 +47,22 @@ class Bookings_Information: UITableViewController {
         caretakerImageView.clipsToBounds = true
         caretakerCallImageView.gestureRecognizers?.forEach(caretakerCallImageView.removeGestureRecognizer)
         
-        // Make the caretakerCallImageView tappable
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(callCaretakerTapped))
-        caretakerCallImageView.addGestureRecognizer(tapGesture)
+   
+        caretakerCallImageView.gestureRecognizers?.forEach(caretakerCallImageView.removeGestureRecognizer)
+        caretakerChatImageView.gestureRecognizers?.forEach(caretakerChatImageView.removeGestureRecognizer)
+
+     
+        let callTapGesture = UITapGestureRecognizer(target: self, action: #selector(callCaretakerTapped))
+        caretakerCallImageView.addGestureRecognizer(callTapGesture)
+        caretakerCallImageView.isUserInteractionEnabled = true // Ensure it's clickable
+
+       
+        let chatTapGesture = UITapGestureRecognizer(target: self, action: #selector(openChat))
+        caretakerChatImageView.addGestureRecognizer(chatTapGesture)
+        caretakerChatImageView.isUserInteractionEnabled = true
+
         
-        // If we have a schedule request, populate the booking info,
-        // then fetch caretaker data from Firestore
+        
         if let request = scheduleRequest {
             updateBookingUI(with: request)
             fetchCaretakerIdFromBooking(bookingId: request.requestId)
@@ -60,8 +71,40 @@ class Bookings_Information: UITableViewController {
         }
     }
     
+    @objc func callCaretakerTapped() {
+        print("Call button tapped") // Debugging
+
+        guard let phone = caretaker?.phoneNumber, !phone.isEmpty else {
+            print("No phone number available") // Debugging
+            return
+        }
+
+        let formattedPhone = phone.replacingOccurrences(of: " ", with: "")
+        if let url = URL(string: "tel://\(formattedPhone)"), UIApplication.shared.canOpenURL(url) {
+            print("Attempting to open call URL: \(url)")
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        } else {
+            print("Failed to initiate call") // Debugging
+        }
+    }
+    
+    @objc func openChat() {
+         print("Chat button tapped")
+
+         guard let caretakerId = caretaker?.caretakerId,
+               let userId = Auth.auth().currentUser?.uid else {
+             print("Error: Caretaker ID or User ID is nil")
+             return
+         }
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                if let chatVC = storyboard.instantiateViewController(withIdentifier: "ChatsViewController") as? Chats {
+                    chatVC.userId = userId
+                    chatVC.caretakerId = caretakerId
+                    navigationController?.pushViewController(chatVC, animated: true)
+                }
+            }
     // MARK: - Booking UI
-    private func updateBookingUI(with request: ScheduleRequest) {
+    private func updateBookingUI(with request: ScheduleCaretakerRequest) {
         
         // Pet Name
         petNameLabel.text = request.petName
@@ -91,8 +134,9 @@ class Bookings_Information: UITableViewController {
     }
     
     
+    
     // MARK: - Short Address Helper
-    private func shortPickupAddress(for request: ScheduleRequest) -> String {
+    private func shortPickupAddress(for request: ScheduleCaretakerRequest) -> String {
         // Gather minimal fields for a short address
         var components: [String] = []
         
@@ -166,6 +210,7 @@ class Bookings_Information: UITableViewController {
                 }
             }
     }
+
     
     // MARK: - Caretaker UI
     private func updateCaretakerUI(_ caretaker: Caretakers) {
@@ -192,24 +237,28 @@ class Bookings_Information: UITableViewController {
     
     
     
-    @objc func callCaretakerTapped() {
-        print("Call button tapped") // Debugging
-        
-        guard let phone = caretaker?.phoneNumber, !phone.isEmpty else {
-            print("No phone number available") // Debugging
-            return
-        }
-        
-        let formattedPhone = phone.replacingOccurrences(of: " ", with: "")
-        if let url = URL(string: "tel://\(formattedPhone)"), UIApplication.shared.canOpenURL(url) {
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
-            print("Calling: \(formattedPhone)") // Debugging
-        } else {
-            print("Failed to initiate call") // Debugging
-        }
-    }
+
     
 
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // Check if "Track Pet" cell is tapped
+        if indexPath.section == 2 && indexPath.row == 0 {  // Update based on correct section/row
+            guard let caretaker = self.caretaker,
+                  let latitude = caretaker.latitude,
+                  let longitude = caretaker.longitude else {
+                print("Error: Caretaker location not available")
+                return
+            }
+            
+            // Navigate to MapViewController
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            if let mapVC = storyboard.instantiateViewController(withIdentifier: "Track_Pet_Map") as? Track_Pet_Map {
+                mapVC.caretakerLatitude = latitude
+                mapVC.caretakerLongitude = longitude
+                navigationController?.pushViewController(mapVC, animated: true)
+            }
+        }
+    }
     
     //    // MARK: - Table view data source
     //

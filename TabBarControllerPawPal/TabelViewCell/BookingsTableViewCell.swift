@@ -30,7 +30,7 @@ class BookingsTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
     }
     
-    func configureCell(with request: ScheduleRequest) {
+    func configureCell(with request: ScheduleCaretakerRequest) {
         petNameLabel.text = request.petName
         
         // Format the dates if needed.

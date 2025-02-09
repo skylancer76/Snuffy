@@ -14,7 +14,7 @@ class Caretaker_Home: UIViewController , UITableViewDelegate , UITableViewDataSo
     @IBOutlet var tableView: UITableView!
     @IBOutlet weak var bgView: UIView!
     
-    var scheduleRequests: [ScheduleRequest] = []
+    var scheduleRequests: [ScheduleCaretakerRequest] = []
     
     var caretakerId: String?
     

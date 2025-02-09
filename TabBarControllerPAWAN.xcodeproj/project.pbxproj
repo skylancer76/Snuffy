@@ -17,8 +17,23 @@
 		4975DF682D1F074900C2CBAF /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 4975DF672D1F074900C2CBAF /* FirebaseStorage */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		49ED1EC12D58DC850000A300 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		49C4A2A52CE88CF2005E3ECF /* TabBarControllerPawPal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TabBarControllerPawPal.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		49ED1EA82D58DC840000A300 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		49ED1EAA2D58DC840000A300 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -66,7 +81,17 @@
 			children = (
 				49240C302CDBA93A00A32BC1 /* TabBarControllerPawPal */,
 				49C4A2A52CE88CF2005E3ECF /* TabBarControllerPawPal.app */,
+				49ED1EA72D58DC840000A300 /* Frameworks */,
 			);
+			sourceTree = "<group>";
+		};
+		49ED1EA72D58DC840000A300 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				49ED1EA82D58DC840000A300 /* WidgetKit.framework */,
+				49ED1EAA2D58DC840000A300 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -79,6 +104,7 @@
 				49240C2A2CDBA93A00A32BC1 /* Sources */,
 				49240C2B2CDBA93A00A32BC1 /* Frameworks */,
 				49240C2C2CDBA93A00A32BC1 /* Resources */,
+				49ED1EC12D58DC850000A300 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
@@ -109,7 +135,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1600;
+				LastSwiftUpdateCheck = 1620;
 				LastUpgradeCheck = 1600;
 				TargetAttributes = {
 					49240C2D2CDBA93A00A32BC1 = {

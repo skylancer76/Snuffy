@@ -15,10 +15,10 @@ class My_Bookings: UIViewController, UITableViewDelegate, UITableViewDataSource 
     @IBOutlet var tableView: UITableView!
     @IBOutlet weak var bookingSegmentedControl: UISegmentedControl!
     
-    var upcomingBookings: [ScheduleRequest] = []
-    var completedBookings: [ScheduleRequest] = []
+    var upcomingBookings: [ScheduleCaretakerRequest] = []
+    var completedBookings: [ScheduleCaretakerRequest] = []
     var bookingsListener: ListenerRegistration?
-    var selectedBooking: ScheduleRequest?
+    var selectedBooking: ScheduleCaretakerRequest?
     
     override func viewDidLoad() {
         super.viewDidLoad()
