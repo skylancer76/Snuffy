@@ -209,6 +209,7 @@ class Bookings_Information: UITableViewController {
         }
     }
     
+
     
     //    // MARK: - Table view data source
     //
@@ -278,4 +279,16 @@ class Bookings_Information: UITableViewController {
      */
     
     
+}
+extension UIImageView {
+    func loadImage(from url: URL) {
+        DispatchQueue.global().async {
+            if let data = try? Data(contentsOf: url),
+               let image = UIImage(data: data) {
+                DispatchQueue.main.async {
+                    self.image = image
+                }
+            }
+        }
+    }
 }
