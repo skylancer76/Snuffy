@@ -31,7 +31,7 @@ class My_Pets: UIViewController {
         let gradientLayer = CAGradientLayer()
         gradientLayer.frame = view.bounds                           // Match the frame of the view
         gradientLayer.colors = [
-            UIColor.systemPurple.withAlphaComponent(0.3).cgColor,   // Start color
+            UIColor.systemPink.withAlphaComponent(0.3).cgColor,   // Start color
             UIColor.clear.cgColor                                   // End color
         ]
         gradientLayer.locations = [0.0, 1.0]                        // Gradually fade
