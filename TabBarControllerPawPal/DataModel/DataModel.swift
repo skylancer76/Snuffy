@@ -33,7 +33,7 @@ class Caretakers: Codable {
     var longitude: Double? {
             return location.count > 1 ? location[1] : nil
         }
-    // Initialization
+    
     init(
         caretakerId: String,
         name: String,
@@ -51,6 +51,66 @@ class Caretakers: Codable {
         phoneNumber: String? = nil
     ) {
         self.caretakerId = caretakerId
+        self.name = name
+        self.email = email
+        self.password = password
+        self.profilePic = profilePic
+        self.bio = bio
+        self.experience = experience
+        self.address = address
+        self.location = location
+        self.distanceAway = distanceAway
+        self.status = status
+        self.pendingRequests = pendingRequests
+        self.completedRequests = completedRequests
+        self.phoneNumber = phoneNumber
+    }
+}
+
+
+
+// MARK: - Dog Walker Model
+
+class DogWalker: Codable {
+    var dogWalkerId: String
+    var name: String
+    var email: String
+    var password: String
+    var profilePic: String
+    var bio: String
+    var experience: Int
+    var address: String
+    var location: [Double] // [latitude, longitude]
+    var distanceAway: Double
+    var status: String
+    var pendingRequests: [String] // List of pending request IDs
+    var completedRequests: Int
+    var phoneNumber: String?
+    var latitude: Double? {
+            return location.count > 0 ? location[0] : nil
+        }
+        
+    var longitude: Double? {
+            return location.count > 1 ? location[1] : nil
+        }
+    // Initialization
+    init(
+        dogWalkerId: String,
+        name: String,
+        email: String,
+        password: String,
+        profilePic: String,
+        bio: String,
+        experience: Int,
+        address: String,
+        location: [Double],
+        distanceAway: Double = 0.0,
+        status: String = "available",
+        pendingRequests: [String] = [],
+        completedRequests: Int = 0,
+        phoneNumber: String? = nil
+    ) {
+        self.dogWalkerId = dogWalkerId
         self.name = name
         self.email = email
         self.password = password
@@ -294,6 +354,78 @@ struct ScheduleCaretakerRequest: Codable {
     }
 }
 
+
+
+
+// MARK: - Dogwalker Request
+
+struct ScheduleDogWalkerRequest: Codable {
+    
+    // MARK: - Required Fields
+    var requestId: String
+    var userId: String
+    var userName: String
+    var petName: String
+    var startDate: Date
+    var endDate: Date
+
+    var instructions: String
+    var status: String
+    var dogWalkerId: String
+    var duration: String
+    var timestamp: Date?
+    
+    init?(from data: [String: Any]) {
+        
+        guard let requestId = data["requestId"] as? String,
+              let userId    = data["userId"] as? String,
+              let userName  = data["userName"] as? String,
+              let petName   = data["petName"]  as? String,
+              let startTimestamp = data["startDate"] as? Timestamp,
+              let endTimestamp = data["endDate"] as? Timestamp,
+
+              let instructions = data["instructions"] as? String,
+              let dogWalkerId = data["dogWalkerId"] as? String,
+              let status      = data["status"] as? String
+        else {
+            return nil
+        }
+        
+        self.requestId = requestId
+        self.userId = userId
+        self.userName = userName
+        self.petName = petName
+        self.startDate = startTimestamp.dateValue()
+        self.endDate = endTimestamp.dateValue()
+
+        self.instructions = instructions
+        self.dogWalkerId = dogWalkerId
+        self.status = status
+        self.duration = ScheduleDogWalkerRequest.formatDateRange(start: startTimestamp, end: endTimestamp)
+        
+        if let rawTimestamp = data["timestamp"] as? Timestamp {
+                    self.timestamp = rawTimestamp.dateValue()
+                } else {
+                    self.timestamp = nil
+                }
+            }
+            
+            static func formatDateRange(start: Timestamp, end: Timestamp) -> String {
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateStyle = .medium
+                dateFormatter.timeStyle = .short
+                
+                let startStr = dateFormatter.string(from: start.dateValue())
+                let endStr   = dateFormatter.string(from: end.dateValue())
+                return "\(startStr) - \(endStr)"
+            }
+        
+        
+    }
+    
+
+
+// MARK: - Chats Struct
 struct ChatMessage {
     var senderId: String
     var text: String
