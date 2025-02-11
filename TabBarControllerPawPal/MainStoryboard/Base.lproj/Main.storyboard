@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="ilH-8F-CtW">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="6fy-Vc-4CS">
     <device id="retina6_3" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
@@ -159,7 +159,7 @@
         <scene sceneID="a8s-TA-cPK">
             <objects>
                 <viewController storyboardIdentifier="login" id="6DQ-db-eNt" customClass="User_Login" customModule="TabBarControllerPawPal" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="o43-ja-Wzx">
+                    <view key="view" multipleTouchEnabled="YES" contentMode="scaleToFill" id="o43-ja-Wzx">
                         <rect key="frame" x="0.0" y="0.0" width="402" height="874"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -304,7 +304,7 @@
         <scene sceneID="oxZ-wW-wyd">
             <objects>
                 <viewController id="KDT-8r-P2m" customClass="User_Sign_Up" customModule="TabBarControllerPawPal" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="fRy-Tl-hBb">
+                    <view key="view" multipleTouchEnabled="YES" contentMode="scaleToFill" id="fRy-Tl-hBb">
                         <rect key="frame" x="0.0" y="0.0" width="402" height="874"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -486,7 +486,7 @@
         <scene sceneID="sli-ov-LhL">
             <objects>
                 <tableViewController id="ddH-0V-h7z" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" id="JNx-4b-Mv0">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="interactive" dataMode="static" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" id="JNx-4b-Mv0">
                         <rect key="frame" x="0.0" y="0.0" width="402" height="864"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
@@ -660,7 +660,7 @@
         <scene sceneID="b19-qC-Ofd">
             <objects>
                 <viewController storyboardIdentifier="HomeSceneVC" id="WbF-UU-uVh" customClass="Home_Scene" customModule="TabBarControllerPawPal" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="3Rz-mx-9oZ">
+                    <view key="view" multipleTouchEnabled="YES" contentMode="scaleToFill" id="3Rz-mx-9oZ">
                         <rect key="frame" x="0.0" y="0.0" width="402" height="874"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -764,7 +764,7 @@
         <scene sceneID="i72-sZ-jNT">
             <objects>
                 <tableViewController id="Cwp-fV-E38" customClass="Schedule_Request" customModule="TabBarControllerPawPal" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" id="3MC-Es-9nu">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="interactive" dataMode="static" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" id="3MC-Es-9nu">
                         <rect key="frame" x="0.0" y="0.0" width="402" height="864"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
@@ -1004,7 +1004,7 @@
         <scene sceneID="0VP-8v-LYY">
             <objects>
                 <tableViewController id="W9h-Uu-RBp" customClass="Add_Address" customModule="TabBarControllerPawPal" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" id="HtX-PW-ZlZ">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="interactive" dataMode="static" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" id="HtX-PW-ZlZ">
                         <rect key="frame" x="0.0" y="0.0" width="402" height="864"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
@@ -1268,7 +1268,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="402" height="874"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="jDG-TC-Alb">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="interactive" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="jDG-TC-Alb">
                                 <rect key="frame" x="0.0" y="62" width="402" height="728"/>
                                 <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
                                 <prototypes>
@@ -1361,7 +1361,7 @@
                                 <rect key="frame" x="0.0" y="790" width="402" height="50"/>
                                 <subviews>
                                     <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Type a message ...." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="7RC-jr-a4D">
-                                        <rect key="frame" x="8" y="10" width="317.66666666666669" height="35"/>
+                                        <rect key="frame" x="8" y="10" width="317.66666666666669" height="30"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
@@ -1382,7 +1382,7 @@
                                     <constraint firstItem="7RC-jr-a4D" firstAttribute="leading" secondItem="fvb-PN-ZxE" secondAttribute="leading" constant="8" id="1WM-P1-Xkb"/>
                                     <constraint firstAttribute="height" constant="50" id="GmQ-Yx-UrT"/>
                                     <constraint firstItem="7RC-jr-a4D" firstAttribute="top" secondItem="fvb-PN-ZxE" secondAttribute="top" constant="10" id="Mir-os-IfG"/>
-                                    <constraint firstAttribute="bottom" secondItem="7RC-jr-a4D" secondAttribute="bottom" constant="5" id="f30-Y2-A5o"/>
+                                    <constraint firstAttribute="bottom" secondItem="7RC-jr-a4D" secondAttribute="bottom" constant="10" id="f30-Y2-A5o"/>
                                     <constraint firstAttribute="trailing" secondItem="aWa-FT-gZg" secondAttribute="trailing" constant="8" id="j6V-lm-keK"/>
                                     <constraint firstAttribute="bottom" secondItem="aWa-FT-gZg" secondAttribute="bottom" constant="5" id="jaY-B9-w1Q"/>
                                     <constraint firstItem="aWa-FT-gZg" firstAttribute="leading" secondItem="7RC-jr-a4D" secondAttribute="trailing" constant="5" id="jtg-dU-9iz"/>
@@ -1410,7 +1410,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bbD-jW-2d3" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="8591" y="868"/>
+            <point key="canvasLocation" x="8589.552238805969" y="867.73455377574362"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="otv-qp-iJJ">
@@ -2365,7 +2365,7 @@
                                     <constraint firstAttribute="height" constant="1" id="Jer-rv-rmr"/>
                                 </constraints>
                             </view>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="8vH-9z-M8g">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="interactive" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="8vH-9z-M8g">
                                 <rect key="frame" x="0.0" y="245" width="402" height="497"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
@@ -2522,7 +2522,7 @@
         <scene sceneID="a8l-M1-rpT">
             <objects>
                 <tableViewController storyboardIdentifier="BookingDetailsVC" id="DfO-8i-7jg" customClass="Bookings_Information" customModule="TabBarControllerPawPal" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" id="C56-m3-1V5">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="interactive" dataMode="static" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" id="C56-m3-1V5">
                         <rect key="frame" x="0.0" y="0.0" width="402" height="874"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
@@ -4148,7 +4148,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qtL-z6-bzT" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5532.8358208955224" y="-2290.1601830663612"/>
+            <point key="canvasLocation" x="5551" y="-2290"/>
         </scene>
         <!--Home-->
         <scene sceneID="Ltb-G4-GxG">
@@ -4167,7 +4167,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HnY-wP-NMY" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4485" y="-2290"/>
+            <point key="canvasLocation" x="4400" y="-2290"/>
         </scene>
         <!--My Bookings-->
         <scene sceneID="DUt-2P-Xhg">
@@ -4225,7 +4225,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="d7B-w2-hvl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5533" y="-1495"/>
+            <point key="canvasLocation" x="5551" y="-1512"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="kPX-YN-B6c">
@@ -4246,7 +4246,7 @@
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="y2G-Ee-wt7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3448" y="-2290"/>
+            <point key="canvasLocation" x="3451" y="-2290"/>
         </scene>
         <!--My Bookings-->
         <scene sceneID="hVM-sh-VMv">
@@ -4265,7 +4265,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GJa-Ux-gwk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4484" y="-1495"/>
+            <point key="canvasLocation" x="4400" y="-1512"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="F2T-qf-wfr">
@@ -4663,20 +4663,20 @@
                                             <rect key="frame" x="0.0" y="0.0" width="362" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.64999997615814209" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="person.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="tk3-K2-9aX">
-                                                    <rect key="frame" x="20" y="12.33333333333333" width="22" height="18.666666666666671"/>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.64999997615814209" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="person.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="tk3-K2-9aX">
+                                                    <rect key="frame" x="20" y="12.333333333333329" width="22" height="18.666666666666757"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="22" id="EtG-E0-AY3"/>
                                                         <constraint firstAttribute="height" constant="22" id="jh3-93-oNT"/>
                                                     </constraints>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Owner Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ebS-zt-nGe">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Owner Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ebS-zt-nGe">
                                                     <rect key="frame" x="56.999999999999993" y="12.666666666666664" width="89.333333333333314" height="18"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g3y-UJ-gTL">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g3y-UJ-gTL">
                                                     <rect key="frame" x="304" y="12.666666666666664" width="38" height="18"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <color key="textColor" systemColor="secondaryLabelColor"/>
@@ -4764,10 +4764,10 @@
             </objects>
             <point key="canvasLocation" x="5724" y="868"/>
         </scene>
-        <!--Table View Controller-->
+        <!--User Profile-->
         <scene sceneID="dRQ-HP-Z9q">
             <objects>
-                <tableViewController id="NGE-5V-45X" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="Profile" id="NGE-5V-45X" customClass="User_Profile" customModule="TabBarControllerPawPal" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" id="CgW-X6-xWl">
                         <rect key="frame" x="0.0" y="0.0" width="402" height="874"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -4982,6 +4982,9 @@
                                                     <buttonConfiguration key="configuration" style="tinted" title="Logout">
                                                         <color key="baseForegroundColor" systemColor="systemRedColor"/>
                                                     </buttonConfiguration>
+                                                    <connections>
+                                                        <action selector="logoutTapped:" destination="NGE-5V-45X" eventType="touchUpInside" id="PNX-Sy-4Ws"/>
+                                                    </connections>
                                                 </button>
                                             </subviews>
                                             <constraints>
@@ -5026,6 +5029,12 @@
                             <outlet property="delegate" destination="NGE-5V-45X" id="niU-1O-1gc"/>
                         </connections>
                     </tableView>
+                    <connections>
+                        <outlet property="emailLabel" destination="HXl-lK-9Ss" id="DdG-HO-sPR"/>
+                        <outlet property="logoutButton" destination="8ha-ii-pd9" id="qB6-fw-07c"/>
+                        <outlet property="nameLabel" destination="lz2-WX-Nsw" id="O4O-5G-oXJ"/>
+                        <outlet property="profileImageView" destination="rSc-Ka-D1d" id="LUx-mZ-Qfn"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xce-0s-kzu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
