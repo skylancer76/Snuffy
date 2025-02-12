@@ -50,7 +50,7 @@ class Pet_Profile: UIViewController {
         let gradientLayer = CAGradientLayer()
         gradientLayer.frame = view.bounds                           // Match the frame of the view
         gradientLayer.colors = [
-            UIColor.systemPink.withAlphaComponent(0.3).cgColor,   // Start color
+            UIColor.systemPink.withAlphaComponent(0.3).cgColor,     // Start color
             UIColor.clear.cgColor                                   // End color
         ]
         gradientLayer.locations = [0.0, 1.0]                        // Gradually fade
@@ -59,12 +59,12 @@ class Pet_Profile: UIViewController {
         // Apply the gradient to the gradientView
         gradientView.layer.insertSublayer(gradientLayer, at: 0)
         
-        
-        petImage.layer.cornerRadius = 15
+        petImage.layer.cornerRadius = petImage.frame.height / 2
         petImage.layer.masksToBounds = true
         
         petInfo.layer.cornerRadius = 12
         petInfo.layer.masksToBounds = true
+        petInfo.backgroundColor = UIColor.systemPink.withAlphaComponent(0.2)
     }
     
     // Fetch pet data from Firestore using petId
@@ -96,9 +96,7 @@ class Pet_Profile: UIViewController {
             }
         }
     }
-    
-    // Remove any IBAction segues attached directly to the cell.
-    // We will handle navigation in didSelectRowAt.
+
 }
 
 extension UIImageView {
@@ -141,40 +139,51 @@ extension UIImageView {
   
 }
 
+
 extension Pet_Profile: UITableViewDataSource, UITableViewDelegate {
-    
+
     // Number of rows in the table (one row for each option)
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tableOptions.count
     }
     
-    // Configure each cell with the corresponding option and icon.
+    // Configure each cell using the custom cell with image and label.
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "PetDetailCell", for: indexPath)
-        cell.textLabel?.text = tableOptions[indexPath.row]
+
+        // Dequeue the custom cell and cast it to PetProfileTableViewCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "PetDetailCell", for: indexPath) as? PetProfileTableViewCell else {
+            return UITableViewCell()
+        }
         
+        let option = tableOptions[indexPath.row]
+        cell.petDetailName.text = option
+        
+        // Set the appropriate icon based on the option.
         let icon: UIImage?
-        switch tableOptions[indexPath.row] {
+        switch option {
         case "Pet Vaccinations":
             icon = UIImage(systemName: "syringe.fill")
         case "Pet Diet":
-            icon = UIImage(systemName: "fork.knife")
+            icon = UIImage(systemName: "fork.knife.circle.fill")
         case "Pet Medications":
-            icon = UIImage(systemName: "pills.fill")
+            icon = UIImage(systemName: "pills.circle.fill")
         default:
             icon = nil
         }
+        
         if let icon = icon {
             let tintedIcon = icon.withRenderingMode(.alwaysTemplate)
-            cell.imageView?.image = tintedIcon
-            cell.imageView?.tintColor = UIColor.systemPurple.withAlphaComponent(0.6)
+            cell.petDetailImage.image = tintedIcon
+            cell.petDetailImage.tintColor = UIColor.systemPink.withAlphaComponent(0.6)
         }
+        
         return cell
     }
     
     // Set cell height.
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
+        
     }
     
     // Handle cell selection to navigate to the proper screen.

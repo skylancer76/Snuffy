@@ -51,7 +51,7 @@ class Add_New_Pet: UITableViewController, UIImagePickerControllerDelegate, UINav
             selectedImage = editedImage
             // Update button title instead of setting an image
             imageSelectButton.setTitle("Image Selected", for: .normal)
-            imageSelectButton.setTitleColor(.purple, for: .normal)
+            imageSelectButton.setTitleColor(.systemGreen, for: .normal)
         }
         dismiss(animated: true, completion: nil)
     }
