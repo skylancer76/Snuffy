@@ -364,10 +364,15 @@ struct ScheduleDogWalkerRequest: Codable {
     var date: Date
     var startTime: Date
     var endTime: Date
+    var petImageUrl: String?
+    var petBreed: String?
     var instructions: String
     var status: String
     var dogWalkerId: String
     var duration: String
+    var buildingNo: String?
+    var houseNo: String?
+    var landmark: String?
     var timestamp: Date?
     
     init?(from data: [String: Any]) {
@@ -382,6 +387,7 @@ struct ScheduleDogWalkerRequest: Codable {
             let instructions = data["instructions"] as? String,
             let dogWalkerId = data["dogWalkerId"] as? String,
             let status = data["status"] as? String
+            
         else {
             return nil
         }
@@ -396,6 +402,11 @@ struct ScheduleDogWalkerRequest: Codable {
         self.instructions = instructions
         self.dogWalkerId = dogWalkerId
         self.status = status
+        self.petImageUrl = data["petImageUrl"]  as? String
+        self.petBreed = data["petBreed"]     as? String
+        self.buildingNo = data["buildingNo"]   as? String
+        self.houseNo = data["houseNo"]      as? String
+        self.landmark = data["landmark"]     as? String
         
         if let rawTimestamp = data["timestamp"] as? Timestamp {
             self.timestamp = rawTimestamp.dateValue()

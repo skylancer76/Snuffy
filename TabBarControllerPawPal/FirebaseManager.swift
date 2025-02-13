@@ -49,7 +49,7 @@ class FirebaseManager {
                 }
                 
                 // Update caretaker's profilePic field with the download URL (if any).
-                var updatedCaretaker = caretaker
+                let updatedCaretaker = caretaker
                 updatedCaretaker.profilePic = profileImageUrl ?? ""
                 
                 self.saveCaretakerToFirestore(caretaker: updatedCaretaker, caretakerRef: caretakerRef) { error in
@@ -307,7 +307,7 @@ class FirebaseManager {
                     }
                     
                     // Update the dog walker object with the obtained download URL.
-                    var updatedDogWalker = dogWalker
+                    let updatedDogWalker = dogWalker
                     updatedDogWalker.profilePic = profileImageUrl ?? ""
                     
                     self.saveDogWalkerToFirestore(dogWalker: updatedDogWalker, dogWalkerRef: dogWalkerRef) { error in
@@ -460,8 +460,8 @@ class FirebaseManager {
     }
 
     private func assignDogWalker(using userLocation: CLLocation,
-                                 requestId: String,
-                                 completion: @escaping (Error?) -> Void) {
+                                   requestId: String,
+                                   completion: @escaping (Error?) -> Void) {
         db.collection("dogwalkers")
             .whereField("status", isEqualTo: "available")
             .getDocuments { (walkerSnapshot, error) in
@@ -470,13 +470,17 @@ class FirebaseManager {
                     return
                 }
                 
-                guard let walkerDocs = walkerSnapshot?.documents else {
+                guard let walkerDocs = walkerSnapshot?.documents, !walkerDocs.isEmpty else {
                     completion(NSError(domain: "", code: -1,
                                        userInfo: [NSLocalizedDescriptionKey: "No available dog walkers found"]))
                     return
                 }
                 
-                let sortedWalkers = walkerDocs.compactMap { doc -> (DocumentReference, DogWalker, Double)? in
+                // Compute a combined score for each dog walker.
+                // Here, lower distance is better and higher rating is better.
+                // We'll normalize the distance score as: 1/(distance+1) and the rating score as: rating/5.
+                // We then combine these scores with weights (70% distance, 30% rating).
+                let weightedWalkers = walkerDocs.compactMap { doc -> (DocumentReference, DogWalker, Double)? in
                     let data = doc.data()
                     guard let dogWalker = try? Firestore.Decoder().decode(DogWalker.self, from: data) else {
                         print("Decoding dog walker failed for doc: \(doc.documentID)")
@@ -495,17 +499,23 @@ class FirebaseManager {
                     }
                     
                     guard let wLoc = walkerLocation else { return nil }
+                    let distance = userLocation.distance(from: wLoc) // in meters
                     
-                    let distanceInMeters = userLocation.distance(from: wLoc)
-                    let distanceInKm = distanceInMeters / 1000.0
-                    let safeDistance = max(distanceInKm, 0.001) // avoid division by zero
+                    // Normalize distance score (higher is better)
+                    let distanceScore = 1.0 / (distance + 1.0)
+                    
+                    // Normalize rating (assuming maximum rating is 5)
                     let rating = Double(dogWalker.rating) ?? 4.0
-                    let score = rating / safeDistance
-                    return (doc.reference, dogWalker, score)
+                    let ratingScore = rating / 5.0
+                    
+                    // Combine scores with weights (adjust these weights as needed)
+                    let combinedScore = (distanceScore * 0.7) + (ratingScore * 0.3)
+                    
+                    return (doc.reference, dogWalker, combinedScore)
                 }
-                .sorted { $0.2 > $1.2 }
+                .sorted { $0.2 > $1.2 } // Highest combined score first
                 
-                guard let (selectedWalkerRef, selectedWalker, _) = sortedWalkers.first else {
+                guard let (selectedWalkerRef, selectedWalker, _) = weightedWalkers.first else {
                     completion(NSError(domain: "", code: -1,
                                        userInfo: [NSLocalizedDescriptionKey: "No suitable dog walkers found"]))
                     return
@@ -536,7 +546,7 @@ class FirebaseManager {
     }
 
 
-
+    // Accept Dog Walker Request – simply update the status to "accepted" and mark the dog walker as assigned.
     func acceptDogWalkerRequest(dogWalkerId: String, requestId: String, completion: @escaping (Error?) -> Void) {
         let dogWalkerRef = db.collection("dogwalkers").document(dogWalkerId)
         let requestRef = db.collection("dogWalkerRequests").document(requestId)
@@ -552,11 +562,13 @@ class FirebaseManager {
         }
     }
 
+
+    // Reject Dog Walker Request – update the current request status to "rejected" for the rejecting dog walker,
+    // then remove that walker from the sorted list and assign the next best candidate (if available).
     func rejectDogWalkerRequest(dogWalkerId: String,
                                 requestId: String,
-                                sortedDogWalkers: [(DocumentReference, DogWalker, Double)],
-                                completion: @escaping (Error?) -> Void)
-    {
+                                sortedDogWalkers: [(DocumentReference, DogWalker, CLLocationDistance)],
+                                completion: @escaping (Error?) -> Void) {
         let requestRef = db.collection("dogWalkerRequests").document(requestId)
         
         requestRef.updateData(["status": "rejected"]) { error in
@@ -564,8 +576,9 @@ class FirebaseManager {
                 completion(error)
                 return
             }
+            // Remove the rejecting dog walker (assumed to be the first in the sorted list)
             var remainingDogWalkers = sortedDogWalkers
-            remainingDogWalkers.removeFirst() // remove the rejecting dog walker
+            remainingDogWalkers.removeFirst()
             
             if let (nextWalkerRef, nextWalker, _) = remainingDogWalkers.first {
                 requestRef.updateData([
@@ -593,6 +606,7 @@ class FirebaseManager {
             }
         }
     }
+
 
     // MARK: - Fetch Requests & Bookings
     
@@ -654,6 +668,64 @@ class FirebaseManager {
             }
     }
     
+    // fetch for dogwalkersRequests
+    func fetchAssignedDogWalkerRequests(for dogWalkerId: String, completion: @escaping ([ScheduleDogWalkerRequest]) -> Void) {
+        db.collection("dogWalkerRequests")
+            .whereField("dogWalkerId", isEqualTo: dogWalkerId)
+            .whereField("status", isEqualTo: "pending")
+            .getDocuments { snapshot, error in
+                if let error = error {
+                    print("Error fetching dog walker requests: \(error.localizedDescription)")
+                    completion([])
+                    return
+                }
+                
+                var requests: [ScheduleDogWalkerRequest] = []
+                let group = DispatchGroup()
+                
+                for document in snapshot?.documents ?? [] {
+                    var requestData = document.data()
+                    requestData["requestId"] = document.documentID
+                    
+                    // Ensure petName exists to look up additional pet details.
+                    guard let petName = requestData["petName"] as? String else { continue }
+                    
+                    group.enter()
+                    self.db.collection("Pets")
+                        .whereField("petName", isEqualTo: petName)
+                        .getDocuments { petSnapshot, error in
+                            if let error = error {
+                                print("Error fetching pet info for \(petName): \(error.localizedDescription)")
+                                group.leave()
+                                return
+                            }
+                            
+                            guard let petDocument = petSnapshot?.documents.first else {
+                                print("No pet found for name: \(petName)")
+                                group.leave()
+                                return
+                            }
+                            
+                            let petId = petDocument.documentID
+                            requestData["petId"] = petId
+                            let petData = petDocument.data()
+                            requestData["petBreed"] = petData["petBreed"] as? String ?? "Unknown"
+                            requestData["petImageUrl"] = petData["petImage"] as? String ?? ""
+                            
+                            if let scheduleRequest = ScheduleDogWalkerRequest(from: requestData) {
+                                requests.append(scheduleRequest)
+                            }
+                            
+                            group.leave()
+                        }
+                }
+                
+                group.notify(queue: .main) {
+                    completion(requests)
+                }
+            }
+    }
+
     /// Fetch booking details for a pet owner (both caretaker & dogwalker requests, if stored in same collection).
     func fetchOwnerBookings(for userId: String, completion: @escaping ([ScheduleCaretakerRequest]) -> Void) {
         db.collection("scheduleRequests")

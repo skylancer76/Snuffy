@@ -30,6 +30,7 @@ class User_Sign_Up: UIViewController {
         signUpButton.layer.cornerRadius = 10
         signUpButton.layer.masksToBounds = true
         passwordTextField.isSecureTextEntry = true
+
     }
     
     
@@ -80,13 +81,41 @@ class User_Sign_Up: UIViewController {
             guard let user = authResult?.user else { return }
             
             if selectedIndex == 0 {
-                self.saveUserDataToFirestore(uid: user.uid, name: name, email: email, role: "Pet Owner")
-            } else {
-                self.saveCaretakerDataToFirestore(uid: user.uid, name: name, email: email, password : password)
-            }
-        }
+                            self.saveUserDataToFirestore(uid: user.uid, name: name, email: email, role: "Pet Owner")
+                        } else if selectedIndex == 1 {
+                            self.saveCaretakerDataToFirestore(uid: user.uid, name: name, email: email, password: password)
+                        } else {
+                            self.saveDogWalkerDataToFirestore(uid: user.uid, name: name, email: email, password: password)
+                        }
+                    }
     }
     
+    func saveDogWalkerDataToFirestore(uid: String, name: String, email: String, password: String) {
+         let dogWalkerData: [String: Any] = [
+             "dogWalkerId": uid,
+             "name": name,
+             "email": email,
+             "password": password,
+             "profilePic": "",
+             "rating": "0.0",
+             "address": "",
+             "location": [0.0, 0.0],
+             "distanceAway": 0.0,
+             "status": "available",
+             "pendingRequests": [],
+             "completedRequests": 0,
+             "phoneNumber": "",
+             "createdAt": Timestamp()
+         ]
+
+         db.collection("dogWalkers").document(uid).setData(dogWalkerData) { error in
+             if let error = error {
+                 self.showAlert(title: "Error", message: "Error saving dog walker data: \(error.localizedDescription)")
+             } else {
+                 self.navigateToHomeScreen()
+             }
+         }
+     }
     
     // MARK: - Save User Data to Firestore
     func saveUserDataToFirestore(uid: String, name: String, email: String, role: String) {

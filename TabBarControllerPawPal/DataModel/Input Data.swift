@@ -7,7 +7,7 @@
 
 import Foundation
 
-let caretakers: [Caretakers] = []
+//let caretakers: [Caretakers] = []
 
 //    Caretakers(caretakerId: "C1", name: "Abhinav Jain", email: "abhinav.jain@gmail.com",
 //              password: "password1", profilePic: "Abhinav", bio: "An animal lover with 6 years of experience.",

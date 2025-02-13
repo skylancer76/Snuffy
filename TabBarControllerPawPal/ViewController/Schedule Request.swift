@@ -149,20 +149,51 @@ class Schedule_Request: UITableViewController {
     }
     
     // MARK: - Pet Picker Menu
+//    private func configurePetPickerMenu() {
+//        let actions = petNames.map { petName -> UIAction in
+//            let state: UIMenuElement.State = selectedPetNames.contains(petName) ? .on : .off
+//            return UIAction(title: petName, state: state) { [weak self] _ in
+//                guard let self = self else { return }
+//                // For single selection, clear any existing selection before adding the new one.
+//                if self.selectedPetNames.contains(petName) {
+//                    self.selectedPetNames.removeAll()
+//                } else {
+//                    self.selectedPetNames.removeAll()
+//                    self.selectedPetNames.insert(petName)
+//                }
+//                let title = self.selectedPetNames.isEmpty ? "Select Pet" : self.selectedPetNames.joined(separator: ", ")
+//                self.petPickerButton.setTitle(title, for: .normal)
+//                self.configurePetPickerMenu()
+//            }
+//        }
+//        
+//        let menu = UIMenu(title: "Select Pet", children: actions)
+//        petPickerButton.menu = menu
+//        petPickerButton.showsMenuAsPrimaryAction = true
+//        
+//        if selectedPetNames.isEmpty {
+//            petPickerButton.setTitle("Select Pet", for: .normal)
+//        }
+//    }
+    
+    
     private func configurePetPickerMenu() {
+        // If no pet is selected yet, default to the first pet (if available)
+        if selectedPetNames.isEmpty, let firstPet = petNames.first {
+            selectedPetNames.insert(firstPet)
+            petPickerButton.setTitle(firstPet, for: .normal)
+        }
+        
         let actions = petNames.map { petName -> UIAction in
             let state: UIMenuElement.State = selectedPetNames.contains(petName) ? .on : .off
             return UIAction(title: petName, state: state) { [weak self] _ in
                 guard let self = self else { return }
-                // For single selection, clear any existing selection before adding the new one.
-                if self.selectedPetNames.contains(petName) {
-                    self.selectedPetNames.removeAll()
-                } else {
-                    self.selectedPetNames.removeAll()
-                    self.selectedPetNames.insert(petName)
-                }
-                let title = self.selectedPetNames.isEmpty ? "Select Pet" : self.selectedPetNames.joined(separator: ", ")
+                // Clear previous selections and update to the new selection.
+                self.selectedPetNames.removeAll()
+                self.selectedPetNames.insert(petName)
+                let title = self.selectedPetNames.joined(separator: ", ")
                 self.petPickerButton.setTitle(title, for: .normal)
+                // Refresh the menu so that the selected state updates.
                 self.configurePetPickerMenu()
             }
         }
@@ -170,11 +201,8 @@ class Schedule_Request: UITableViewController {
         let menu = UIMenu(title: "Select Pet", children: actions)
         petPickerButton.menu = menu
         petPickerButton.showsMenuAsPrimaryAction = true
-        
-        if selectedPetNames.isEmpty {
-            petPickerButton.setTitle("Select Pet", for: .normal)
-        }
     }
+
     
     // MARK: - Fetch User Name
     func fetchUserName(userId: String, completion: @escaping (String) -> Void) {
