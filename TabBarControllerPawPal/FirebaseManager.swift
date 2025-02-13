@@ -48,6 +48,7 @@ class FirebaseManager {
                     return
                 }
                 
+                // Update caretaker's profilePic field with the download URL (if any).
                 var updatedCaretaker = caretaker
                 updatedCaretaker.profilePic = profileImageUrl ?? ""
                 
@@ -78,7 +79,9 @@ class FirebaseManager {
     /// Upload a caretaker's profile image to Firebase Storage.
     func uploadProfileImage(imageName: String, caretakerId: String, completion: @escaping (String?, Error?) -> Void) {
         guard let image = UIImage(named: imageName) else {
-            completion(nil, NSError(domain: "ImageError", code: 404, userInfo: [NSLocalizedDescriptionKey: "Image not found in assets"]))
+            completion(nil, NSError(domain: "ImageError",
+                                    code: 404,
+                                    userInfo: [NSLocalizedDescriptionKey: "Image not found in assets"]))
             return
         }
         
@@ -100,13 +103,15 @@ class FirebaseManager {
                 }
             }
         } else {
-            completion(nil, NSError(domain: "ImageError", code: 500, userInfo: [NSLocalizedDescriptionKey: "Failed to convert image to data"]))
+            completion(nil, NSError(domain: "ImageError",
+                                    code: 500,
+                                    userInfo: [NSLocalizedDescriptionKey: "Failed to convert image to data"]))
         }
     }
     
-    // MARK: - Schedule Request Functions
+    // MARK: - Schedule Caretaker Request Functions
     
-    /// Save schedule request data to Firestore.
+    /// Save caretaker schedule request data to Firestore.
     func saveScheduleRequestData(data: [String: Any], completion: @escaping (Error?) -> Void) {
         let collection = db.collection("scheduleRequests")
         if let requestId = data["requestId"] as? String {
@@ -129,25 +134,28 @@ class FirebaseManager {
             }
             
             guard let petDoc = snapshot?.documents.first else {
-                completion(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Pet not found"]))
+                completion(NSError(domain: "", code: -1,
+                                   userInfo: [NSLocalizedDescriptionKey: "Pet not found"]))
                 return
             }
             
             guard let ownerId = petDoc.data()["ownerID"] as? String else {
-                completion(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Owner ID not found in pet document"]))
+                completion(NSError(domain: "", code: -1,
+                                   userInfo: [NSLocalizedDescriptionKey: "Owner ID not found in pet document"]))
                 return
             }
             
             guard let currentUserId = Auth.auth().currentUser?.uid, currentUserId == ownerId else {
-                completion(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Current user is not the owner of the pet"]))
+                completion(NSError(domain: "", code: -1,
+                                   userInfo: [NSLocalizedDescriptionKey: "Current user is not the owner of the pet"]))
                 return
             }
             
-            // Use the provided userLocation from the Add Address page if available.
+            // If userLocation is provided, use it. Otherwise, fetch from user's doc.
             if let providedLocation = userLocation {
                 self.assignCaretaker(using: providedLocation, requestId: requestId, completion: completion)
             } else {
-                // Fallback: fetch the location from the user's Firestore document.
+                // Fallback: fetch location from user doc
                 self.db.collection("users").document(ownerId).getDocument { (userSnapshot, error) in
                     if let error = error {
                         completion(error)
@@ -155,7 +163,8 @@ class FirebaseManager {
                     }
                     
                     guard let userData = userSnapshot?.data() else {
-                        completion(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "User data not found"]))
+                        completion(NSError(domain: "", code: -1,
+                                           userInfo: [NSLocalizedDescriptionKey: "User data not found"]))
                         return
                     }
                     
@@ -172,7 +181,8 @@ class FirebaseManager {
                     }
                     
                     guard let loc = fetchedLocation else {
-                        completion(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "User location not found"]))
+                        completion(NSError(domain: "", code: -1,
+                                           userInfo: [NSLocalizedDescriptionKey: "User location not found"]))
                         return
                     }
                     
@@ -183,76 +193,351 @@ class FirebaseManager {
     }
     
     /// Helper function to perform caretaker assignment using a given location.
-    private func assignCaretaker(using userLocation: CLLocation, requestId: String, completion: @escaping (Error?) -> Void) {
-        db.collection("caretakers").whereField("status", isEqualTo: "available").getDocuments { (caretakerSnapshot, error) in
-            if let error = error {
-                completion(error)
-                return
-            }
-            
-            guard let caretakerDocs = caretakerSnapshot?.documents else {
-                completion(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No available caretakers found"]))
-                return
-            }
-            
-            let sortedCaretakers = caretakerDocs.compactMap { doc -> (DocumentReference, Caretakers, Double)? in
-                let data = doc.data()
-                guard let caretaker = try? Firestore.Decoder().decode(Caretakers.self, from: data) else {
-                    print("Decoding failed for document: \(doc.documentID)")
-                    return nil
-                }
-                
-                var caretakerLocation: CLLocation?
-                if let caretakerGeoPoint = data["location"] as? GeoPoint {
-                    caretakerLocation = CLLocation(latitude: caretakerGeoPoint.latitude, longitude: caretakerGeoPoint.longitude)
-                } else if let locationMap = data["location"] as? [String: Any],
-                          let lat = locationMap["latitude"] as? Double,
-                          let lon = locationMap["longitude"] as? Double {
-                    caretakerLocation = CLLocation(latitude: lat, longitude: lon)
-                } else if let locationArray = data["location"] as? [Double],
-                          locationArray.count >= 2 {
-                    caretakerLocation = CLLocation(latitude: locationArray[0], longitude: locationArray[1])
-                }
-                
-                guard let caretakerLocation = caretakerLocation else {
-                    print("Location not found or invalid for caretaker: \(caretaker.caretakerId)")
-                    return nil
-                }
-                
-                let distanceInMeters = userLocation.distance(from: caretakerLocation)
-                let distanceInKm = distanceInMeters / 1000.0
-                let safeDistance = distanceInKm > 0 ? distanceInKm : 0.001
-                let score = Double(caretaker.experience) / safeDistance
-                return (doc.reference, caretaker, score)
-            }
-            .sorted { $0.2 > $1.2 }
-            
-            guard let (selectedCaretakerRef, selectedCaretaker, _) = sortedCaretakers.first else {
-                completion(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No suitable caretakers found"]))
-                return
-            }
-            
-            print("Assigning request \(requestId) to caretaker: \(selectedCaretaker.name) (Exp: \(selectedCaretaker.experience))")
-            
-            let requestRef = self.db.collection("scheduleRequests").document(requestId)
-            requestRef.updateData([
-                "caretakerId": selectedCaretaker.caretakerId,
-                "status": "pending"
-            ]) { error in
+    private func assignCaretaker(using userLocation: CLLocation,
+                                 requestId: String,
+                                 completion: @escaping (Error?) -> Void) {
+        db.collection("caretakers")
+            .whereField("status", isEqualTo: "available")
+            .getDocuments { (caretakerSnapshot, error) in
                 if let error = error {
                     completion(error)
                     return
                 }
                 
-                selectedCaretakerRef.updateData([
-                    "pendingRequests": FieldValue.arrayUnion([requestId])
+                guard let caretakerDocs = caretakerSnapshot?.documents else {
+                    completion(NSError(domain: "", code: -1,
+                                       userInfo: [NSLocalizedDescriptionKey: "No available caretakers found"]))
+                    return
+                }
+                
+                // Score caretakers by (experience / distance).
+                let sortedCaretakers = caretakerDocs.compactMap { doc -> (DocumentReference, Caretakers, Double)? in
+                    let data = doc.data()
+                    guard let caretaker = try? Firestore.Decoder().decode(Caretakers.self, from: data) else {
+                        print("Decoding caretaker failed for doc: \(doc.documentID)")
+                        return nil
+                    }
+                    
+                    var caretakerLocation: CLLocation?
+                    
+                    // Attempt to parse caretaker location from Firestore
+                    if let caretakerGeoPoint = data["location"] as? GeoPoint {
+                        caretakerLocation = CLLocation(latitude: caretakerGeoPoint.latitude,
+                                                       longitude: caretakerGeoPoint.longitude)
+                    } else if let locationMap = data["location"] as? [String: Any],
+                              let lat = locationMap["latitude"] as? Double,
+                              let lon = locationMap["longitude"] as? Double {
+                        caretakerLocation = CLLocation(latitude: lat, longitude: lon)
+                    } else if let locationArray = data["location"] as? [Double],
+                              locationArray.count >= 2 {
+                        caretakerLocation = CLLocation(latitude: locationArray[0],
+                                                       longitude: locationArray[1])
+                    }
+                    
+                    guard let caretakerLoc = caretakerLocation else {
+                        print("No location found for caretaker: \(caretaker.caretakerId)")
+                        return nil
+                    }
+                    
+                    let distanceInMeters = userLocation.distance(from: caretakerLoc)
+                    let distanceInKm = distanceInMeters / 1000.0
+                    let safeDistance = max(distanceInKm, 0.001) // avoid dividing by zero
+                    let score = Double(caretaker.experience) / safeDistance
+                    return (doc.reference, caretaker, score)
+                }
+                .sorted { $0.2 > $1.2 }
+                
+                guard let (selectedCaretakerRef, selectedCaretaker, _) = sortedCaretakers.first else {
+                    completion(NSError(domain: "", code: -1,
+                                       userInfo: [NSLocalizedDescriptionKey: "No suitable caretakers found"]))
+                    return
+                }
+                
+                print("Assigning request \(requestId) to caretaker: \(selectedCaretaker.name) (Exp: \(selectedCaretaker.experience))")
+                
+                let requestRef = self.db.collection("scheduleRequests").document(requestId)
+                requestRef.updateData([
+                    "caretakerId": selectedCaretaker.caretakerId,
+                    "status": "pending"
                 ]) { error in
                     if let error = error {
                         completion(error)
-                    } else {
-                        print("Request successfully assigned to \(selectedCaretaker.name)")
-                        completion(nil)
+                        return
                     }
+                    
+                    selectedCaretakerRef.updateData([
+                        "pendingRequests": FieldValue.arrayUnion([requestId])
+                    ]) { error in
+                        if let error = error {
+                            completion(error)
+                        } else {
+                            print("Request successfully assigned to \(selectedCaretaker.name)")
+                            completion(nil)
+                        }
+                    }
+                }
+            }
+    }
+    
+    // MARK: - Dogwalker Data Functions
+    
+    func saveDogWalkerData(dogWalkers: [DogWalker], completion: @escaping (Error?) -> Void) {
+        let group = DispatchGroup()
+        var overallError: Error?  // To capture any error that occurs
+
+        for dogWalker in dogWalkers {
+            group.enter()
+            let dogWalkerRef = db.collection("dogwalkers").document(dogWalker.dogWalkerId)
+            
+            // If the profilePic string is already a URL, assume the image has been uploaded.
+            if dogWalker.profilePic.starts(with: "http") {
+                self.saveDogWalkerToFirestore(dogWalker: dogWalker, dogWalkerRef: dogWalkerRef) { error in
+                    if let error = error {
+                        overallError = error
+                    }
+                    group.leave()
+                }
+            } else {
+                // Upload the local image (profilePic holds the local asset name).
+                uploadDogWalkerProfileImage(imageName: dogWalker.profilePic, dogWalkerId: dogWalker.dogWalkerId) { profileImageUrl, error in
+                    if let error = error {
+                        overallError = error
+                        group.leave()
+                        return
+                    }
+                    
+                    // Update the dog walker object with the obtained download URL.
+                    var updatedDogWalker = dogWalker
+                    updatedDogWalker.profilePic = profileImageUrl ?? ""
+                    
+                    self.saveDogWalkerToFirestore(dogWalker: updatedDogWalker, dogWalkerRef: dogWalkerRef) { error in
+                        if let error = error {
+                            overallError = error
+                        }
+                        group.leave()
+                    }
+                }
+            }
+        }
+        
+        group.notify(queue: .main) {
+            completion(overallError)
+        }
+    }
+
+    /// Helper function to encode and save a DogWalker object in Firestore.
+    func saveDogWalkerToFirestore(dogWalker: DogWalker, dogWalkerRef: DocumentReference, completion: @escaping (Error?) -> Void) {
+        do {
+            let data = try Firestore.Encoder().encode(dogWalker)
+            dogWalkerRef.setData(data, completion: completion)
+        } catch {
+            completion(error)
+        }
+    }
+
+    /// Upload a dog walker's profile image (from local assets) to Firebase Storage.
+    func uploadDogWalkerProfileImage(imageName: String, dogWalkerId: String, completion: @escaping (String?, Error?) -> Void) {
+        // Load the local image from your assets.
+        guard let image = UIImage(named: imageName) else {
+            let error = NSError(domain: "ImageError",
+                                code: 404,
+                                userInfo: [NSLocalizedDescriptionKey: "Image not found in assets"])
+            completion(nil, error)
+            return
+        }
+        
+        let storageRef = Storage.storage().reference().child("dogwalker_profile_pictures/\(dogWalkerId).jpg")
+        
+        // Convert the image to JPEG data.
+        guard let imageData = image.jpegData(compressionQuality: 0.8) else {
+            let error = NSError(domain: "ImageError",
+                                code: 500,
+                                userInfo: [NSLocalizedDescriptionKey: "Failed to convert image to data"])
+            completion(nil, error)
+            return
+        }
+        
+        // Upload the image data.
+        storageRef.putData(imageData, metadata: nil) { _, error in
+            if let error = error {
+                completion(nil, error)
+                return
+            }
+            
+            // Retrieve the download URL for the uploaded image.
+            storageRef.downloadURL { url, error in
+                if let error = error {
+                    completion(nil, error)
+                } else {
+                    completion(url?.absoluteString, nil)
+                }
+            }
+        }
+    }
+    
+    // MARK: - Dog Walker Request Functions
+    
+    /// Save dog walker request data to Firestore.
+    func saveDogWalkerRequestData(data: [String: Any], completion: @escaping (Error?) -> Void) {
+        let collection = db.collection("dogWalkerRequests")  // or rename to "scheduleRequests" if you prefer
+        guard let requestId = data["requestId"] as? String else {
+            completion(NSError(domain: "",
+                               code: -1,
+                               userInfo: [NSLocalizedDescriptionKey: "Missing requestId in data"]))
+            return
+        }
+        collection.document(requestId).setData(data) { error in
+            completion(error)
+        }
+    }
+    
+    /// Auto-assign a dog walker (analogous to auto-assigning a caretaker).
+    func autoAssignDogWalker(petName: String,
+                             requestId: String,
+                             userLocation: CLLocation?,
+                             completion: @escaping (Error?) -> Void)
+    {
+        // 1) Confirm the pet belongs to the current user
+        db.collection("Pets").whereField("petName", isEqualTo: petName).getDocuments { (snapshot, error) in
+            if let error = error {
+                completion(error)
+                return
+            }
+            guard let petDoc = snapshot?.documents.first else {
+                let err = NSError(domain: "", code: -1,
+                                  userInfo: [NSLocalizedDescriptionKey: "Pet not found"])
+                completion(err)
+                return
+            }
+            guard let ownerId = petDoc.data()["ownerID"] as? String else {
+                let err = NSError(domain: "", code: -1,
+                                  userInfo: [NSLocalizedDescriptionKey: "Owner ID not found in pet document"])
+                completion(err)
+                return
+            }
+            guard let currentUserId = Auth.auth().currentUser?.uid, currentUserId == ownerId else {
+                let err = NSError(domain: "", code: -1,
+                                  userInfo: [NSLocalizedDescriptionKey: "Current user is not the owner of the pet"])
+                completion(err)
+                return
+            }
+            
+            // 2) Decide if we already have a userLocation. If not, fetch from user doc.
+            let handleAssignment: (CLLocation) -> Void = { actualLocation in
+                // 3) Query all dogwalkers with status = "available"
+                self.db.collection("dogwalkers")
+                    .whereField("status", isEqualTo: "available")
+                    .getDocuments { (walkerSnapshot, error) in
+                        if let error = error {
+                            completion(error)
+                            return
+                        }
+                        guard let walkerDocs = walkerSnapshot?.documents, !walkerDocs.isEmpty else {
+                            let err = NSError(domain: "", code: -1,
+                                              userInfo: [NSLocalizedDescriptionKey: "No available dog walkers found"])
+                            completion(err)
+                            return
+                        }
+                        
+                        // 4) Sort dogwalkers by a score (experience / distance)
+                        let sortedWalkers = walkerDocs.compactMap { doc -> (DocumentReference, DogWalker, Double)? in
+                            let data = doc.data()
+                            guard let dogWalker = try? Firestore.Decoder().decode(DogWalker.self, from: data) else {
+                                print("Decoding dog walker failed for doc: \(doc.documentID)")
+                                return nil
+                            }
+                            
+                            // Attempt to get dogwalker location
+                            var walkerLocation: CLLocation?
+                            if let geo = data["location"] as? GeoPoint {
+                                walkerLocation = CLLocation(latitude: geo.latitude, longitude: geo.longitude)
+                            } else if let locMap = data["location"] as? [String: Any],
+                                      let lat = locMap["latitude"] as? Double,
+                                      let lon = locMap["longitude"] as? Double {
+                                walkerLocation = CLLocation(latitude: lat, longitude: lon)
+                            } else if let locArray = data["location"] as? [Double],
+                                      locArray.count >= 2 {
+                                walkerLocation = CLLocation(latitude: locArray[0], longitude: locArray[1])
+                            }
+                            
+                            guard let wLoc = walkerLocation else {
+                                // If no location, skip
+                                return nil
+                            }
+                            
+                            let distanceInMeters = actualLocation.distance(from: wLoc)
+                            let distanceInKm = distanceInMeters / 1000.0
+                            let safeDistance = max(distanceInKm, 0.001)
+                            let score = Double(dogWalker.experience) / safeDistance
+                            
+                            return (doc.reference, dogWalker, score)
+                        }
+                        .sorted { $0.2 > $1.2 }
+                        
+                        // 5) Pick the top dogwalker
+                        guard let (selectedWalkerRef, selectedWalker, _) = sortedWalkers.first else {
+                            let err = NSError(domain: "", code: -1,
+                                              userInfo: [NSLocalizedDescriptionKey: "No suitable dog walkers found"])
+                            completion(err)
+                            return
+                        }
+                        
+                        // 6) Update request doc with dogWalkerId and status = "pending"
+                        let requestRef = self.db.collection("dogWalkerRequests").document(requestId)
+                        requestRef.updateData([
+                            "dogWalkerId": selectedWalker.dogWalkerId,
+                            "status": "pending"
+                        ]) { error in
+                            if let error = error {
+                                completion(error)
+                                return
+                            }
+                            // 7) Add this requestId to the dogwalker's pendingRequests
+                            selectedWalkerRef.updateData([
+                                "pendingRequests": FieldValue.arrayUnion([requestId])
+                            ]) { error in
+                                completion(error)
+                            }
+                        }
+                    }
+            }
+            
+            // If userLocation was provided, use it; otherwise, fetch from user doc
+            if let providedLoc = userLocation {
+                handleAssignment(providedLoc)
+            } else {
+                // Fallback: fetch from user doc
+                self.db.collection("users").document(ownerId).getDocument { (userSnapshot, error) in
+                    if let error = error {
+                        completion(error)
+                        return
+                    }
+                    guard let userData = userSnapshot?.data() else {
+                        let err = NSError(domain: "", code: -1,
+                                          userInfo: [NSLocalizedDescriptionKey: "User data not found"])
+                        completion(err)
+                        return
+                    }
+                    
+                    var fetchedLocation: CLLocation?
+                    if let geo = userData["location"] as? GeoPoint {
+                        fetchedLocation = CLLocation(latitude: geo.latitude, longitude: geo.longitude)
+                    } else if let locMap = userData["location"] as? [String: Any],
+                              let lat = locMap["latitude"] as? Double,
+                              let lon = locMap["longitude"] as? Double {
+                        fetchedLocation = CLLocation(latitude: lat, longitude: lon)
+                    } else if let locArray = userData["location"] as? [Double],
+                              locArray.count >= 2 {
+                        fetchedLocation = CLLocation(latitude: locArray[0], longitude: locArray[1])
+                    }
+                    
+                    guard let loc = fetchedLocation else {
+                        let err = NSError(domain: "", code: -1,
+                                          userInfo: [NSLocalizedDescriptionKey: "User location not found"])
+                        completion(err)
+                        return
+                    }
+                    handleAssignment(loc)
                 }
             }
         }
@@ -318,7 +603,7 @@ class FirebaseManager {
             }
     }
     
-    /// Fetch booking details for a pet owner.
+    /// Fetch booking details for a pet owner (both caretaker & dogwalker requests, if stored in same collection).
     func fetchOwnerBookings(for userId: String, completion: @escaping ([ScheduleCaretakerRequest]) -> Void) {
         db.collection("scheduleRequests")
             .whereField("userId", isEqualTo: userId)
@@ -333,7 +618,7 @@ class FirebaseManager {
                 for document in snapshot?.documents ?? [] {
                     var requestData = document.data()
                     requestData["requestId"] = document.documentID
-                    // Convert to ScheduleRequest model
+                    // Convert to ScheduleCaretakerRequest model
                     if let scheduleRequest = ScheduleCaretakerRequest(from: requestData) {
                         requests.append(scheduleRequest)
                     }
@@ -342,30 +627,29 @@ class FirebaseManager {
             }
     }
     
-    // Keeps check on the bookings and updates at a time 
+    /// Observe the owner's bookings in real-time (caretaker or dogwalker).
     func observeOwnerBookings(for userId: String, completion: @escaping ([ScheduleCaretakerRequest]) -> Void) -> ListenerRegistration {
-           let query = db.collection("scheduleRequests").whereField("userId", isEqualTo: userId)
-           return query.addSnapshotListener { snapshot, error in
-               if let error = error {
-                   print("Error fetching bookings: \(error.localizedDescription)")
-                   completion([])
-                   return
-               }
-               
-               var requests: [ScheduleCaretakerRequest] = []
-               for document in snapshot?.documents ?? [] {
-                   var requestData = document.data()
-                   requestData["requestId"] = document.documentID  // Include the document ID
-                   if let scheduleRequest = ScheduleCaretakerRequest(from: requestData) {
-                       requests.append(scheduleRequest)
-                   }
-               }
-               completion(requests)
-           }
-       }
-   
+        let query = db.collection("scheduleRequests").whereField("userId", isEqualTo: userId)
+        return query.addSnapshotListener { snapshot, error in
+            if let error = error {
+                print("Error fetching bookings: \(error.localizedDescription)")
+                completion([])
+                return
+            }
+            
+            var requests: [ScheduleCaretakerRequest] = []
+            for document in snapshot?.documents ?? [] {
+                var requestData = document.data()
+                requestData["requestId"] = document.documentID  // Include the document ID
+                if let scheduleRequest = ScheduleCaretakerRequest(from: requestData) {
+                    requests.append(scheduleRequest)
+                }
+            }
+            completion(requests)
+        }
+    }
 
-    /// Update the booking status.
+    /// Update the booking status (e.g., "pending" -> "accepted", etc.).
     func updateBookingStatus(requestId: String, newStatus: String, completion: @escaping (Error?) -> Void) {
         db.collection("scheduleRequests").document(requestId).updateData([
             "status": newStatus
@@ -374,15 +658,7 @@ class FirebaseManager {
         }
     }
     
-    /// Format a Firestore Timestamp into a date string.
-    func formatDate(timestamp: Timestamp) -> String {
-        let date = timestamp.dateValue()
-        let formatter = DateFormatter()
-        formatter.dateFormat = "dd MMM" // e.g., "12 Feb"
-        return formatter.string(from: date)
-    }
-    
-    /// Accept a request and update statuses accordingly.
+    /// Accept a request and update caretaker status accordingly.
     func acceptRequest(caretakerId: String, requestId: String, completion: @escaping (Error?) -> Void) {
         let caretakerRef = db.collection("caretakers").document(caretakerId)
         let requestRef = db.collection("scheduleRequests").document(requestId)
@@ -399,7 +675,7 @@ class FirebaseManager {
         }
     }
     
-    /// Fetch available caretakers and sort them by a score (experience divided by distance).
+    /// Fetch available caretakers and sort them by a score (experience / distance).
     func fetchAvailableCaretakers(completion: @escaping ([(DocumentReference, Caretakers, Double)]) -> Void) {
         db.collection("caretakers").whereField("status", isEqualTo: "available").getDocuments { snapshot, error in
             if let error = error {
@@ -410,7 +686,9 @@ class FirebaseManager {
             
             let caretakers = snapshot?.documents.compactMap { doc -> (DocumentReference, Caretakers, Double)? in
                 let data = doc.data()
-                guard let caretaker = try? Firestore.Decoder().decode(Caretakers.self, from: data) else { return nil }
+                guard let caretaker = try? Firestore.Decoder().decode(Caretakers.self, from: data) else {
+                    return nil
+                }
                 
                 let experience = caretaker.experience
                 let distance = caretaker.distanceAway
@@ -424,8 +702,12 @@ class FirebaseManager {
         }
     }
     
-    /// Reject a request and reassign it to another available caretaker.
-    func rejectRequest(caretakerId: String, requestId: String, sortedCaretakers: [(DocumentReference, Caretakers, Double)], completion: @escaping (Error?) -> Void) {
+    /// Reject a request and reassign it to the next caretaker in the sorted list.
+    func rejectRequest(caretakerId: String,
+                       requestId: String,
+                       sortedCaretakers: [(DocumentReference, Caretakers, Double)],
+                       completion: @escaping (Error?) -> Void)
+    {
         let requestRef = db.collection("scheduleRequests").document(requestId)
         
         requestRef.updateData(["status": "rejected"]) { error in
@@ -435,10 +717,13 @@ class FirebaseManager {
             }
             
             var remainingCaretakers = sortedCaretakers
-            remainingCaretakers.removeFirst()
+            remainingCaretakers.removeFirst() // remove the caretaker who rejected
             
             if let (caretakerRef, nextCaretaker, _) = remainingCaretakers.first {
-                requestRef.updateData(["caretakerId": nextCaretaker.caretakerId, "status": "pending"]) { error in
+                requestRef.updateData([
+                    "caretakerId": nextCaretaker.caretakerId,
+                    "status": "pending"
+                ]) { error in
                     if let error = error {
                         completion(error)
                         return
@@ -457,7 +742,8 @@ class FirebaseManager {
                 }
             } else {
                 print("No more caretakers available.")
-                completion(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No caretakers available."]))
+                completion(NSError(domain: "", code: -1,
+                                   userInfo: [NSLocalizedDescriptionKey: "No caretakers available."]))
             }
         }
     }
@@ -596,33 +882,6 @@ class FirebaseManager {
         }
     }
 }
-    
-    
-    //    func pushSampleData() {
-    //        let samplePets = [
-    //            PetLiveUpdate(name: "Buzzo", description: "Found near the Community Park SRM.", location: CLLocationCoordinate2D(latitude: 12.8230, longitude: 80.0444), im: ["pick1", "pick2", "pick3"]),
-    //            PetLiveUpdate(name: "Fluffy", description: "Spotted near the main gate.", location: CLLocationCoordinate2D(latitude: 12.8210, longitude: 80.0424), im: ["pick1", "pick2", "pick3"]),
-    //            PetLiveUpdate(name: "Max", description: "Seen by the sports complex.", location: CLLocationCoordinate2D(latitude: 12.8250, longitude: 80.0454), im: ["pick1", "pick2", "pick3"])
-    //            ]
-    //
-    //            let db = Firestore.firestore()
-    //            for pet in samplePets {
-    //                db.collection("petsLive").addDocument(data: pet.toDictionary()) { error in
-    //                    if let error = error {
-    //                        print("Error adding document: \(error)")
-    //                    } else {
-    //                        print("Document added successfully!")
-    //                    }
-    //            }
-    //        }
-    //    }
-    
-//}
-
-
-
-
-
 
 
 

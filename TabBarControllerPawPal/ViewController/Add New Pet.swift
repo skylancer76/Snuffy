@@ -33,6 +33,9 @@ class Add_New_Pet: UITableViewController, UIImagePickerControllerDelegate, UINav
     }
 
     func setupUI() {
+        // Set the button's title label font to system font with size 15
+        imageSelectButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
+        
         // Set default button title
         imageSelectButton.setTitle("Select Image", for: .normal)
         imageSelectButton.addTarget(self, action: #selector(selectImage), for: .touchUpInside)
@@ -46,7 +49,8 @@ class Add_New_Pet: UITableViewController, UIImagePickerControllerDelegate, UINav
         present(imagePicker, animated: true, completion: nil)
     }
 
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
+    func imagePickerController(_ picker: UIImagePickerController,
+                               didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         if let editedImage = info[.editedImage] as? UIImage {
             selectedImage = editedImage
             // Update button title instead of setting an image

@@ -15,6 +15,7 @@ class My_Pets: UIViewController {
     @IBOutlet weak var backgroundView: UIView!
     @IBOutlet weak var addPetButton: UIButton!
     @IBOutlet weak var myPets: UICollectionView!
+    @IBOutlet weak var scheduleBookingButton: UIButton!
     
     var pets: [PetData] = []
     var petsListener: ListenerRegistration?
@@ -61,6 +62,16 @@ class My_Pets: UIViewController {
     // Add Pet Buttton function
     @IBAction func addPetButtonTapped(_ sender: UIButton) {
         performSegue(withIdentifier: "AddNewPetSegue", sender: self)
+    }
+    
+    
+    @IBAction func scheduleBookingButtonTapped(_ sender: Any) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            if let tabBarController = storyboard.instantiateViewController(withIdentifier: "TabBarControllerID") as? UITabBarController {
+                tabBarController.selectedIndex = 0
+                tabBarController.modalPresentationStyle = .fullScreen
+                self.present(tabBarController, animated: true, completion: nil)
+            }
     }
     
     
@@ -148,7 +159,7 @@ extension My_Pets: UICollectionViewDataSource , UICollectionViewDelegate{
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PetCell", for: indexPath) as! My_Pets_Cell
         let pet = pets[indexPath.item]
         cell.configure(with: pet)
-        cell.contentView.layer.cornerRadius = 8
+        cell.contentView.layer.cornerRadius = 12
         cell.backgroundColor = .clear
         cell.layer.masksToBounds = false
         cell.layer.shadowRadius = 5

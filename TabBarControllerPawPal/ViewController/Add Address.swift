@@ -15,6 +15,11 @@ protocol AddAddressDelegate: AnyObject {
     func didSubmitAddress(addressData: [String: Any])
 }
 
+enum RequestType {
+    case caretaker
+    case dogwalker
+}
+
 // MARK: - Autocomplete Table Handler
 class AutocompleteTableHandler: NSObject, UITableViewDataSource, UITableViewDelegate {
     var searchResults: [MKLocalSearchCompletion] = []
@@ -49,8 +54,6 @@ class Add_Address: UITableViewController, MKMapViewDelegate {
     
     // MARK: - Properties
     weak var delegate: AddAddressDelegate?
-    // Location manager calls are commented out:
-    // private let locationManager = CLLocationManager()
     private var selectedCoordinate: CLLocationCoordinate2D?
     
     // Autocomplete properties
@@ -58,7 +61,7 @@ class Add_Address: UITableViewController, MKMapViewDelegate {
     var searchCompleter: MKLocalSearchCompleter!
     var autocompleteHandler: AutocompleteTableHandler!
     
-    // Passed Data
+    // Passed Data from previous screen(s)
     var selectedPetName: String = ""
     var startDate: Date = Date()
     var endDate: Date = Date()
@@ -66,17 +69,16 @@ class Add_Address: UITableViewController, MKMapViewDelegate {
     var isPetDropoff: Bool = false
     var instructions: String = ""
     
+    // New property to indicate request type (default is caretaker)
+    var requestType: RequestType = .caretaker
+    
     // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupMapView()
         setupLocationTextField()
         
-        // Location Manager calls are commented out:
-        // setupLocationManager()
-        // locationManager.startUpdatingLocation()
-        
-        // Force default location to Chennai.
+        // Set a default location (Chennai, in this example)
         setDefaultLocationToChennai()
         
         // Setup autocomplete search completer and table view.
@@ -109,7 +111,6 @@ class Add_Address: UITableViewController, MKMapViewDelegate {
     private func setupSearchCompleter() {
         searchCompleter = MKLocalSearchCompleter()
         searchCompleter.delegate = self
-        // Optionally, restrict results to the current map region.
         searchCompleter.region = mapView.region
     }
     
@@ -119,11 +120,9 @@ class Add_Address: UITableViewController, MKMapViewDelegate {
         autocompleteTableView.register(UITableViewCell.self, forCellReuseIdentifier: "AutoCompleteCell")
         autocompleteTableView.isHidden = true
         
-        // Create and assign the autocomplete handler.
         autocompleteHandler = AutocompleteTableHandler()
         autocompleteHandler.didSelectResult = { [weak self] result in
             guard let self = self else { return }
-            // Form the search query from the selected result.
             let searchQuery = result.title + " " + result.subtitle
             let searchRequest = MKLocalSearch.Request()
             searchRequest.naturalLanguageQuery = searchQuery
@@ -136,20 +135,13 @@ class Add_Address: UITableViewController, MKMapViewDelegate {
                 }
                 self.selectedCoordinate = coordinate
                 DispatchQueue.main.async {
-                    // Update the marker on the map.
                     self.mapView.removeAnnotations(self.mapView.annotations)
                     let annotation = MKPointAnnotation()
                     annotation.coordinate = coordinate
                     self.mapView.addAnnotation(annotation)
-                    
-                    // Update the map region.
                     let region = MKCoordinateRegion(center: coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
                     self.mapView.setRegion(region, animated: true)
-                    
-                    // Update the text field with the reverse-geocoded address.
                     self.getAddressFromCoordinates(coordinate: coordinate)
-                    
-                    // Hide autocomplete suggestions.
                     self.autocompleteTableView.isHidden = true
                     self.locationTextField.resignFirstResponder()
                 }
@@ -158,21 +150,15 @@ class Add_Address: UITableViewController, MKMapViewDelegate {
         
         autocompleteTableView.delegate = autocompleteHandler
         autocompleteTableView.dataSource = autocompleteHandler
-        
-        // Add the autocomplete table view as a subview.
         self.view.addSubview(autocompleteTableView)
     }
     
     // MARK: - Set Default Map Region to Chennai
     private func setDefaultLocationToChennai() {
-        // Chennai's approximate coordinates.
         let chennaiCoordinate = CLLocationCoordinate2D(latitude: 13.0827, longitude: 80.2707)
-        let region = MKCoordinateRegion(center: chennaiCoordinate,
-                                        latitudinalMeters: 1000,
-                                        longitudinalMeters: 1000)
+        let region = MKCoordinateRegion(center: chennaiCoordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
         mapView.setRegion(region, animated: true)
         selectedCoordinate = chennaiCoordinate
-        // Update the text field with the address.
         getAddressFromCoordinates(coordinate: chennaiCoordinate)
     }
     
@@ -181,13 +167,10 @@ class Add_Address: UITableViewController, MKMapViewDelegate {
         let location = sender.location(in: mapView)
         let coordinate = mapView.convert(location, toCoordinateFrom: mapView)
         selectedCoordinate = coordinate
-        
-        // Remove any existing annotations and add a new marker.
         mapView.removeAnnotations(mapView.annotations)
         let annotation = MKPointAnnotation()
         annotation.coordinate = coordinate
         mapView.addAnnotation(annotation)
-        
         getAddressFromCoordinates(coordinate: coordinate)
     }
     
@@ -195,7 +178,6 @@ class Add_Address: UITableViewController, MKMapViewDelegate {
     private func getAddressFromCoordinates(coordinate: CLLocationCoordinate2D) {
         let location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
         let geocoder = CLGeocoder()
-        
         geocoder.reverseGeocodeLocation(location) { [weak self] (placemarks, error) in
             guard let self = self,
                   let placemark = placemarks?.first,
@@ -227,7 +209,6 @@ class Add_Address: UITableViewController, MKMapViewDelegate {
             return
         }
         
-        // Prepare address data.
         let addressData: [String: Any] = [
             "location": locationText,
             "houseNo": houseNo,
@@ -237,30 +218,30 @@ class Add_Address: UITableViewController, MKMapViewDelegate {
             "longitude": selectedCoordinate?.longitude ?? 0.0
         ]
         
-        // Save Request to Firebase.
-        saveScheduleRequest(addressData: addressData)
+        // Call the appropriate save function based on the request type.
+        switch requestType {
+        case .caretaker:
+            saveCaretakerRequest(addressData: addressData)
+        case .dogwalker:
+            saveDogWalkerRequest(addressData: addressData)
+        }
     }
     
-    // MARK: - Save Schedule Request to Firebase
-    private func saveScheduleRequest(addressData: [String: Any]) {
-        // Ensure the user is logged in.
+    // MARK: - Save Caretaker Request
+    private func saveCaretakerRequest(addressData: [String: Any]) {
         guard let currentUser = Auth.auth().currentUser else {
             showAlert(title: "Error", message: "You must be logged in.")
             return
         }
-        
         let requestId = UUID().uuidString
         let userId = currentUser.uid
-
-        // Fetch the username from Firestore (users collection)
+        
         fetchUserName(userId: userId) { [weak self] userName in
             guard let self = self else { return }
-            
-            // Build the request data with the fetched username.
             var requestData: [String: Any] = [
                 "requestId": requestId,
                 "userId": userId,
-                "userName": userName,    // Use username from Firestore.
+                "userName": userName,
                 "petName": self.selectedPetName,
                 "startDate": Timestamp(date: self.startDate),
                 "endDate": Timestamp(date: self.endDate),
@@ -271,24 +252,20 @@ class Add_Address: UITableViewController, MKMapViewDelegate {
                 "timestamp": Timestamp(date: Date())
             ]
             
-            // Merge any additional address data.
+            // Merge additional address data.
             for (key, value) in addressData {
                 requestData[key] = value
             }
             
-            // Save the request data to Firebase.
             FirebaseManager.shared.saveScheduleRequestData(data: requestData) { error in
                 DispatchQueue.main.async {
                     if let error = error {
-                        print("Error scheduling request: \(error.localizedDescription)")
+                        print("Error scheduling caretaker request: \(error.localizedDescription)")
                         self.showAlert(title: "Error", message: "Could not schedule request.")
                     } else {
-                        // Create a CLLocation from the selected coordinate (if available)
                         let userLocation = self.selectedCoordinate.map {
                             CLLocation(latitude: $0.latitude, longitude: $0.longitude)
                         }
-                        
-                        // Auto-assign caretaker after saving the request.
                         FirebaseManager.shared.autoAssignCaretaker(
                             petName: self.selectedPetName,
                             requestId: requestId,
@@ -300,14 +277,68 @@ class Add_Address: UITableViewController, MKMapViewDelegate {
                                 print("Caretaker assigned for request: \(requestId)")
                             }
                         }
-                        
-                        // Transition to the Request Scheduled screen.
                         self.performSegue(withIdentifier: "showRequestScheduled", sender: self)
                     }
                 }
             }
         }
     }
+    
+    // MARK: - Save Dogwalker Request
+    private func saveDogWalkerRequest(addressData: [String: Any]) {
+        guard let currentUser = Auth.auth().currentUser else {
+            showAlert(title: "Error", message: "You must be logged in.")
+            return
+        }
+        let requestId = UUID().uuidString
+        let userId = currentUser.uid
+        
+        fetchUserName(userId: userId) { [weak self] userName in
+            guard let self = self else { return }
+            var requestData: [String: Any] = [
+                "requestId": requestId,
+                "userId": userId,
+                "userName": userName,
+                "petName": self.selectedPetName,
+                "startDate": Timestamp(date: self.startDate),
+                "endDate": Timestamp(date: self.endDate),
+                "instructions": self.instructions,
+                "status": "available",
+                "dogWalkerId": "",
+                "timestamp": Timestamp(date: Date())
+            ]
+            
+            for (key, value) in addressData {
+                requestData[key] = value
+            }
+            
+            FirebaseManager.shared.saveDogWalkerRequestData(data: requestData) { error in
+                DispatchQueue.main.async {
+                    if let error = error {
+                        print("Error scheduling dogwalker request: \(error.localizedDescription)")
+                        self.showAlert(title: "Error", message: "Could not schedule request.")
+                    } else {
+                        let userLocation = self.selectedCoordinate.map {
+                            CLLocation(latitude: $0.latitude, longitude: $0.longitude)
+                        }
+                        FirebaseManager.shared.autoAssignDogWalker(
+                            petName: self.selectedPetName,
+                            requestId: requestId,
+                            userLocation: userLocation
+                        ) { assignError in
+                            if let assignError = assignError {
+                                print("Auto-assign dogwalker error: \(assignError.localizedDescription)")
+                            } else {
+                                print("Dogwalker assigned for request: \(requestId)")
+                            }
+                        }
+                        self.performSegue(withIdentifier: "showRequestScheduled", sender: self)
+                    }
+                }
+            }
+        }
+    }
+    
     func fetchUserName(userId: String, completion: @escaping (String) -> Void) {
         let usersCollection = Firestore.firestore().collection("users")
         usersCollection.document(userId).getDocument { document, error in
@@ -323,7 +354,6 @@ class Add_Address: UITableViewController, MKMapViewDelegate {
             }
         }
     }
-
     
     // MARK: - Show Alert Helper
     private func showAlert(title: String, message: String) {
@@ -335,15 +365,12 @@ class Add_Address: UITableViewController, MKMapViewDelegate {
 
 // MARK: - UITextFieldDelegate for Search & Autocomplete
 extension Add_Address: UITextFieldDelegate {
-    // When the user presses the Return key.
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if textField == locationTextField {
             if let searchText = textField.text, !searchText.isEmpty {
-                // Perform a full search.
                 let geocoder = CLGeocoder()
                 geocoder.geocodeAddressString(searchText) { [weak self] placemarks, error in
                     guard let self = self else { return }
-                    
                     if let error = error {
                         print("Geocode error: \(error.localizedDescription)")
                         return
@@ -352,9 +379,7 @@ extension Add_Address: UITextFieldDelegate {
                     if let placemark = placemarks?.first, let location = placemark.location {
                         let coordinate = location.coordinate
                         self.selectedCoordinate = coordinate
-                        let region = MKCoordinateRegion(center: coordinate,
-                                                        latitudinalMeters: 1000,
-                                                        longitudinalMeters: 1000)
+                        let region = MKCoordinateRegion(center: coordinate, latitudinalMeters: 1000, longitudinalMeters: 1000)
                         DispatchQueue.main.async {
                             self.mapView.setRegion(region, animated: true)
                             self.mapView.removeAnnotations(self.mapView.annotations)
@@ -370,17 +395,14 @@ extension Add_Address: UITextFieldDelegate {
         return true
     }
     
-    // Update autocomplete suggestions as the user types.
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if textField == locationTextField {
             let currentText = textField.text ?? ""
             guard let stringRange = Range(range, in: currentText) else { return true }
             let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
             searchCompleter.queryFragment = updatedText
-            // Show or hide the autocomplete table view based on text emptiness.
             autocompleteTableView.isHidden = updatedText.isEmpty
             
-            // Clear previous autocomplete results if text is empty.
             if updatedText.isEmpty {
                 autocompleteHandler.searchResults = []
                 autocompleteTableView.reloadData()

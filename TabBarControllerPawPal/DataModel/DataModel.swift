@@ -77,8 +77,7 @@ class DogWalker: Codable {
     var email: String
     var password: String
     var profilePic: String
-    var bio: String
-    var experience: Int
+    var rating: String
     var address: String
     var location: [Double] // [latitude, longitude]
     var distanceAway: Double
@@ -100,8 +99,7 @@ class DogWalker: Codable {
         email: String,
         password: String,
         profilePic: String,
-        bio: String,
-        experience: Int,
+        rating: String,
         address: String,
         location: [Double],
         distanceAway: Double = 0.0,
@@ -115,8 +113,7 @@ class DogWalker: Codable {
         self.email = email
         self.password = password
         self.profilePic = profilePic
-        self.bio = bio
-        self.experience = experience
+        self.rating = rating
         self.address = address
         self.location = location
         self.distanceAway = distanceAway
@@ -360,15 +357,12 @@ struct ScheduleCaretakerRequest: Codable {
 // MARK: - Dogwalker Request
 
 struct ScheduleDogWalkerRequest: Codable {
-    
-    // MARK: - Required Fields
     var requestId: String
     var userId: String
     var userName: String
     var petName: String
     var startDate: Date
     var endDate: Date
-
     var instructions: String
     var status: String
     var dogWalkerId: String
@@ -376,52 +370,49 @@ struct ScheduleDogWalkerRequest: Codable {
     var timestamp: Date?
     
     init?(from data: [String: Any]) {
-        
-        guard let requestId = data["requestId"] as? String,
-              let userId    = data["userId"] as? String,
-              let userName  = data["userName"] as? String,
-              let petName   = data["petName"]  as? String,
-              let startTimestamp = data["startDate"] as? Timestamp,
-              let endTimestamp = data["endDate"] as? Timestamp,
-
-              let instructions = data["instructions"] as? String,
-              let dogWalkerId = data["dogWalkerId"] as? String,
-              let status      = data["status"] as? String
+        guard
+            let requestId    = data["requestId"] as? String,
+            let userId       = data["userId"] as? String,
+            let userName     = data["userName"] as? String,
+            let petName      = data["petName"] as? String,
+            let startTS      = data["startDate"] as? Timestamp,
+            let endTS        = data["endDate"] as? Timestamp,
+            let instructions = data["instructions"] as? String,
+            let dogWalkerId  = data["dogWalkerId"] as? String,
+            let status       = data["status"] as? String
         else {
             return nil
         }
         
-        self.requestId = requestId
-        self.userId = userId
-        self.userName = userName
-        self.petName = petName
-        self.startDate = startTimestamp.dateValue()
-        self.endDate = endTimestamp.dateValue()
-
+        self.requestId    = requestId
+        self.userId       = userId
+        self.userName     = userName
+        self.petName      = petName
+        self.startDate    = startTS.dateValue()
+        self.endDate      = endTS.dateValue()
         self.instructions = instructions
-        self.dogWalkerId = dogWalkerId
-        self.status = status
-        self.duration = ScheduleDogWalkerRequest.formatDateRange(start: startTimestamp, end: endTimestamp)
+        self.dogWalkerId  = dogWalkerId
+        self.status       = status
         
         if let rawTimestamp = data["timestamp"] as? Timestamp {
-                    self.timestamp = rawTimestamp.dateValue()
-                } else {
-                    self.timestamp = nil
-                }
-            }
-            
-            static func formatDateRange(start: Timestamp, end: Timestamp) -> String {
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateStyle = .medium
-                dateFormatter.timeStyle = .short
-                
-                let startStr = dateFormatter.string(from: start.dateValue())
-                let endStr   = dateFormatter.string(from: end.dateValue())
-                return "\(startStr) - \(endStr)"
-            }
+            self.timestamp = rawTimestamp.dateValue()
+        } else {
+            self.timestamp = nil
+        }
         
-        
+        self.duration = ScheduleDogWalkerRequest.formatDateRange(start: startTS, end: endTS)
     }
+    
+    static func formatDateRange(start: Timestamp, end: Timestamp) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .short
+        
+        let startStr = dateFormatter.string(from: start.dateValue())
+        let endStr   = dateFormatter.string(from: end.dateValue())
+        return "\(startStr) - \(endStr)"
+    }
+}
     
 
 
