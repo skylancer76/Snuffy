@@ -1667,35 +1667,39 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="Gj8-8H-6vs">
-                                        <rect key="frame" x="20" y="61.666667938232422" width="362" height="43.666667938232422"/>
+                                        <rect key="frame" x="20" y="61.666667938232422" width="362" height="44.333332061767578"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Gj8-8H-6vs" id="Vsp-ib-Lq5">
-                                            <rect key="frame" x="0.0" y="0.0" width="362" height="43.666667938232422"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="362" height="44.333332061767578"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Breed" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ugd-4T-qKC">
-                                                    <rect key="frame" x="20" y="13" width="41" height="18"/>
+                                                    <rect key="frame" x="20" y="13.333333333333336" width="41" height="18"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <color key="textColor" systemColor="secondaryLabelColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Value" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="99L-aW-jUS">
-                                                    <rect key="frame" x="304.33333333333331" y="12.000000000000002" width="37.666666666666686" height="19.666666666666671"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                    <textInputTraits key="textInputTraits"/>
-                                                </textField>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EVh-Ht-FkX">
+                                                    <rect key="frame" x="292" y="6" width="70" height="32.333333333333336"/>
+                                                    <color key="tintColor" systemColor="placeholderTextColor"/>
+                                                    <state key="normal" title="Button"/>
+                                                    <buttonConfiguration key="configuration" style="plain" title="Button">
+                                                        <fontDescription key="titleFontDescription" type="system" pointSize="15"/>
+                                                    </buttonConfiguration>
+                                                </button>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="99L-aW-jUS" firstAttribute="centerY" secondItem="Vsp-ib-Lq5" secondAttribute="centerY" id="NTB-p5-gv6"/>
                                                 <constraint firstItem="Ugd-4T-qKC" firstAttribute="centerY" secondItem="Vsp-ib-Lq5" secondAttribute="centerY" id="Y4O-IS-gkW"/>
-                                                <constraint firstItem="99L-aW-jUS" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Ugd-4T-qKC" secondAttribute="trailing" constant="8" symbolic="YES" id="Z4H-g3-6Ao"/>
                                                 <constraint firstItem="Ugd-4T-qKC" firstAttribute="leading" secondItem="Vsp-ib-Lq5" secondAttribute="leadingMargin" id="bEA-5H-cu3"/>
-                                                <constraint firstItem="99L-aW-jUS" firstAttribute="trailing" secondItem="Vsp-ib-Lq5" secondAttribute="trailingMargin" id="mCh-pb-dVF"/>
+                                                <constraint firstAttribute="trailing" secondItem="EVh-Ht-FkX" secondAttribute="trailing" id="hGr-B1-QjF"/>
+                                                <constraint firstAttribute="bottom" secondItem="EVh-Ht-FkX" secondAttribute="bottom" constant="6" id="iq1-OV-euG"/>
+                                                <constraint firstItem="EVh-Ht-FkX" firstAttribute="top" secondItem="Vsp-ib-Lq5" secondAttribute="top" constant="6" id="np8-2m-K1h"/>
+                                                <constraint firstItem="EVh-Ht-FkX" firstAttribute="leading" relation="lessThanOrEqual" secondItem="Ugd-4T-qKC" secondAttribute="trailing" constant="231" id="yF6-lV-L0S"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="4LI-SC-itC">
-                                        <rect key="frame" x="20" y="105.33333587646484" width="362" height="43.666667938232422"/>
+                                        <rect key="frame" x="20" y="106" width="362" height="43.666667938232422"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="4LI-SC-itC" id="Zo0-6B-88j">
                                             <rect key="frame" x="0.0" y="0.0" width="362" height="43.666667938232422"/>
@@ -1723,35 +1727,39 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="Pdq-g6-O6A">
-                                        <rect key="frame" x="20" y="149.00000381469727" width="362" height="43.666667938232422"/>
+                                        <rect key="frame" x="20" y="149.66666793823242" width="362" height="45"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Pdq-g6-O6A" id="bZ6-t7-747">
-                                            <rect key="frame" x="0.0" y="0.0" width="362" height="43.666667938232422"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="362" height="45"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Gender" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zHy-B5-wiD">
-                                                    <rect key="frame" x="20" y="13" width="51" height="18"/>
+                                                    <rect key="frame" x="20" y="13.666666666666664" width="51" height="18"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <color key="textColor" systemColor="secondaryLabelColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Value" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="asa-YN-8IE">
-                                                    <rect key="frame" x="304.33333333333331" y="12.000000000000002" width="37.666666666666686" height="19.666666666666671"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                    <textInputTraits key="textInputTraits"/>
-                                                </textField>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pZL-oy-7JF">
+                                                    <rect key="frame" x="292" y="6" width="70" height="32.333333333333336"/>
+                                                    <color key="tintColor" systemColor="placeholderTextColor"/>
+                                                    <state key="normal" title="Button"/>
+                                                    <buttonConfiguration key="configuration" style="plain" title="Button">
+                                                        <fontDescription key="titleFontDescription" type="system" pointSize="15"/>
+                                                    </buttonConfiguration>
+                                                </button>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="asa-YN-8IE" firstAttribute="centerY" secondItem="bZ6-t7-747" secondAttribute="centerY" id="GZn-KI-SaH"/>
-                                                <constraint firstItem="asa-YN-8IE" firstAttribute="trailing" secondItem="bZ6-t7-747" secondAttribute="trailingMargin" id="MQR-lo-94D"/>
-                                                <constraint firstItem="asa-YN-8IE" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="zHy-B5-wiD" secondAttribute="trailing" constant="8" symbolic="YES" id="NtL-xc-DvK"/>
+                                                <constraint firstAttribute="trailing" secondItem="pZL-oy-7JF" secondAttribute="trailing" id="1mb-pp-hcx"/>
                                                 <constraint firstItem="zHy-B5-wiD" firstAttribute="centerY" secondItem="bZ6-t7-747" secondAttribute="centerY" id="OiB-KO-Z87"/>
                                                 <constraint firstItem="zHy-B5-wiD" firstAttribute="leading" secondItem="bZ6-t7-747" secondAttribute="leadingMargin" id="SSh-td-yJX"/>
+                                                <constraint firstItem="pZL-oy-7JF" firstAttribute="leading" relation="lessThanOrEqual" secondItem="zHy-B5-wiD" secondAttribute="trailing" constant="221" id="T7J-El-DzU"/>
+                                                <constraint firstAttribute="bottom" secondItem="pZL-oy-7JF" secondAttribute="bottom" constant="6.6699999999999999" id="f0r-K0-ZKD"/>
+                                                <constraint firstItem="pZL-oy-7JF" firstAttribute="top" secondItem="bZ6-t7-747" secondAttribute="top" constant="6" id="xmQ-b1-8cn"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="sl2-Ss-fCM">
-                                        <rect key="frame" x="20" y="192.66667175292969" width="362" height="44.333332061767578"/>
+                                        <rect key="frame" x="20" y="194.66666793823242" width="362" height="44.333332061767578"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="sl2-Ss-fCM" id="53m-OV-ibM">
                                             <rect key="frame" x="0.0" y="0.0" width="362" height="44.333332061767578"/>
@@ -1780,7 +1788,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="ocS-Li-Wdh">
-                                        <rect key="frame" x="20" y="237.00000381469727" width="362" height="43.666667938232422"/>
+                                        <rect key="frame" x="20" y="239" width="362" height="43.666667938232422"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="ocS-Li-Wdh" id="hIK-l8-Nb2">
                                             <rect key="frame" x="0.0" y="0.0" width="362" height="43.666667938232422"/>
@@ -1832,15 +1840,15 @@
                         <outlet property="addButton" destination="buP-nc-k4x" id="D1y-Lr-reP"/>
                         <outlet property="imageSelectButton" destination="8I7-yt-4rw" id="rb6-bw-MzD"/>
                         <outlet property="petAgeTextField" destination="fmZ-GB-BEA" id="Xee-75-byr"/>
-                        <outlet property="petBreedTextField" destination="99L-aW-jUS" id="LD3-gd-nAl"/>
-                        <outlet property="petGenderTextField" destination="asa-YN-8IE" id="qmQ-GK-6ey"/>
+                        <outlet property="petBreedButton" destination="EVh-Ht-FkX" id="G6T-fp-CiG"/>
+                        <outlet property="petGenderButton" destination="pZL-oy-7JF" id="hZd-cZ-Iro"/>
                         <outlet property="petNameTextField" destination="elJ-u4-coL" id="jsd-ra-okv"/>
                         <outlet property="petWeightTextField" destination="nkG-gr-j2Q" id="iSc-DK-kMN"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Qsa-x2-tzF" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5724" y="1696"/>
+            <point key="canvasLocation" x="5723.8805970149251" y="1695.6521739130433"/>
         </scene>
         <!--Pet Profile-->
         <scene sceneID="82a-ot-KYq">
@@ -2494,14 +2502,14 @@
                                                                 <action selector="arrowButtonTapped:" destination="cLm-w4-UUL" eventType="touchUpInside" id="rrw-i6-WuD"/>
                                                             </connections>
                                                         </button>
-                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hnU-fI-5IM">
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hnU-fI-5IM">
                                                             <rect key="frame" x="295.66666666666669" y="74" width="56.333333333333314" height="25"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="25" id="C0I-oL-EBj"/>
                                                             </constraints>
                                                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                             <state key="normal" title="Button"/>
-                                                            <buttonConfiguration key="configuration" style="tinted" title="Button">
+                                                            <buttonConfiguration key="configuration" style="filled" title="Button">
                                                                 <fontDescription key="titleFontDescription" type="system" pointSize="10"/>
                                                             </buttonConfiguration>
                                                         </button>
@@ -2598,14 +2606,14 @@
                                                                 <imageReference key="image" image="chevron.right" catalog="system" symbolScale="medium"/>
                                                             </buttonConfiguration>
                                                         </button>
-                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1JW-qW-Hlc">
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1JW-qW-Hlc">
                                                             <rect key="frame" x="295.66666666666669" y="74" width="56.333333333333314" height="25"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="25" id="9c1-sn-0Ke"/>
                                                             </constraints>
                                                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                             <state key="normal" title="Button"/>
-                                                            <buttonConfiguration key="configuration" style="tinted" title="Button">
+                                                            <buttonConfiguration key="configuration" style="filled" title="Button">
                                                                 <fontDescription key="titleFontDescription" type="system" pointSize="10"/>
                                                             </buttonConfiguration>
                                                         </button>
@@ -5698,6 +5706,9 @@
         </systemColor>
         <systemColor name="linkColor">
             <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="placeholderTextColor">
+            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.29803921568627451" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="secondaryLabelColor">
             <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>

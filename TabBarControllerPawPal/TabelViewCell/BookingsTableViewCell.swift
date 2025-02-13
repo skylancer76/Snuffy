@@ -40,21 +40,22 @@ class BookingsTableViewCell: UITableViewCell {
         startDateLabel.text = "\(dateFormatter.string(from: request.startDate))"
         endDateLabel.text = "\(dateFormatter.string(from: request.endDate))"
         
-        // Set status button title
-        let status = request.status
-        statusButton.setTitle(status, for: .normal)
-        
-        // Instead of changing backgroundColor, update the button’s tintColor.
-        switch status {
-        case "Pending":
-            statusButton.tintColor = .systemOrange
-        case "Ongoing":
-            statusButton.tintColor = .systemBlue
-        case "Completed":
-            statusButton.tintColor = .systemGreen
-        default:
-            statusButton.tintColor = .systemPink
-        }
+        statusButton.setTitle(request.status, for: .normal)
+            var config = statusButton.configuration ?? UIButton.Configuration.filled()
+            switch request.status {
+            case "pending":
+                config.baseBackgroundColor = .systemRed
+            case "accepted":
+                config.baseBackgroundColor = .systemBlue
+            case "ongoing":
+                config.baseBackgroundColor = .systemYellow
+            case "completed":
+                config.baseBackgroundColor = .systemGreen
+            default:
+                config.baseBackgroundColor = .gray
+            }
+            config.baseForegroundColor = .white
+            statusButton.configuration = config
     }
     
     @IBAction func arrowButtonTapped(_ sender: UIButton) {

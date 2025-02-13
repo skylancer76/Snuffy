@@ -48,6 +48,14 @@ class Home_Scene: UIViewController {
         checkUserAuthentication()
         
         // Removed location access code from Home Scene as per the new requirements.
+        
+//        FirebaseManager.shared.saveDogWalkerData(dogWalkers: dogWalkers) { error in
+//                    if let error = error {
+//                        print("Error uploading dog walkers: \(error.localizedDescription)")
+//                    } else {
+//                        print("Dog walkers data uploaded successfully.")
+//                    }
+//                }
     }
     
     override func viewWillAppear(_ animated: Bool) {

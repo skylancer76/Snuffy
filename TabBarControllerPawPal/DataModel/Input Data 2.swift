@@ -7,7 +7,7 @@
 
 //import Foundation
 //
-//let dogWalkers = [
+//let dogWalkers = [ ]
 //    DogWalker(
 //        dogWalkerId: "0kfkDOlaE4ZGatxWsxUgSnYPm5n1",
 //        name: "Arun Kumar",

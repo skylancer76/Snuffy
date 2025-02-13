@@ -17,22 +17,39 @@ protocol AddNewPetDelegate: AnyObject {
 class Add_New_Pet: UITableViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
     @IBOutlet weak var petNameTextField: UITextField!
-    @IBOutlet weak var petBreedTextField: UITextField!
+//    @IBOutlet weak var petBreedTextField: UITextField!
+    @IBOutlet weak var petBreedButton: UIButton!
     @IBOutlet weak var petAgeTextField: UITextField!
-    @IBOutlet weak var petGenderTextField: UITextField!
+//    @IBOutlet weak var petGenderTextField: UITextField!
+    @IBOutlet weak var petGenderButton: UIButton!
     @IBOutlet weak var petWeightTextField: UITextField!
     @IBOutlet weak var imageSelectButton: UIButton!  // Changed from UIImageView to UIButton
     @IBOutlet weak var addButton: UIBarButtonItem!
     
     weak var delegate: AddNewPetDelegate?
     var selectedImage: UIImage?
-
+    var selectedGender: String?
+    var selectedBreed: String?
+    
+    let genderOptions = ["Male", "Female"]
+    var breedOptions = ["Labrador", "German Shepherd", "Golden Retriever", "Poodle", "Bulldog", "Other"]
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        setupDropDownMenus()
     }
 
     func setupUI() {
+        
+        
+        petGenderButton.setTitle("Select Gender", for: .normal)
+        petBreedButton.setTitle("Select Breed", for: .normal)
+                
+        petGenderButton.addTarget(self, action: #selector(showGenderPicker), for: .touchUpInside)
+
+
         // Set the button's title label font to system font with size 15
         imageSelectButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
         
@@ -40,6 +57,62 @@ class Add_New_Pet: UITableViewController, UIImagePickerControllerDelegate, UINav
         imageSelectButton.setTitle("Select Image", for: .normal)
         imageSelectButton.addTarget(self, action: #selector(selectImage), for: .touchUpInside)
     }
+    
+    @objc func showGenderPicker() {
+            let alert = UIAlertController(title: "Select Gender", message: nil, preferredStyle: .actionSheet)
+            
+            for gender in genderOptions {
+                alert.addAction(UIAlertAction(title: gender, style: .default, handler: { _ in
+                    self.selectedGender = gender
+                    self.petGenderButton.setTitle(gender, for: .normal)
+                }))
+            }
+            
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            present(alert, animated: true)
+        }
+    
+    
+    func setupDropDownMenus() {
+            // Breed Selection Menu
+            let breedActions = breedOptions.map { breed in
+                UIAction(title: breed, handler: { [weak self] _ in
+                    if breed == "Other" {
+                        self?.promptForCustomBreed()
+                    } else {
+                        self?.selectedBreed = breed
+                        self?.petBreedButton.setTitle(breed, for: .normal)
+                    }
+                })
+            }
+            petBreedButton.menu = UIMenu(title: "Select Breed", children: breedActions)
+            petBreedButton.showsMenuAsPrimaryAction = true  // Enables drop-down
+            
+            // Gender Selection Menu
+            let genderActions = genderOptions.map { gender in
+                UIAction(title: gender, handler: { [weak self] _ in
+                    self?.selectedGender = gender
+                    self?.petGenderButton.setTitle(gender, for: .normal)
+                })
+            }
+            petGenderButton.menu = UIMenu(title: "Select Gender", children: genderActions)
+            petGenderButton.showsMenuAsPrimaryAction = true  // Enables drop-down
+        }
+    func promptForCustomBreed() {
+            let alert = UIAlertController(title: "Enter Breed", message: "Please enter your pet's breed.", preferredStyle: .alert)
+            alert.addTextField { textField in
+                textField.placeholder = "Breed Name"
+            }
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak self] _ in
+                if let customBreed = alert.textFields?.first?.text, !customBreed.isEmpty {
+                    self?.selectedBreed = customBreed
+                    self?.petBreedButton.setTitle(customBreed, for: .normal)
+                }
+            }))
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            present(alert, animated: true)
+        }
+    
 
     @objc func selectImage() {
         let imagePicker = UIImagePickerController()
@@ -62,8 +135,8 @@ class Add_New_Pet: UITableViewController, UIImagePickerControllerDelegate, UINav
 
     @IBAction func AddButtonTapped(_ sender: Any) {
         guard let petName = petNameTextField.text, !petName.isEmpty,
-              let petBreed = petBreedTextField.text, !petBreed.isEmpty,
-              let petGender = petGenderTextField.text, !petGender.isEmpty,
+              let petBreed = selectedBreed, !petBreed.isEmpty,
+              let petGender = selectedGender,
               let petAge = petAgeTextField.text, !petAge.isEmpty,
               let petWeight = petWeightTextField.text, !petWeight.isEmpty,
               let image = selectedImage else {
@@ -154,8 +227,10 @@ class Add_New_Pet: UITableViewController, UIImagePickerControllerDelegate, UINav
 
     func clearFields() {
         petNameTextField.text = ""
-        petBreedTextField.text = ""
-        petGenderTextField.text = ""
+        selectedBreed = nil
+        selectedGender = nil
+        petBreedButton.setTitle("Select Breed", for: .normal)
+        petGenderButton.setTitle("Select Gender", for: .normal)
         petAgeTextField.text = ""
         petWeightTextField.text = ""
         imageSelectButton.setTitle("Select Image", for: .normal)

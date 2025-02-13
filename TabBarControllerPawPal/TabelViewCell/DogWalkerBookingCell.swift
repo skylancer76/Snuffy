@@ -25,5 +25,27 @@ class DogWalkerBookingCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
+    
+    func configureCell(with request: ScheduleDogWalkerRequest) {
+        petNameLabel.text = request.petName
+        
+        
+        statusButton.setTitle(request.status, for: .normal)
+            var config = statusButton.configuration ?? UIButton.Configuration.filled()
+            switch request.status {
+            case "pending":
+                config.baseBackgroundColor = .systemRed
+            case "accepted":
+                config.baseBackgroundColor = .systemBlue
+            case "ongoing":
+                config.baseBackgroundColor = .systemYellow
+            case "completed":
+                config.baseBackgroundColor = .systemGreen
+            default:
+                config.baseBackgroundColor = .gray
+            }
+            config.baseForegroundColor = .white
+            statusButton.configuration = config
+    }
 
 }
