@@ -361,8 +361,9 @@ struct ScheduleDogWalkerRequest: Codable {
     var userId: String
     var userName: String
     var petName: String
-    var startDate: Date
-    var endDate: Date
+    var date: Date
+    var startTime: Date
+    var endTime: Date
     var instructions: String
     var status: String
     var dogWalkerId: String
@@ -371,28 +372,30 @@ struct ScheduleDogWalkerRequest: Codable {
     
     init?(from data: [String: Any]) {
         guard
-            let requestId    = data["requestId"] as? String,
-            let userId       = data["userId"] as? String,
-            let userName     = data["userName"] as? String,
-            let petName      = data["petName"] as? String,
-            let startTS      = data["startDate"] as? Timestamp,
-            let endTS        = data["endDate"] as? Timestamp,
+            let requestId = data["requestId"] as? String,
+            let userId    = data["userId"] as? String,
+            let userName  = data["userName"] as? String,
+            let petName   = data["petName"] as? String,
+            let dateTS    = data["date"] as? Timestamp,
+            let startTimeTS = data["startTime"] as? Timestamp,
+            let endTimeTS = data["endTime"] as? Timestamp,
             let instructions = data["instructions"] as? String,
-            let dogWalkerId  = data["dogWalkerId"] as? String,
-            let status       = data["status"] as? String
+            let dogWalkerId = data["dogWalkerId"] as? String,
+            let status = data["status"] as? String
         else {
             return nil
         }
         
-        self.requestId    = requestId
-        self.userId       = userId
-        self.userName     = userName
-        self.petName      = petName
-        self.startDate    = startTS.dateValue()
-        self.endDate      = endTS.dateValue()
+        self.requestId = requestId
+        self.userId = userId
+        self.userName = userName
+        self.petName = petName
+        self.date = dateTS.dateValue()
+        self.startTime = startTimeTS.dateValue()
+        self.endTime = endTimeTS.dateValue()
         self.instructions = instructions
-        self.dogWalkerId  = dogWalkerId
-        self.status       = status
+        self.dogWalkerId = dogWalkerId
+        self.status = status
         
         if let rawTimestamp = data["timestamp"] as? Timestamp {
             self.timestamp = rawTimestamp.dateValue()
@@ -400,19 +403,17 @@ struct ScheduleDogWalkerRequest: Codable {
             self.timestamp = nil
         }
         
-        self.duration = ScheduleDogWalkerRequest.formatDateRange(start: startTS, end: endTS)
+        self.duration = ScheduleDogWalkerRequest.calculateDuration(start: self.startTime, end: self.endTime)
     }
     
-    static func formatDateRange(start: Timestamp, end: Timestamp) -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .medium
-        dateFormatter.timeStyle = .short
-        
-        let startStr = dateFormatter.string(from: start.dateValue())
-        let endStr   = dateFormatter.string(from: end.dateValue())
-        return "\(startStr) - \(endStr)"
+    static func calculateDuration(start: Date, end: Date) -> String {
+        let interval = end.timeIntervalSince(start)
+        let hours = Int(interval) / 3600
+        let minutes = (Int(interval) % 3600) / 60
+        return "\(hours)h \(minutes)m"
     }
 }
+
     
 
 

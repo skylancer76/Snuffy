@@ -379,7 +379,7 @@ class FirebaseManager {
     
     /// Save dog walker request data to Firestore.
     func saveDogWalkerRequestData(data: [String: Any], completion: @escaping (Error?) -> Void) {
-        let collection = db.collection("dogWalkerRequests")  // or rename to "scheduleRequests" if you prefer
+        let collection = db.collection("dogWalkerRequests")
         guard let requestId = data["requestId"] as? String else {
             completion(NSError(domain: "",
                                code: -1,
@@ -395,154 +395,205 @@ class FirebaseManager {
     func autoAssignDogWalker(petName: String,
                              requestId: String,
                              userLocation: CLLocation?,
-                             completion: @escaping (Error?) -> Void)
-    {
-        // 1) Confirm the pet belongs to the current user
+                             completion: @escaping (Error?) -> Void) {
         db.collection("Pets").whereField("petName", isEqualTo: petName).getDocuments { (snapshot, error) in
             if let error = error {
                 completion(error)
                 return
             }
+            
             guard let petDoc = snapshot?.documents.first else {
-                let err = NSError(domain: "", code: -1,
-                                  userInfo: [NSLocalizedDescriptionKey: "Pet not found"])
-                completion(err)
+                completion(NSError(domain: "", code: -1,
+                                   userInfo: [NSLocalizedDescriptionKey: "Pet not found"]))
                 return
             }
+            
             guard let ownerId = petDoc.data()["ownerID"] as? String else {
-                let err = NSError(domain: "", code: -1,
-                                  userInfo: [NSLocalizedDescriptionKey: "Owner ID not found in pet document"])
-                completion(err)
+                completion(NSError(domain: "", code: -1,
+                                   userInfo: [NSLocalizedDescriptionKey: "Owner ID not found in pet document"]))
                 return
             }
+            
             guard let currentUserId = Auth.auth().currentUser?.uid, currentUserId == ownerId else {
-                let err = NSError(domain: "", code: -1,
-                                  userInfo: [NSLocalizedDescriptionKey: "Current user is not the owner of the pet"])
-                completion(err)
+                completion(NSError(domain: "", code: -1,
+                                   userInfo: [NSLocalizedDescriptionKey: "Current user is not the owner of the pet"]))
                 return
             }
             
-            // 2) Decide if we already have a userLocation. If not, fetch from user doc.
-            let handleAssignment: (CLLocation) -> Void = { actualLocation in
-                // 3) Query all dogwalkers with status = "available"
-                self.db.collection("dogwalkers")
-                    .whereField("status", isEqualTo: "available")
-                    .getDocuments { (walkerSnapshot, error) in
-                        if let error = error {
-                            completion(error)
-                            return
-                        }
-                        guard let walkerDocs = walkerSnapshot?.documents, !walkerDocs.isEmpty else {
-                            let err = NSError(domain: "", code: -1,
-                                              userInfo: [NSLocalizedDescriptionKey: "No available dog walkers found"])
-                            completion(err)
-                            return
-                        }
-                        
-                        // 4) Sort dogwalkers by a score (experience / distance)
-                        let sortedWalkers = walkerDocs.compactMap { doc -> (DocumentReference, DogWalker, Double)? in
-                            let data = doc.data()
-                            guard let dogWalker = try? Firestore.Decoder().decode(DogWalker.self, from: data) else {
-                                print("Decoding dog walker failed for doc: \(doc.documentID)")
-                                return nil
-                            }
-                            
-                            // Attempt to get dogwalker location
-                            var walkerLocation: CLLocation?
-                            if let geo = data["location"] as? GeoPoint {
-                                walkerLocation = CLLocation(latitude: geo.latitude, longitude: geo.longitude)
-                            } else if let locMap = data["location"] as? [String: Any],
-                                      let lat = locMap["latitude"] as? Double,
-                                      let lon = locMap["longitude"] as? Double {
-                                walkerLocation = CLLocation(latitude: lat, longitude: lon)
-                            } else if let locArray = data["location"] as? [Double],
-                                      locArray.count >= 2 {
-                                walkerLocation = CLLocation(latitude: locArray[0], longitude: locArray[1])
-                            }
-                            
-                            guard let wLoc = walkerLocation else {
-                                // If no location, skip
-                                return nil
-                            }
-                            
-                            let distanceInMeters = actualLocation.distance(from: wLoc)
-                            let distanceInKm = distanceInMeters / 1000.0
-                            let safeDistance = max(distanceInKm, 0.001)
-                            let score = Double(dogWalker.experience) / safeDistance
-                            
-                            return (doc.reference, dogWalker, score)
-                        }
-                        .sorted { $0.2 > $1.2 }
-                        
-                        // 5) Pick the top dogwalker
-                        guard let (selectedWalkerRef, selectedWalker, _) = sortedWalkers.first else {
-                            let err = NSError(domain: "", code: -1,
-                                              userInfo: [NSLocalizedDescriptionKey: "No suitable dog walkers found"])
-                            completion(err)
-                            return
-                        }
-                        
-                        // 6) Update request doc with dogWalkerId and status = "pending"
-                        let requestRef = self.db.collection("dogWalkerRequests").document(requestId)
-                        requestRef.updateData([
-                            "dogWalkerId": selectedWalker.dogWalkerId,
-                            "status": "pending"
-                        ]) { error in
-                            if let error = error {
-                                completion(error)
-                                return
-                            }
-                            // 7) Add this requestId to the dogwalker's pendingRequests
-                            selectedWalkerRef.updateData([
-                                "pendingRequests": FieldValue.arrayUnion([requestId])
-                            ]) { error in
-                                completion(error)
-                            }
-                        }
-                    }
-            }
-            
-            // If userLocation was provided, use it; otherwise, fetch from user doc
-            if let providedLoc = userLocation {
-                handleAssignment(providedLoc)
+            if let providedLocation = userLocation {
+                self.assignDogWalker(using: providedLocation, requestId: requestId, completion: completion)
             } else {
-                // Fallback: fetch from user doc
                 self.db.collection("users").document(ownerId).getDocument { (userSnapshot, error) in
                     if let error = error {
                         completion(error)
                         return
                     }
+                    
                     guard let userData = userSnapshot?.data() else {
-                        let err = NSError(domain: "", code: -1,
-                                          userInfo: [NSLocalizedDescriptionKey: "User data not found"])
-                        completion(err)
+                        completion(NSError(domain: "", code: -1,
+                                           userInfo: [NSLocalizedDescriptionKey: "User data not found"]))
                         return
                     }
                     
                     var fetchedLocation: CLLocation?
-                    if let geo = userData["location"] as? GeoPoint {
-                        fetchedLocation = CLLocation(latitude: geo.latitude, longitude: geo.longitude)
-                    } else if let locMap = userData["location"] as? [String: Any],
-                              let lat = locMap["latitude"] as? Double,
-                              let lon = locMap["longitude"] as? Double {
+                    if let userGeoPoint = userData["location"] as? GeoPoint {
+                        fetchedLocation = CLLocation(latitude: userGeoPoint.latitude, longitude: userGeoPoint.longitude)
+                    } else if let locationMap = userData["location"] as? [String: Any],
+                              let lat = locationMap["latitude"] as? Double,
+                              let lon = locationMap["longitude"] as? Double {
                         fetchedLocation = CLLocation(latitude: lat, longitude: lon)
-                    } else if let locArray = userData["location"] as? [Double],
-                              locArray.count >= 2 {
-                        fetchedLocation = CLLocation(latitude: locArray[0], longitude: locArray[1])
+                    } else if let locationArray = userData["location"] as? [Double],
+                              locationArray.count >= 2 {
+                        fetchedLocation = CLLocation(latitude: locationArray[0], longitude: locationArray[1])
                     }
                     
                     guard let loc = fetchedLocation else {
-                        let err = NSError(domain: "", code: -1,
-                                          userInfo: [NSLocalizedDescriptionKey: "User location not found"])
-                        completion(err)
+                        completion(NSError(domain: "", code: -1,
+                                           userInfo: [NSLocalizedDescriptionKey: "User location not found"]))
                         return
                     }
-                    handleAssignment(loc)
+                    
+                    self.assignDogWalker(using: loc, requestId: requestId, completion: completion)
                 }
             }
         }
     }
-    
+
+    private func assignDogWalker(using userLocation: CLLocation,
+                                 requestId: String,
+                                 completion: @escaping (Error?) -> Void) {
+        db.collection("dogwalkers")
+            .whereField("status", isEqualTo: "available")
+            .getDocuments { (walkerSnapshot, error) in
+                if let error = error {
+                    completion(error)
+                    return
+                }
+                
+                guard let walkerDocs = walkerSnapshot?.documents else {
+                    completion(NSError(domain: "", code: -1,
+                                       userInfo: [NSLocalizedDescriptionKey: "No available dog walkers found"]))
+                    return
+                }
+                
+                let sortedWalkers = walkerDocs.compactMap { doc -> (DocumentReference, DogWalker, Double)? in
+                    let data = doc.data()
+                    guard let dogWalker = try? Firestore.Decoder().decode(DogWalker.self, from: data) else {
+                        print("Decoding dog walker failed for doc: \(doc.documentID)")
+                        return nil
+                    }
+                    
+                    var walkerLocation: CLLocation?
+                    if let geo = data["location"] as? GeoPoint {
+                        walkerLocation = CLLocation(latitude: geo.latitude, longitude: geo.longitude)
+                    } else if let locMap = data["location"] as? [String: Any],
+                              let lat = locMap["latitude"] as? Double,
+                              let lon = locMap["longitude"] as? Double {
+                        walkerLocation = CLLocation(latitude: lat, longitude: lon)
+                    } else if let locArray = data["location"] as? [Double], locArray.count >= 2 {
+                        walkerLocation = CLLocation(latitude: locArray[0], longitude: locArray[1])
+                    }
+                    
+                    guard let wLoc = walkerLocation else { return nil }
+                    
+                    let distanceInMeters = userLocation.distance(from: wLoc)
+                    let distanceInKm = distanceInMeters / 1000.0
+                    let safeDistance = max(distanceInKm, 0.001) // avoid division by zero
+                    let rating = Double(dogWalker.rating) ?? 4.0
+                    let score = rating / safeDistance
+                    return (doc.reference, dogWalker, score)
+                }
+                .sorted { $0.2 > $1.2 }
+                
+                guard let (selectedWalkerRef, selectedWalker, _) = sortedWalkers.first else {
+                    completion(NSError(domain: "", code: -1,
+                                       userInfo: [NSLocalizedDescriptionKey: "No suitable dog walkers found"]))
+                    return
+                }
+                
+                let requestRef = self.db.collection("dogWalkerRequests").document(requestId)
+                requestRef.updateData([
+                    "dogWalkerId": selectedWalker.dogWalkerId,
+                    "status": "pending"
+                ]) { error in
+                    if let error = error {
+                        completion(error)
+                        return
+                    }
+                    
+                    selectedWalkerRef.updateData([
+                        "pendingRequests": FieldValue.arrayUnion([requestId])
+                    ]) { error in
+                        if let error = error {
+                            completion(error)
+                        } else {
+                            print("Request successfully assigned to dog walker: \(selectedWalker.name)")
+                            completion(nil)
+                        }
+                    }
+                }
+            }
+    }
+
+
+
+    func acceptDogWalkerRequest(dogWalkerId: String, requestId: String, completion: @escaping (Error?) -> Void) {
+        let dogWalkerRef = db.collection("dogwalkers").document(dogWalkerId)
+        let requestRef = db.collection("dogWalkerRequests").document(requestId)
+        
+        requestRef.updateData(["status": "accepted"]) { error in
+            if let error = error {
+                completion(error)
+                return
+            }
+            dogWalkerRef.setData(["status": "assigned"], merge: true) { error in
+                completion(error)
+            }
+        }
+    }
+
+    func rejectDogWalkerRequest(dogWalkerId: String,
+                                requestId: String,
+                                sortedDogWalkers: [(DocumentReference, DogWalker, Double)],
+                                completion: @escaping (Error?) -> Void)
+    {
+        let requestRef = db.collection("dogWalkerRequests").document(requestId)
+        
+        requestRef.updateData(["status": "rejected"]) { error in
+            if let error = error {
+                completion(error)
+                return
+            }
+            var remainingDogWalkers = sortedDogWalkers
+            remainingDogWalkers.removeFirst() // remove the rejecting dog walker
+            
+            if let (nextWalkerRef, nextWalker, _) = remainingDogWalkers.first {
+                requestRef.updateData([
+                    "dogWalkerId": nextWalker.dogWalkerId,
+                    "status": "pending"
+                ]) { error in
+                    if let error = error {
+                        completion(error)
+                        return
+                    }
+                    nextWalkerRef.updateData([
+                        "pendingRequests": FieldValue.arrayUnion([requestId])
+                    ]) { error in
+                        if let error = error {
+                            completion(error)
+                        } else {
+                            print("Request reassigned to dog walker: \(nextWalker.name)")
+                            completion(nil)
+                        }
+                    }
+                }
+            } else {
+                completion(NSError(domain: "", code: -1,
+                                   userInfo: [NSLocalizedDescriptionKey: "No dog walkers available for reassignment"]))
+            }
+        }
+    }
+
     // MARK: - Fetch Requests & Bookings
     
     /// Fetch assigned requests for a caretaker.

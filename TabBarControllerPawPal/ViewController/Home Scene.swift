@@ -56,6 +56,7 @@ class Home_Scene: UIViewController {
     }
     
 
+
     func checkUserAuthentication() {
             if Auth.auth().currentUser == nil {
                 redirectToLogin()

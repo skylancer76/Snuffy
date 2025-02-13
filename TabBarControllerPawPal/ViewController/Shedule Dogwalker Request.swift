@@ -4,7 +4,6 @@
 //
 //  Created by admin19 on 13/02/25.
 //
-
 import UIKit
 import FirebaseAuth
 import FirebaseFirestore
@@ -15,10 +14,10 @@ class Schedule_Dogwalker_Request: UITableViewController {
     // MARK: - Outlets
     @IBOutlet weak var petPickerButton: UIButton!
     
-    // A UIDatePicker for selecting the *date* of the walk
+    // A UIDatePicker for selecting the *date* of the walk.
     @IBOutlet weak var datePicker: UIDatePicker!
     
-    // UIDatePickers for selecting *time* (start and end)
+    // UIDatePickers for selecting *time* (start and end).
     @IBOutlet weak var startTimePicker: UIDatePicker!
     @IBOutlet weak var endTimePicker: UIDatePicker!
     
@@ -27,29 +26,51 @@ class Schedule_Dogwalker_Request: UITableViewController {
     private var petNames: [String] = []
     private var selectedPetNames = Set<String>()
     
+    // We store the current request ID so that when the address is submitted later,
+    // we can trigger the auto‑assignment using this ID.
+    var currentRequestId: String?
+    var selectedPetName: String = ""
+    
     // MARK: - View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         petPickerButton.setTitle("Select Pet", for: .normal)
-        
         fetchPetNamesForCurrentUser()
     }
     
     // MARK: - IBAction for Add Address button
     @IBAction func addAddressButtonTapped(_ sender: UIButton) {
-        performSegue(withIdentifier: "GoToAddAddress", sender: nil)
+        sender.isEnabled = false
+            
+            saveDogWalkerRequest { [weak self] error in
+                guard let self = self else { return }
+                DispatchQueue.main.async {
+                    sender.isEnabled = true // Re-enable button after saving request
+                    
+                    if let error = error {
+                        print("Error scheduling dog walker request: \(error.localizedDescription)")
+                        self.showAlert(title: "Error", message: "Could not schedule request.")
+                    } else {
+                        print("Dog walker request saved. Now transitioning to address screen.")
+                        
+                        // Ensure segue is performed only once
+                        if self.shouldPerformSegue(withIdentifier: "DogWalker", sender: nil) {
+                            self.performSegue(withIdentifier: "DogWalker", sender: nil)
+                        }
+                    }
+                }
+            }
     }
     
     // MARK: - Prepare for Segue
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "GoToAddAddress" {
+        if segue.identifier == "DogWalker" {
             if let navController = segue.destination as? UINavigationController,
                let destination = navController.topViewController as? Add_Address {
                 destination.delegate = self
                 destination.selectedPetName = petPickerButton.title(for: .normal) ?? ""
                 
-                // We'll pass the raw date/time picks to Add_Address,
-                // but the final combination is done inside saveDogWalkerRequest(...)
+                // Pass the raw date/time picks to Add_Address.
                 destination.startDate = startTimePicker.date
                 destination.endDate = endTimePicker.date
                 destination.instructions = walkingInstructionsTextView.text
@@ -202,7 +223,7 @@ class Schedule_Dogwalker_Request: UITableViewController {
         }
     }
     
-    // MARK: - Save Dog Walker Request
+    // MARK: - Save Dog Walker Request (Without Immediate Auto‑Assignment)
     func saveDogWalkerRequest(addressData: [String: Any]? = nil,
                               completion: @escaping (Error?) -> Void) {
         guard let currentUser = Auth.auth().currentUser else {
@@ -212,114 +233,97 @@ class Schedule_Dogwalker_Request: UITableViewController {
         }
         
         let userId = currentUser.uid
+        let requestId = UUID().uuidString
+        self.currentRequestId = requestId
         
-        // 1) Get the chosen date (just day/month/year)
+        // 1) Get the chosen date (day/month/year) and reset to midnight.
         let selectedDate = datePicker.date
+        let calendar = Calendar.current
+        let dateComponents = calendar.dateComponents([.year, .month, .day], from: selectedDate)
+        guard let dateOnly = calendar.date(from: dateComponents) else {
+            showAlert(title: "Error", message: "Invalid date selected.")
+            completion(NSError(domain: "", code: -1, userInfo: nil))
+            return
+        }
         
-        // 2) Get the chosen start and end times (hour/minute)
+        // 2) Get the chosen start and end times (hour/minute) from the pickers.
         let startTime = startTimePicker.date
         let endTime = endTimePicker.date
         
-        // 3) Combine them so that "selectedDate + startTime" = combinedStart
-        let calendar = Calendar.current
-        
-        // Extract day/month/year from selectedDate
-        var dateComponents = calendar.dateComponents([.day, .month, .year], from: selectedDate)
-        
-        // Start time
+        // 3) Combine dateOnly with startTime and endTime for validation.
         let startComponents = calendar.dateComponents([.hour, .minute], from: startTime)
-        dateComponents.hour = startComponents.hour
-        dateComponents.minute = startComponents.minute
-        guard let combinedStart = calendar.date(from: dateComponents) else {
-            showAlert(title: "Error", message: "Invalid start date/time.")
+        var combinedStartComponents = calendar.dateComponents([.year, .month, .day], from: dateOnly)
+        combinedStartComponents.hour = startComponents.hour
+        combinedStartComponents.minute = startComponents.minute
+        guard let combinedStart = calendar.date(from: combinedStartComponents) else {
+            showAlert(title: "Error", message: "Invalid start time.")
             completion(NSError(domain: "", code: -1, userInfo: nil))
             return
         }
         
-        // End time
-        let endComponents = calendar.dateComponents([.hour, .minute], from: endTime)
-        dateComponents.hour = endComponents.hour
-        dateComponents.minute = endComponents.minute
-        guard let combinedEnd = calendar.date(from: dateComponents) else {
-            showAlert(title: "Error", message: "Invalid end date/time.")
+        var endComponents = calendar.dateComponents([.hour, .minute], from: endTime)
+        var combinedEndComponents = calendar.dateComponents([.year, .month, .day], from: dateOnly)
+        combinedEndComponents.hour = endComponents.hour
+        combinedEndComponents.minute = endComponents.minute
+        guard let combinedEnd = calendar.date(from: combinedEndComponents) else {
+            showAlert(title: "Error", message: "Invalid end time.")
             completion(NSError(domain: "", code: -1, userInfo: nil))
             return
         }
         
-        // Ensure end >= start
+        // Ensure that the end time is not before the start time.
         guard combinedEnd >= combinedStart else {
             showAlert(title: "Error", message: "End time must be after start time.")
             completion(NSError(domain: "", code: -1, userInfo: nil))
             return
         }
         
-        // Fetch the user's name, then build the request data
+        // Fetch the user's name, then build the request data.
         fetchUserName(userId: userId) { [weak self] userName in
-            guard let self = self else { return }
-            print("User name returned from fetchUserName: \(userName)")
+                    guard let self = self else { return }
+                    print("User name returned from fetchUserName: \(userName)")
+
+                    let petName = self.petPickerButton.title(for: .normal) ?? "Unknown Pet"
+                    let instructions = self.walkingInstructionsTextView.text ?? ""
+
+                    var requestData: [String: Any] = [
+                        "requestId": requestId,
+                        "userId": userId,
+                        "userName": userName,
+                        "petName": petName,
+                        "date": Timestamp(date: self.datePicker.date),
+                        "startTime": Timestamp(date: self.startTimePicker.date),
+                        "endTime": Timestamp(date: self.endTimePicker.date),
+                        "instructions": instructions,
+                        "status": "available",
+                        "dogWalkerId": "",
+                        "timestamp": Timestamp(date: Date())
+                    ]
             
-            let petName = (self.petPickerButton.title(for: .normal) != "Select Pet")
-                            ? self.petPickerButton.title(for: .normal)!
-                            : "Unknown Pet"
-            let instructions = self.walkingInstructionsTextView.text ?? ""
-            let requestId = UUID().uuidString
-            
-            // Prepare the dog walker request data
-            var requestData: [String: Any] = [
-                "requestId": requestId,
-                "userId": userId,
-                "userName": userName,
-                "petName": petName,
-                "startDate": Timestamp(date: combinedStart),
-                "endDate": Timestamp(date: combinedEnd),
-                "instructions": instructions,
-                "status": "available",
-                "dogWalkerId": "",
-                "timestamp": Timestamp(date: Date())
-            ]
-            
-            // Merge address data if provided
-            if let addressData = addressData {
-                for (key, value) in addressData {
-                    requestData[key] = value
-                }
-            }
-            
-            // Save to Firestore
-            FirebaseManager.shared.saveDogWalkerRequestData(data: requestData) { error in
-                if let error = error {
-                    print("Failed to save dog walker request: \(error.localizedDescription)")
-                    self.showAlert(title: "Error", message: "Failed to save the dog walker request.")
-                    completion(error)
-                } else {
-                    print("Dog walker request saved successfully!")
-                    
-                    // (Optional) Auto-assign a dog walker if you have that logic set up:
-                    let userLocation: CLLocation? = {
-                        if let addressData = addressData,
-                           let lat = addressData["latitude"] as? Double,
-                           let lon = addressData["longitude"] as? Double {
-                            return CLLocation(latitude: lat, longitude: lon)
+            print("Received Address Data before merging: \(addressData ?? [:])")
+
+                        // Merge address data
+                        if let addressData = addressData {
+                            for (key, value) in addressData {
+                                requestData[key] = value
+                            }
                         }
-                        return nil
-                    }()
-                    
-                    FirebaseManager.shared.autoAssignDogWalker(
-                        petName: petName,
-                        requestId: requestId,
-                        userLocation: userLocation
-                    ) { assignError in
-                        if let assignError = assignError {
-                            print("Auto-assign dog walker error: \(assignError.localizedDescription)")
-                        } else {
-                            print("Dog walker assigned for request: \(requestId)")
+
+                        // ✅ Print the final requestData that will be saved
+                        print("Final Dog Walker Request Data: \(requestData)")
+
+                        // Save request data in Firestore
+                        FirebaseManager.shared.saveDogWalkerRequestData(data: requestData) { error in
+                            if let error = error {
+                                print("Failed to save dog walker request: \(error.localizedDescription)")
+                                self.showAlert(title: "Error", message: "Failed to save the dog walker request.")
+                                completion(error)
+                            } else {
+                                print("Dog walker request saved successfully!")
+                                completion(nil)
+                            }
                         }
                     }
-                    
-                    completion(nil)
-                }
-            }
-        }
     }
     
     // MARK: - Show Alert Helper
@@ -336,25 +340,49 @@ class Schedule_Dogwalker_Request: UITableViewController {
 
 // MARK: - AddAddressDelegate
 extension Schedule_Dogwalker_Request: AddAddressDelegate {
-    func didSubmitAddress(addressData: [String : Any]) {
+    func didSubmitAddress(addressData: [String: Any]) {
         print("Delegate received address data: \(addressData)")
-        // Call saveDogWalkerRequest with the provided address data.
-        self.saveDogWalkerRequest(addressData: addressData) { [weak self] error in
-            guard let self = self else { return }
-            DispatchQueue.main.async {
-                if let error = error {
-                    print("Error scheduling dog walker request: \(error.localizedDescription)")
-                    self.showAlert(title: "Error", message: "Could not schedule request.")
-                } else {
-                    let alert = UIAlertController(title: "Success",
-                                                  message: "Your dog walker request has been sent.",
-                                                  preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
-                        self.navigationController?.popViewController(animated: true)
-                    }))
-                    self.present(alert, animated: true)
+        
+        // Ensure that we're updating the existing request, not creating a new one
+        guard let requestId = self.currentRequestId else {
+            print("Error: No request ID found.")
+            return
+        }
+
+        let db = Firestore.firestore()
+        let requestRef = db.collection("dogWalkerRequests").document(requestId)
+        
+        // Update the existing Firestore request with address details
+        requestRef.updateData(addressData) { error in
+            if let error = error {
+                print("Error updating dog walker request with address: \(error.localizedDescription)")
+            } else {
+                print("Successfully updated dog walker request with address!")
+
+                let petName = self.petPickerButton.title(for: .normal) ?? "Unknown Pet"
+                let userLocation: CLLocation? = {
+                    if let lat = addressData["latitude"] as? Double,
+                       let lon = addressData["longitude"] as? Double {
+                        return CLLocation(latitude: lat, longitude: lon)
+                    }
+                    return nil
+                }()
+
+                // ✅ Now that address is updated, trigger auto-assignment
+                FirebaseManager.shared.autoAssignDogWalker(
+                    petName: petName,
+                    requestId: requestId,
+                    userLocation: userLocation
+                ) { assignError in
+                    if let assignError = assignError {
+                        print("Auto-assign dogwalker error: \(assignError.localizedDescription)")
+                    } else {
+                        print("Dogwalker assigned for request: \(requestId)")
+                    }
                 }
             }
         }
     }
+
+
 }

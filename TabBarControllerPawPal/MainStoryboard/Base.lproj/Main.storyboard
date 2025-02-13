@@ -485,7 +485,7 @@
         <!--Book Dog Walker-->
         <scene sceneID="sli-ov-LhL">
             <objects>
-                <tableViewController id="ddH-0V-h7z" sceneMemberID="viewController">
+                <tableViewController id="ddH-0V-h7z" customClass="Schedule_Dogwalker_Request" customModule="TabBarControllerPawPal" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="interactive" dataMode="static" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" id="JNx-4b-Mv0">
                         <rect key="frame" x="0.0" y="0.0" width="402" height="864"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -542,7 +542,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="date" translatesAutoresizingMaskIntoConstraints="NO" id="BGm-zD-uZS">
-                                                    <rect key="frame" x="237" y="7" width="120" height="30"/>
+                                                    <rect key="frame" x="237" y="6.6666666666666679" width="120" height="30.000000000000004"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="120" id="kR6-Y6-qXE"/>
                                                         <constraint firstAttribute="height" constant="30" id="nSZ-Eg-O2J"/>
@@ -663,7 +663,8 @@
                                                         <fontDescription key="titleFontDescription" type="system" weight="medium" pointSize="18"/>
                                                     </buttonConfiguration>
                                                     <connections>
-                                                        <segue destination="g4C-sf-8A2" kind="show" identifier="showRequestScheduled" id="v2O-VK-8sd"/>
+                                                        <action selector="addAddressButtonTapped:" destination="ddH-0V-h7z" eventType="touchUpInside" id="Hua-PZ-xbo"/>
+                                                        <segue destination="g4C-sf-8A2" kind="show" identifier="DogWalker" id="VRy-M2-YRb"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
@@ -684,6 +685,13 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Book Dog Walker" id="cJj-0V-vyb"/>
+                    <connections>
+                        <outlet property="datePicker" destination="BGm-zD-uZS" id="XLz-3M-5nB"/>
+                        <outlet property="endTimePicker" destination="PMg-Bk-O7O" id="Huc-Cy-xnG"/>
+                        <outlet property="petPickerButton" destination="2v0-uV-wUv" id="Okx-WS-xUH"/>
+                        <outlet property="startTimePicker" destination="7Qh-Cb-UlI" id="i3F-zx-1Hw"/>
+                        <outlet property="walkingInstructionsTextView" destination="dXE-7F-F5j" id="RPy-i8-3A5"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rIB-2j-0c1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -2874,7 +2882,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999998807907104" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="info.circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Lfd-3P-3pM">
-                                                    <rect key="frame" x="20" y="15.666666666666664" width="22" height="20.666666666666671"/>
+                                                    <rect key="frame" x="20" y="15.666666666666666" width="22" height="20.666666666666671"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="22" id="ffr-DS-H3D"/>
                                                         <constraint firstAttribute="width" constant="22" id="oti-ff-wdc"/>
@@ -3053,9 +3061,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="402" height="874"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KaB-PG-b7y">
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.69999999999999996" contentMode="scaleToFill" showsUserLocation="YES" pitchButtonVisibility="visible" showsUserTrackingButton="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KaB-PG-b7y">
                                 <rect key="frame" x="0.0" y="62" width="402" height="778"/>
-                                <standardMapConfiguration key="preferredConfiguration"/>
+                                <standardMapConfiguration key="preferredConfiguration" elevationStyle="realistic"/>
                             </mapView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="PLF-Ux-PYV"/>
@@ -4718,7 +4726,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.64999997615814209" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="indianrupeesign.circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="tk3-K2-9aX">
-                                                    <rect key="frame" x="20" y="11.333333333333329" width="22" height="20.6666666666667"/>
+                                                    <rect key="frame" x="20" y="11.333333333333329" width="22" height="20.666666666666728"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="22" id="EtG-E0-AY3"/>
                                                         <constraint firstAttribute="height" constant="22" id="jh3-93-oNT"/>
@@ -5107,7 +5115,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="v2O-VK-8sd"/>
+        <segue reference="VRy-M2-YRb"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" systemColor="systemPinkColor"/>
     <resources>
