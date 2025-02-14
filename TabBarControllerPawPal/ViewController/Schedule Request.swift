@@ -29,6 +29,10 @@ class Schedule_Request: UITableViewController {
         super.viewDidLoad()
         petPickerButton.setTitle("Select Pet", for: .normal)
         fetchPetNamesForCurrentUser()
+        
+        startDatePicker.minimumDate = Date()
+        endDatePicker.minimumDate = startDatePicker.date
+        startDatePicker.addTarget(self, action: #selector(startDateChanged(_:)), for: .valueChanged)
     }
     
     // MARK: - IBAction for Add Address button
@@ -176,7 +180,11 @@ class Schedule_Request: UITableViewController {
 //        }
 //    }
     
-    
+    @objc func startDateChanged(_ sender: UIDatePicker) {
+        
+        endDatePicker.minimumDate = sender.date
+    }
+
     private func configurePetPickerMenu() {
         // If no pet is selected yet, default to the first pet (if available)
         if selectedPetNames.isEmpty, let firstPet = petNames.first {

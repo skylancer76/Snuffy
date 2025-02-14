@@ -191,6 +191,7 @@ class Add_Address: UITableViewController, MKMapViewDelegate {
     }
     
     // MARK: - IBAction for Scheduling (Update) Request
+    
     @IBAction func scheduleRequestTapped(_ sender: UIButton) {
         guard let locationText = locationTextField.text, !locationText.isEmpty,
               let houseNo = houseNoTextField.text, !houseNo.isEmpty,
@@ -198,6 +199,7 @@ class Add_Address: UITableViewController, MKMapViewDelegate {
             showAlert(title: "Error", message: "Please fill in all required fields.")
             return
         }
+        
         let addressData: [String: Any] = [
             "location": locationText,
             "houseNo": houseNo,
@@ -206,42 +208,84 @@ class Add_Address: UITableViewController, MKMapViewDelegate {
             "latitude": selectedCoordinate?.latitude ?? 0.0,
             "longitude": selectedCoordinate?.longitude ?? 0.0
         ]
-        // Update the existing request document with the address data.
-        if let requestId = currentRequestId {
-            let requestRef = Firestore.firestore().collection("dogWalkerRequests").document(requestId)
-            requestRef.updateData(addressData) { error in
-                if let error = error {
-                    print("Error updating dog walker request with address: \(error.localizedDescription)")
-                    self.showAlert(title: "Error", message: "Could not update the request with address.")
-                } else {
-                    print("Successfully updated dog walker request with address!")
-                    let petName = self.selectedPetName
-                    let userLocation: CLLocation? = {
-                        if let lat = addressData["latitude"] as? Double,
-                           let lon = addressData["longitude"] as? Double {
-                            return CLLocation(latitude: lat, longitude: lon)
-                        }
-                        return nil
-                    }()
-                    FirebaseManager.shared.autoAssignDogWalker(
-                        petName: petName,
-                        requestId: requestId,
-                        userLocation: userLocation
-                    ) { assignError in
-                        if let assignError = assignError {
-                            print("Auto-assign dogwalker error: \(assignError.localizedDescription)")
-                        } else {
-                            print("Dogwalker assigned for request: \(requestId)")
-                        }
+        
+        // Check the request type.
+        if requestType == .caretaker {
+            // For caretaker requests, pass the data via the delegate.
+            delegate?.didSubmitAddress(addressData: addressData)
+            return
+        }
+        
+        // For dogwalker requests, we expect a currentRequestId.
+        guard let requestId = currentRequestId else {
+            print("No current request ID found; cannot update address.")
+            showAlert(title: "Error", message: "No request ID found for updating the dogwalker request.")
+            return
+        }
+        
+        let requestRef = Firestore.firestore().collection("dogWalkerRequests").document(requestId)
+        
+        // Check if the document exists
+        requestRef.getDocument { (document, error) in
+            if let error = error {
+                print("Error fetching dogwalker request: \(error.localizedDescription)")
+                self.showAlert(title: "Error", message: "Could not retrieve the request.")
+                return
+            }
+            
+            if let document = document, document.exists {
+                // Document exists, update it.
+                self.updateDogwalkerRequest(requestRef: requestRef, addressData: addressData, requestId: requestId)
+            } else {
+                // Document doesn't exist, create it.
+                requestRef.setData(addressData, merge: true) { error in
+                    if let error = error {
+                        print("Error creating dogwalker request with address: \(error.localizedDescription)")
+                        self.showAlert(title: "Error", message: "Could not create the request with address.")
+                    } else {
+                        print("Successfully created dogwalker request with address!")
+                        self.afterDogwalkerUpdate(addressData: addressData, requestId: requestId)
                     }
-                    self.performSegue(withIdentifier: "showRequestScheduled", sender: self)
                 }
             }
-        } else {
-            print("No current request ID found; cannot update address.")
         }
     }
-    
+
+    private func updateDogwalkerRequest(requestRef: DocumentReference, addressData: [String: Any], requestId: String) {
+        requestRef.updateData(addressData) { error in
+            if let error = error {
+                print("Error updating dog walker request with address: \(error.localizedDescription)")
+                self.showAlert(title: "Error", message: "Could not update the request with address.")
+            } else {
+                print("Successfully updated dog walker request with address!")
+                self.afterDogwalkerUpdate(addressData: addressData, requestId: requestId)
+            }
+        }
+    }
+
+    private func afterDogwalkerUpdate(addressData: [String: Any], requestId: String) {
+        let petName = self.selectedPetName
+        let userLocation: CLLocation? = {
+            if let lat = addressData["latitude"] as? Double,
+               let lon = addressData["longitude"] as? Double {
+                return CLLocation(latitude: lat, longitude: lon)
+            }
+            return nil
+        }()
+        FirebaseManager.shared.autoAssignDogWalker(
+            petName: petName,
+            requestId: requestId,
+            userLocation: userLocation
+        ) { assignError in
+            if let assignError = assignError {
+                print("Auto-assign dogwalker error: \(assignError.localizedDescription)")
+            } else {
+                print("Dogwalker assigned for request: \(requestId)")
+            }
+        }
+        self.performSegue(withIdentifier: "showRequestScheduled", sender: self)
+    }
+
     // MARK: - Alert Helper
     func showAlert(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
