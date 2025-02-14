@@ -32,6 +32,7 @@ class Schedule_Dogwalker_Request: UITableViewController {
         super.viewDidLoad()
         petPickerButton.setTitle("Select Pet", for: .normal)
         fetchPetNamesForCurrentUser()
+        datePicker.minimumDate = Date()
     }
     
     // MARK: - IBAction for Add Address button
