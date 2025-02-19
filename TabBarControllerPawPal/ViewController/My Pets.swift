@@ -65,16 +65,6 @@ class My_Pets: UIViewController {
     }
     
     
-    @IBAction func scheduleBookingButtonTapped(_ sender: Any) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            if let tabBarController = storyboard.instantiateViewController(withIdentifier: "TabBarControllerID") as? UITabBarController {
-                tabBarController.selectedIndex = 0
-                tabBarController.modalPresentationStyle = .fullScreen
-                self.present(tabBarController, animated: true, completion: nil)
-            }
-    }
-    
-    
     func fetchPetsFromFirestore() {
         let db = Firestore.firestore()
         

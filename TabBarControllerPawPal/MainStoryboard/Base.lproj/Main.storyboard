@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="ilH-8F-CtW">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="6fy-Vc-4CS">
     <device id="retina6_3" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
@@ -1552,8 +1552,8 @@
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
-                            <button opaque="NO" alpha="0.59999999999999998" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rJ7-v7-DhV">
-                                <rect key="frame" x="16" y="179" width="180" height="50"/>
+                            <button opaque="NO" alpha="0.40000000000000002" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rJ7-v7-DhV">
+                                <rect key="frame" x="16" y="179" width="370" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="I4h-UD-Km7"/>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="180" id="RRo-wI-103"/>
@@ -1574,42 +1574,17 @@
                                     <segue destination="NWn-lG-93K" kind="presentation" identifier="AddNewPetSegue" modalPresentationStyle="pageSheet" id="aqR-z9-udQ"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" alpha="0.59999999999999998" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5OI-bd-wiY">
-                                <rect key="frame" x="206" y="179" width="180" height="50"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="lQk-OI-MOg"/>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="180" id="mf7-fH-SQV"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
-                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="5" maxY="0.0"/>
-                                <size key="titleShadowOffset" width="4" height="4"/>
-                                <state key="normal" title="Add Pet">
-                                    <color key="titleColor" systemColor="systemPurpleColor"/>
-                                    <imageReference key="image" image="pawprint.circle" catalog="system" symbolScale="medium"/>
-                                </state>
-                                <buttonConfiguration key="configuration" style="filled" title="Schedule Booking" cornerStyle="medium">
-                                    <fontDescription key="titleFontDescription" type="system" weight="medium" pointSize="16"/>
-                                    <color key="baseForegroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </buttonConfiguration>
-                                <connections>
-                                    <action selector="addPetButtonTapped:" destination="An7-pO-EDi" eventType="touchUpInside" id="Utl-sk-rM9"/>
-                                    <action selector="scheduleBookingButtonTapped:" destination="An7-pO-EDi" eventType="touchUpInside" id="HfZ-4B-h2E"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Pbg-wf-isy"/>
                         <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="5OI-bd-wiY" firstAttribute="leading" secondItem="rJ7-v7-DhV" secondAttribute="trailing" constant="10" id="5AG-A3-yac"/>
                             <constraint firstItem="2nf-9t-KQw" firstAttribute="leading" secondItem="Pbg-wf-isy" secondAttribute="leading" id="6qg-TT-DUi"/>
                             <constraint firstItem="2nf-9t-KQw" firstAttribute="trailing" secondItem="Pbg-wf-isy" secondAttribute="trailing" id="8M6-lS-rpw"/>
                             <constraint firstItem="rJ7-v7-DhV" firstAttribute="top" secondItem="B4G-yI-dSp" secondAttribute="bottom" constant="20" id="Ekc-9O-2V1"/>
                             <constraint firstItem="Pbg-wf-isy" firstAttribute="bottom" secondItem="2nf-9t-KQw" secondAttribute="bottom" id="HMU-gt-eoR"/>
                             <constraint firstItem="Pbg-wf-isy" firstAttribute="trailing" secondItem="B4G-yI-dSp" secondAttribute="trailing" id="NOy-Oh-AO8"/>
-                            <constraint firstItem="Pbg-wf-isy" firstAttribute="trailing" secondItem="5OI-bd-wiY" secondAttribute="trailing" constant="16" id="Wsg-O2-1IE"/>
+                            <constraint firstItem="Pbg-wf-isy" firstAttribute="trailing" secondItem="rJ7-v7-DhV" secondAttribute="trailing" constant="16" id="fK3-At-oD9"/>
                             <constraint firstItem="B4G-yI-dSp" firstAttribute="leading" secondItem="Pbg-wf-isy" secondAttribute="leading" id="fVC-Rd-gTK"/>
-                            <constraint firstItem="2nf-9t-KQw" firstAttribute="top" secondItem="5OI-bd-wiY" secondAttribute="bottom" constant="15" id="kp2-KD-3Tq"/>
-                            <constraint firstItem="5OI-bd-wiY" firstAttribute="top" secondItem="B4G-yI-dSp" secondAttribute="bottom" constant="20" id="l40-2O-e3i"/>
                             <constraint firstItem="2nf-9t-KQw" firstAttribute="top" secondItem="rJ7-v7-DhV" secondAttribute="bottom" constant="15" id="mSw-eN-f1S"/>
                             <constraint firstItem="B4G-yI-dSp" firstAttribute="top" secondItem="Pbg-wf-isy" secondAttribute="top" id="wtY-yf-pci"/>
                             <constraint firstItem="rJ7-v7-DhV" firstAttribute="leading" secondItem="Pbg-wf-isy" secondAttribute="leading" constant="16" id="xdo-AB-yVh"/>
@@ -1620,7 +1595,6 @@
                         <outlet property="addPetButton" destination="rJ7-v7-DhV" id="49Z-47-xWf"/>
                         <outlet property="backgroundView" destination="B4G-yI-dSp" id="MAE-bD-pK0"/>
                         <outlet property="myPets" destination="2nf-9t-KQw" id="y3w-S6-TYF"/>
-                        <outlet property="scheduleBookingButton" destination="5OI-bd-wiY" id="cEx-Ei-DaR"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="euh-Ma-wug" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -1685,6 +1659,7 @@
                                                     <state key="normal" title="Button"/>
                                                     <buttonConfiguration key="configuration" style="plain" title="Button">
                                                         <fontDescription key="titleFontDescription" type="system" pointSize="15"/>
+                                                        <color key="baseForegroundColor" systemColor="labelColor"/>
                                                     </buttonConfiguration>
                                                 </button>
                                             </subviews>
@@ -1745,6 +1720,7 @@
                                                     <state key="normal" title="Button"/>
                                                     <buttonConfiguration key="configuration" style="plain" title="Button">
                                                         <fontDescription key="titleFontDescription" type="system" pointSize="15"/>
+                                                        <color key="baseForegroundColor" systemColor="labelColor"/>
                                                     </buttonConfiguration>
                                                 </button>
                                             </subviews>
@@ -2993,7 +2969,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999998807907104" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="info.circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Lfd-3P-3pM">
-                                                    <rect key="frame" x="20" y="15.666666666666664" width="22" height="20.666666666666671"/>
+                                                    <rect key="frame" x="20" y="15.666666666666666" width="22" height="20.666666666666671"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="22" id="ffr-DS-H3D"/>
                                                         <constraint firstAttribute="width" constant="22" id="oti-ff-wdc"/>
@@ -4837,7 +4813,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.64999997615814209" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="indianrupeesign.circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="tk3-K2-9aX">
-                                                    <rect key="frame" x="20" y="11.333333333333329" width="22" height="20.666666666666828"/>
+                                                    <rect key="frame" x="20" y="11.333333333333329" width="22" height="20.666666666666856"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="22" id="EtG-E0-AY3"/>
                                                         <constraint firstAttribute="height" constant="22" id="jh3-93-oNT"/>
@@ -5479,7 +5455,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999998807907104" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="info.circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="KK3-rR-7cX">
-                                                    <rect key="frame" x="20" y="15.666666666666666" width="22" height="20.666666666666671"/>
+                                                    <rect key="frame" x="20" y="15.666666666666664" width="22" height="20.666666666666671"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="22" id="8yO-t5-QWt"/>
                                                         <constraint firstAttribute="height" constant="22" id="EdR-JW-N8Y"/>

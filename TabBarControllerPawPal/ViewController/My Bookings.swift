@@ -149,8 +149,6 @@ class My_Bookings: UIViewController, UITableViewDelegate, UITableViewDataSource 
             cell.bgView.layer.cornerRadius = 10
             cell.bgView.layer.shadowRadius = 5
             cell.bgView.layer.shadowOpacity = 0.1
-            cell.bgView.layer.borderColor = UIColor.systemPink.withAlphaComponent(0.7).cgColor
-            cell.bgView.layer.borderWidth = 1.5
             
             cell.statusButton.tag = indexPath.row
             cell.statusButton.addTarget(self, action: #selector(updateStatus(_:)), for: .touchUpInside)
