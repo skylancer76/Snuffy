@@ -30,9 +30,13 @@ class User_Sign_Up: UIViewController {
         signUpButton.layer.cornerRadius = 10
         signUpButton.layer.masksToBounds = true
         passwordTextField.isSecureTextEntry = true
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tapGesture)
 
     }
-    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
     
     @IBAction func passwordViewTapped(_ sender: UIButton) {
         passwordTextField.isSecureTextEntry.toggle()
@@ -165,16 +169,26 @@ class User_Sign_Up: UIViewController {
         }
     }
     
+//    func navigateToHomeScreen() {
+//          // Create an instance of the Home screen (Main 3)
+//          let storyboard = UIStoryboard(name: "Main", bundle: nil) // Ensure this storyboard name is correct
+//          if let homeVC = storyboard.instantiateInitialViewController() {
+//              homeVC.modalPresentationStyle = .fullScreen
+//              self.present(homeVC, animated: true, completion: nil)
+//          } else {
+//              self.showAlert(title: "Error", message: "Home screen could not be loaded.")
+//          }
+//      }
     func navigateToHomeScreen() {
-          // Create an instance of the Home screen (Main 3)
-          let storyboard = UIStoryboard(name: "Main", bundle: nil) // Ensure this storyboard name is correct
-          if let homeVC = storyboard.instantiateInitialViewController() {
-              homeVC.modalPresentationStyle = .fullScreen
-              self.present(homeVC, animated: true, completion: nil)
-          } else {
-              self.showAlert(title: "Error", message: "Home screen could not be loaded.")
-          }
-      }
+        let storyboard = UIStoryboard(name: "Main", bundle: nil) // Ensure this matches your storyboard name
+        if let tabBarVC = storyboard.instantiateViewController(withIdentifier: "TabBarControllerID") as? UITabBarController {
+            tabBarVC.modalPresentationStyle = .fullScreen
+            self.present(tabBarVC, animated: true, completion: nil)
+        } else {
+            self.showAlert(title: "Error", message: "Home screen could not be loaded.")
+        }
+    }
+
        
     // MARK: - Helper: Show Alert
     func showAlert(title: String, message: String, completion: (() -> Void)? = nil) {

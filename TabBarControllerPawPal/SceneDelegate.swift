@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import FirebaseAuth
+import FirebaseFirestore
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -16,7 +18,61 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
-        guard let _ = (scene as? UIWindowScene) else { return }
+        guard let windowScene = (scene as? UIWindowScene) else { return }
+        window = UIWindow(windowScene: windowScene)
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        if let user = Auth.auth().currentUser {
+                   checkUserRole(userID: user.uid) { role in
+                       DispatchQueue.main.async {
+                           switch role {
+                           case "caretaker":
+                               let caretakerVC = storyboard.instantiateViewController(withIdentifier: "CaretakerTabBarController") as? UITabBarController
+                               self.window?.rootViewController = caretakerVC
+                           case "dogwalker":
+                               let dogwalkerVC = storyboard.instantiateViewController(withIdentifier: "CaretakerTabBarController") as? UITabBarController
+                               self.window?.rootViewController = dogwalkerVC
+                           default:
+                               let userVC = storyboard.instantiateViewController(withIdentifier: "TabBarControllerID") as? UITabBarController
+                               self.window?.rootViewController = userVC
+                           }
+                           self.window?.makeKeyAndVisible()
+                       }
+                   }
+               } else {
+                   // If no user is logged in, show login screen
+                   let loginVC = storyboard.instantiateViewController(withIdentifier: "Start_screen")
+                   window?.rootViewController = loginVC
+                   window?.makeKeyAndVisible()
+               }
+           }
+    func checkUserRole(userID: String, completion: @escaping (String) -> Void) {
+            let db = Firestore.firestore()
+            
+            let group = DispatchGroup()
+            var role: String? = nil
+            
+            // Check caretakers collection
+            group.enter()
+            db.collection("caretakers").whereField("caretakerId", isEqualTo: userID).getDocuments { snapshot, error in
+                if let snapshot = snapshot, !snapshot.documents.isEmpty {
+                    role = "caretaker"
+                }
+                group.leave()
+            }
+
+            // Check dogwalkers collection
+            group.enter()
+            db.collection("dogwalkers").whereField("dogWalkerId", isEqualTo: userID).getDocuments { snapshot, error in
+                if let snapshot = snapshot, !snapshot.documents.isEmpty {
+                    role = "dogwalker"
+                }
+                group.leave()
+            }
+
+            // Notify when all checks are completed
+            group.notify(queue: .main) {
+                completion(role ?? "regular")
+            }
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
