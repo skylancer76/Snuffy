@@ -215,7 +215,7 @@ class Bookings_Information: UITableViewController {
     // MARK: - Caretaker UI
     private func updateCaretakerUI(_ caretaker: Caretakers) {
         caretakerNameLabel.text = caretaker.name
-        caretakerExperienceLabel.text = "Experience: \(caretaker.experience) years"
+        caretakerExperienceLabel.text = "Exp: \(caretaker.experience) years"
         caretakerAddressLabel.text = caretaker.address
         
         // If caretaker has phone
