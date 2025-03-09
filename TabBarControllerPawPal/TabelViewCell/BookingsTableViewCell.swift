@@ -40,7 +40,11 @@ class BookingsTableViewCell: UITableViewCell {
         startDateLabel.text = "\(dateFormatter.string(from: request.startDate))"
         endDateLabel.text = "\(dateFormatter.string(from: request.endDate))"
         
-        statusButton.setTitle(request.status, for: .normal)
+        // Ensure first letter of status is capitalized
+        let formattedStatus = request.status.capitalized
+        statusButton.setTitle(formattedStatus, for: .normal)
+        
+
             var config = statusButton.configuration ?? UIButton.Configuration.filled()
             switch request.status {
             case "pending":

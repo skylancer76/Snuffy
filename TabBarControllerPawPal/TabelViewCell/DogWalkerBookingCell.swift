@@ -29,6 +29,9 @@ class DogWalkerBookingCell: UITableViewCell {
     func configureCell(with request: ScheduleDogWalkerRequest) {
         petNameLabel.text = request.petName
         
+        let formattedStatus = request.status.capitalized
+        statusButton.setTitle(formattedStatus, for: .normal)
+        
         
         statusButton.setTitle(request.status, for: .normal)
             var config = statusButton.configuration ?? UIButton.Configuration.filled()
