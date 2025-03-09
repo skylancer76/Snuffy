@@ -10,6 +10,7 @@ import UIKit
 class PetProfileTableViewCell: UITableViewCell {
     
     
+    @IBOutlet weak var petDetailImageBgView: UIView!
     @IBOutlet weak var petDetailImage: UIImageView!
     @IBOutlet weak var petDetailName: UILabel!
     

@@ -296,7 +296,6 @@ class Schedule_Request: UITableViewController {
                     completion(error)
                 } else {
                     print("Schedule request saved successfully!")
-                    // Extract user location from addressData if available.
                     let userLocation: CLLocation? = {
                         if let addressData = addressData,
                            let lat = addressData["latitude"] as? Double,

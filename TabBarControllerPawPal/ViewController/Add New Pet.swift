@@ -43,7 +43,8 @@ class Add_New_Pet: UITableViewController, UIImagePickerControllerDelegate, UINav
 
     func setupUI() {
         
-        
+        petGenderButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
+        petBreedButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
         petGenderButton.setTitle("Select Gender", for: .normal)
         petBreedButton.setTitle("Select Breed", for: .normal)
                 

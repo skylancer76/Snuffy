@@ -13,6 +13,7 @@ class Pet_Profile: UIViewController {
     
     // The petId passed from My_Pets view controller
     var petId: String?
+    
     @IBOutlet weak var petImage: UIImageView!
     @IBOutlet var weightLabel: UILabel!
     @IBOutlet var genderLabel: UILabel!
@@ -31,6 +32,7 @@ class Pet_Profile: UIViewController {
         super.viewDidLoad()
         
         print("Received Pet ID: \(petId ?? "No Pet ID")")
+        
         petDetailsTableView.dataSource = self
         petDetailsTableView.delegate = self
         
@@ -40,23 +42,22 @@ class Pet_Profile: UIViewController {
             print("Pet ID is missing!")
         }
         
-        
         // Set Gradient View
         let gradientView = UIView(frame: view.bounds)
         gradientView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(gradientView)
         view.sendSubviewToBack(gradientView)
+        
         // Set Gradient inside the view
         let gradientLayer = CAGradientLayer()
-        gradientLayer.frame = view.bounds                           // Match the frame of the view
+        gradientLayer.frame = view.bounds
         gradientLayer.colors = [
-            UIColor.systemPink.withAlphaComponent(0.3).cgColor,     // Start color
-            UIColor.clear.cgColor                                   // End color
+            UIColor.systemPink.withAlphaComponent(0.3).cgColor, // Start color
+            UIColor.clear.cgColor                              // End color
         ]
-        gradientLayer.locations = [0.0, 1.0]                        // Gradually fade
-        gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)          // Top-center
-        gradientLayer.endPoint = CGPoint(x: 0.5, y: 0.5)            // Bottom-center
-        // Apply the gradient to the gradientView
+        gradientLayer.locations = [0.0, 1.0]
+        gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)
+        gradientLayer.endPoint = CGPoint(x: 0.5, y: 0.5)
         gradientView.layer.insertSublayer(gradientLayer, at: 0)
         
         petImage.layer.cornerRadius = petImage.frame.height / 2
@@ -96,11 +97,10 @@ class Pet_Profile: UIViewController {
             }
         }
     }
-
 }
 
+// MARK: - Prefetched Image Extension
 extension UIImageView {
-   
     func loadPrefetchedImageFromUrl(_ urlString: String) {
         guard let url = URL(string: urlString) else {
             DispatchQueue.main.async {
@@ -109,19 +109,19 @@ extension UIImageView {
             return
         }
         
-        // Use the URL's lastPathComponent as the file name.
+        // Use the URL's lastPathComponent as the file name
         let fileName = url.lastPathComponent
         let cachesDirectory = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
         let localURL = cachesDirectory.appendingPathComponent(fileName)
         
-        // Check if the image file already exists locally.
+        // Check if the image file already exists locally
         if FileManager.default.fileExists(atPath: localURL.path),
            let image = UIImage(contentsOfFile: localURL.path) {
             DispatchQueue.main.async {
                 self.image = image
             }
         } else {
-            // If not, download the image using ImageDownloader.
+            // If not, download the image using ImageDownloader
             ImageDownloader.shared.downloadImage(from: url) { downloadedLocalURL in
                 if let downloadedLocalURL = downloadedLocalURL,
                    let image = UIImage(contentsOfFile: downloadedLocalURL.path) {
@@ -136,37 +136,35 @@ extension UIImageView {
             }
         }
     }
-  
 }
 
-
+// MARK: - UITableViewDataSource & UITableViewDelegate
 extension Pet_Profile: UITableViewDataSource, UITableViewDelegate {
-
-    // Number of rows in the table (one row for each option)
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tableOptions.count
     }
     
-    // Configure each cell using the custom cell with image and label.
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
-        // Dequeue the custom cell and cast it to PetProfileTableViewCell
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "PetDetailCell", for: indexPath) as? PetProfileTableViewCell else {
             return UITableViewCell()
         }
         
         let option = tableOptions[indexPath.row]
         cell.petDetailName.text = option
+        cell.petDetailImageBgView.layer.cornerRadius = cell.petDetailImageBgView.frame.height / 2
+        cell.petDetailImageBgView.layer.masksToBounds = true
         
-        // Set the appropriate icon based on the option.
+        // Set the appropriate icon
         let icon: UIImage?
         switch option {
         case "Pet Vaccinations":
             icon = UIImage(systemName: "syringe.fill")
         case "Pet Diet":
-            icon = UIImage(systemName: "fork.knife.circle.fill")
+            icon = UIImage(systemName: "fork.knife")
         case "Pet Medications":
-            icon = UIImage(systemName: "pills.circle.fill")
+            icon = UIImage(systemName: "pills.fill")
         default:
             icon = nil
         }
@@ -174,19 +172,12 @@ extension Pet_Profile: UITableViewDataSource, UITableViewDelegate {
         if let icon = icon {
             let tintedIcon = icon.withRenderingMode(.alwaysTemplate)
             cell.petDetailImage.image = tintedIcon
-            cell.petDetailImage.tintColor = UIColor.systemPink.withAlphaComponent(0.6)
+            cell.petDetailImage.tintColor = UIColor.systemBackground
         }
         
         return cell
     }
     
-    // Set cell height.
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60
-        
-    }
-    
-    // Handle cell selection to navigate to the proper screen.
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let petId = petId else { return }
         let option = tableOptions[indexPath.row]
@@ -210,5 +201,10 @@ extension Pet_Profile: UITableViewDataSource, UITableViewDelegate {
         default:
             break
         }
+    }
+    
+    // Set a consistent cell height if desired
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 60
     }
 }

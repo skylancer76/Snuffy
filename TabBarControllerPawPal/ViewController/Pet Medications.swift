@@ -26,6 +26,28 @@ class Pet_Medications: UIViewController {
         if let petId = petId {
             fetchPetMedicationData(petId: petId)
         }
+        
+        // Set Gradient View
+        let gradientView = UIView(frame: view.bounds)
+        gradientView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(gradientView)
+        view.sendSubviewToBack(gradientView)
+        // Set Gradient inside the view
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.frame = view.bounds                           // Match the frame of the view
+        gradientLayer.colors = [
+            UIColor.systemPink.withAlphaComponent(0.3).cgColor,     // Start color
+            UIColor.clear.cgColor                                   // End color
+        ]
+        gradientLayer.locations = [0.0, 1.0]                        // Gradually fade
+        gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)          // Top-center
+        gradientLayer.endPoint = CGPoint(x: 0.5, y: 0.5)            // Bottom-center
+        // Apply the gradient to the gradientView
+        gradientView.layer.insertSublayer(gradientLayer, at: 0)
+        
+        // Clear the background colour of the table view
+        petMedicationTableView.backgroundColor = .clear
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {

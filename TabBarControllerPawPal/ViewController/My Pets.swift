@@ -15,7 +15,6 @@ class My_Pets: UIViewController {
     @IBOutlet weak var backgroundView: UIView!
     @IBOutlet weak var addPetButton: UIButton!
     @IBOutlet weak var myPets: UICollectionView!
-    @IBOutlet weak var scheduleBookingButton: UIButton!
     
     var pets: [PetData] = []
     var petsListener: ListenerRegistration?
@@ -28,35 +27,34 @@ class My_Pets: UIViewController {
         gradientView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(gradientView)
         view.sendSubviewToBack(gradientView)
+        
         // Set Gradient inside the view
         let gradientLayer = CAGradientLayer()
-        gradientLayer.frame = view.bounds                           // Match the frame of the view
+        gradientLayer.frame = view.bounds // Match the frame of the view
         gradientLayer.colors = [
-            UIColor.systemPink.withAlphaComponent(0.3).cgColor,   // Start color
-            UIColor.clear.cgColor                                   // End color
+            UIColor.systemPink.withAlphaComponent(0.3).cgColor, // Start color
+            UIColor.clear.cgColor                               // End color
         ]
-        gradientLayer.locations = [0.0, 1.0]                        // Gradually fade
-        gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)          // Top-center
-        gradientLayer.endPoint = CGPoint(x: 0.5, y: 0.5)            // Bottom-center
+        gradientLayer.locations = [0.0, 1.0]                     // Gradually fade
+        gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)       // Top-center
+        gradientLayer.endPoint = CGPoint(x: 0.5, y: 0.5)         // Bottom-center
         gradientView.layer.insertSublayer(gradientLayer, at: 0)
-        // Claer background colour of collection view
-        myPets.backgroundColor = .clear
         
+        // Clear background color of collection view
+        myPets.backgroundColor = .clear
         
         // Collection View delegates
         myPets.delegate = self
         myPets.dataSource = self
         
-        // Fetch pets from Firestore
+        // Fetch pets from Firestore (only once)
         fetchPetsFromFirestore()
         
         // Set layout for collection view
         myPets.collectionViewLayout = createLayout()
-        fetchPetsFromFirestore()
-        prefetchImages(for: pets)
-        // Clear Background
-        backgroundView.backgroundColor = .clear
         
+        // Clear background
+        backgroundView.backgroundColor = .clear
     }
     
     // Add Pet Buttton function
@@ -74,46 +72,47 @@ class My_Pets: UIViewController {
             return
         }
         
-        // asking the pets db where the ownerid mathc the currentUser logged in
+        // Listen to pets where ownerID matches the current user
         petsListener = db.collection("Pets")
-                .whereField("ownerID", isEqualTo: currentUser.uid)
-                .addSnapshotListener { [weak self] snapshot, error in
-                    guard let self = self else { return }
-                    
-                    if let error = error {
-                        print("Error fetching pet data: \(error.localizedDescription)")
-                        return
-                    }
-                    
-                    self.pets = snapshot?.documents.compactMap { document in
-                        let data = document.data()
-                        let petId = data["petId"] as? String ?? ""
-                        let name = data["petName"] as? String
-                        let breed = data["petBreed"] as? String
-                        let image = data["petImage"] as? String
-                        let age = data["petAge"] as? String
-                        let gender = data["petGender"] as? String
-                        let weight = data["petWeight"] as? String
-                        
-                        return PetData(
-                            petId: petId,
-                            petImage: image,
-                            petName: name,
-                            petBreed: breed,
-                            petGender: gender,
-                            petAge: age,
-                            petWeight: weight
-                        )
-                    } ?? []
-                    
-                    // Optionally prefetch images for the updated pets array.
-                    self.prefetchImages(for: self.pets)
-                    
-                    DispatchQueue.main.async {
-                        self.myPets.reloadData()
-                    }
+            .whereField("ownerID", isEqualTo: currentUser.uid)
+            .addSnapshotListener { [weak self] snapshot, error in
+                guard let self = self else { return }
+                
+                if let error = error {
+                    print("Error fetching pet data: \(error.localizedDescription)")
+                    return
                 }
-        }
+                
+                self.pets = snapshot?.documents.compactMap { document in
+                    let data = document.data()
+                    let petId = data["petId"] as? String ?? ""
+                    let name = data["petName"] as? String
+                    let breed = data["petBreed"] as? String
+                    let image = data["petImage"] as? String
+                    let age = data["petAge"] as? String
+                    let gender = data["petGender"] as? String
+                    let weight = data["petWeight"] as? String
+                    
+                    return PetData(
+                        petId: petId,
+                        petImage: image,
+                        petName: name,
+                        petBreed: breed,
+                        petGender: gender,
+                        petAge: age,
+                        petWeight: weight
+                    )
+                } ?? []
+                
+                // Optionally prefetch images for the updated pets array.
+                self.prefetchImages(for: self.pets)
+                
+                DispatchQueue.main.async {
+                    self.myPets.reloadData()
+                }
+            }
+    }
+    
     func prefetchImages(for pets: [PetData]) {
         for pet in pets {
             // Ensure there's a valid image URL string.
@@ -126,7 +125,7 @@ class My_Pets: UIViewController {
             ImageDownloader.shared.downloadImage(from: url) { localURL in
                 if let localURL = localURL {
                     print("Downloaded image for \(pet.petName ?? "Unknown") to \(localURL.path)")
-                    // Optionally: You could update your pet model or notify cells if needed.
+                    // Optionally: update your pet model or notify cells if needed.
                 } else {
                     print("Failed to download image for \(pet.petName ?? "Unknown")")
                 }
@@ -134,16 +133,31 @@ class My_Pets: UIViewController {
         }
     }
     
-    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "AddNewPetSegue",
+           let destinationVC = segue.destination as? Add_New_Pet {
+            destinationVC.delegate = self
+            
+        } else if segue.identifier == "ShowPetProfileSegue",
+                  let destinationVC = segue.destination as? Pet_Profile {
+            // Pass the pet ID if we have a selected pet
+            if let selectedPet = selectedPet {
+                destinationVC.petId = selectedPet.petId
+                print("Pet ID passed: \(selectedPet.petId)")  // Debug print
+                destinationVC.hidesBottomBarWhenPushed = true
+            } else {
+                print("Selected Pet is nil!")
+            }
+        }
+    }
 }
 
-
-extension My_Pets: UICollectionViewDataSource , UICollectionViewDelegate{
+// MARK: - CollectionView DataSource & Delegate
+extension My_Pets: UICollectionViewDataSource, UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return pets.count
     }
-    
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PetCell", for: indexPath) as! My_Pets_Cell
@@ -157,56 +171,45 @@ extension My_Pets: UICollectionViewDataSource , UICollectionViewDelegate{
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        // 1) Set the selectedPet
+        selectedPet = pets[indexPath.item]
+        print("Selected pet ID: \(selectedPet?.petId ?? "No Pet ID")")
+        
+        // 2) Manually perform the segue
+        performSegue(withIdentifier: "ShowPetProfileSegue", sender: self)
+    }
     
     func createLayout() -> UICollectionViewLayout {
         // Define item size for two cells
         let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(0.5),  // Adjusted width to fit 2 cells with spacing
+            widthDimension: .fractionalWidth(0.5),
             heightDimension: .fractionalHeight(1.0)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         item.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8)
+        
         // Define group size to accommodate 2 cells
         let groupSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0), // 100% of the container width
-            heightDimension: .absolute(235)  // Adjust height as required
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .absolute(235)
         )
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item, item])
+        
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 16, bottom: 20, trailing: 16) // Adjust section insets
-        // Adjust layout to support only 1 item in case there is only one
+        section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 16, bottom: 20, trailing: 16)
+        
+        // No horizontal scrolling
         section.orthogonalScrollingBehavior = .none
         
         return UICollectionViewCompositionalLayout(section: section)
     }
-    
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        selectedPet = pets[indexPath.item]
-        print("Selected pet ID: \(selectedPet?.petId ?? "No Pet ID")")  // Debug print
-    }
-    
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "AddNewPetSegue", let destinationVC = segue.destination as? Add_New_Pet {
-            destinationVC.delegate = self
-        } else if segue.identifier == "ShowPetProfileSegue", let destinationVC = segue.destination as? Pet_Profile {
-            if let selectedPet = selectedPet {
-                destinationVC.petId = selectedPet.petId  // Pass the petId, not the whole pet object
-                print("Pet ID passed: \(selectedPet.petId)")  // Debug print
-                destinationVC.hidesBottomBarWhenPushed = true
-            } else {
-                print("Selected Pet is nil!")
-            }
-        }
-    }
-    
 }
 
+// MARK: - AddNewPetDelegate
 extension My_Pets: AddNewPetDelegate {
     func didAddNewPet(_ pet: PetData) {
         pets.append(pet)
-        
         DispatchQueue.main.async {
             self.myPets.reloadData()
         }
