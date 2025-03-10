@@ -4,6 +4,7 @@
 //
 //  Created by admin19 on 03/02/25.
 
+
 import UIKit
 import FirebaseAuth
 import FirebaseFirestore
@@ -92,7 +93,7 @@ class Caretaker_Home: UIViewController, UITableViewDelegate, UITableViewDataSour
         let gradientLayer = CAGradientLayer()
         gradientLayer.frame = view.bounds
         gradientLayer.colors = [
-            UIColor.systemPurple.withAlphaComponent(0.3).cgColor,
+            UIColor.systemPink.withAlphaComponent(0.3).cgColor,
             UIColor.clear.cgColor
         ]
         gradientLayer.locations = [0.0, 1.0]
