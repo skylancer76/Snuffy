@@ -2993,7 +2993,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999998807907104" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="info.circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Lfd-3P-3pM">
-                                                    <rect key="frame" x="20" y="15.666666666666666" width="22" height="20.666666666666671"/>
+                                                    <rect key="frame" x="20" y="15.666666666666664" width="22" height="20.666666666666671"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="22" id="ffr-DS-H3D"/>
                                                         <constraint firstAttribute="width" constant="22" id="oti-ff-wdc"/>
@@ -5745,7 +5745,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999998807907104" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="info.circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="KK3-rR-7cX">
-                                                    <rect key="frame" x="20" y="15.666666666666666" width="22" height="20.666666666666671"/>
+                                                    <rect key="frame" x="20" y="15.666666666666664" width="22" height="20.666666666666671"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="22" id="8yO-t5-QWt"/>
                                                         <constraint firstAttribute="height" constant="22" id="EdR-JW-N8Y"/>
@@ -5952,10 +5952,10 @@
             </objects>
             <point key="canvasLocation" x="7623.8805970149251" y="-1488.3295194508007"/>
         </scene>
-        <!--Pet Profile-->
+        <!--Caretaker Pet Profile-->
         <scene sceneID="h5r-xO-7tz">
             <objects>
-                <viewController id="XtO-BC-Zd9" customClass="Pet_Profile" customModule="TabBarControllerPawPal" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="XtO-BC-Zd9" customClass="Caretaker_Pet_Profile" customModule="TabBarControllerPawPal" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="j2h-dU-UbR">
                         <rect key="frame" x="0.0" y="0.0" width="402" height="874"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -6140,14 +6140,14 @@
                         <barButtonItem key="rightBarButtonItem" image="ellipsis.circle" catalog="system" id="yrk-xZ-Y4E"/>
                     </navigationItem>
                     <connections>
-                        <outlet property="ageLabel" destination="rvi-02-C3o" id="ib4-2y-PEM"/>
-                        <outlet property="breedLabel" destination="TXO-wj-v6y" id="rTW-DM-Lx1"/>
-                        <outlet property="genderLabel" destination="fo9-q5-tcU" id="hrD-mr-VMz"/>
-                        <outlet property="nameLabel" destination="40S-20-VYj" id="kIq-wq-nv2"/>
-                        <outlet property="petDetailsTableView" destination="a47-bT-BTm" id="4GU-7w-JVs"/>
-                        <outlet property="petImage" destination="Qgs-yO-oQA" id="Pgo-6b-Azc"/>
+                        <outlet property="ageLabel" destination="SmU-Ar-549" id="mxT-Yh-lk2"/>
+                        <outlet property="breedLabel" destination="TXO-wj-v6y" id="fLc-cB-kGp"/>
+                        <outlet property="genderLabel" destination="1ZW-i9-tlm" id="n2K-7a-Nhe"/>
+                        <outlet property="nameLabel" destination="40S-20-VYj" id="FWh-cf-PIS"/>
+                        <outlet property="petDetailsTableView" destination="a47-bT-BTm" id="b8i-ts-Okq"/>
+                        <outlet property="petImage" destination="Qgs-yO-oQA" id="hjc-1h-vZT"/>
                         <outlet property="petInfo" destination="EhX-Wz-9uO" id="OYw-t8-QdW"/>
-                        <outlet property="weightLabel" destination="BBj-nr-dB4" id="uia-U3-MN8"/>
+                        <outlet property="weightLabel" destination="C5o-zG-gdL" id="PCn-HU-pHi"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PJl-qA-o43" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -6649,13 +6649,7 @@
                             <constraint firstItem="6VC-R4-hUh" firstAttribute="top" secondItem="IfV-lN-4cU" secondAttribute="top" id="wXl-34-WG3"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Pet Medication" id="Gwg-Mn-4Hz">
-                        <barButtonItem key="rightBarButtonItem" image="plus" catalog="system" id="XBP-ei-KUj">
-                            <connections>
-                                <action selector="addPetMedication:" destination="frb-hN-c0U" id="eNK-M9-Wn3"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Pet Medication" id="Gwg-Mn-4Hz"/>
                     <connections>
                         <outlet property="petMedicationTableView" destination="6VC-R4-hUh" id="DxD-u2-4wZ"/>
                     </connections>
@@ -6955,7 +6949,7 @@
                                                     </buttonConfiguration>
                                                     <connections>
                                                         <action selector="petDetailsButtonTapped1:" destination="spL-77-8hz" eventType="touchUpInside" id="Rcr-49-PRr"/>
-                                                        <segue destination="XtO-BC-Zd9" kind="show" identifier="goToPetProfile" id="Y4j-0R-4BB"/>
+                                                        <segue destination="XtO-BC-Zd9" kind="show" identifier="goToPetProfileDogwalker" id="Y4j-0R-4BB"/>
                                                     </connections>
                                                 </button>
                                             </subviews>

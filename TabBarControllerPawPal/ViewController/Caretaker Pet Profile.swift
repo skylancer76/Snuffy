@@ -11,7 +11,7 @@ import FirebaseStorage
 
 class Caretaker_Pet_Profile: UIViewController {
     
-    var petId: String?
+    var petName: String?
     
     // MARK: - Outlets
     @IBOutlet weak var petImage: UIImageView!
@@ -31,15 +31,15 @@ class Caretaker_Pet_Profile: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print("Received Pet ID (caretaker side): \(petId ?? "No Pet ID")")
+        print("Received Pet Name (caretaker side): \(petName ?? "No Pet Name")")
         
         petDetailsTableView.dataSource = self
         petDetailsTableView.delegate = self
         
-        if let petId = petId {
-            fetchPetData(petId: petId)
+        if let petName = petName {
+            fetchPetData(using: petName)
         } else {
-            print("Pet ID is missing!")
+            print("Pet Name is missing!")
         }
         
         // Setup gradient background
@@ -69,19 +69,21 @@ class Caretaker_Pet_Profile: UIViewController {
         petInfo.backgroundColor = UIColor.systemPink.withAlphaComponent(0.2)
     }
     
-    // MARK: - Fetch pet data from Firestore using petId
-    func fetchPetData(petId: String) {
+    // MARK: - Fetch pet data from Firestore using petName
+    func fetchPetData(using petName: String) {
         let db = Firestore.firestore()
-        db.collection("Pets").document(petId).getDocument { document, error in
+        db.collection("Pets").whereField("petName", isEqualTo: petName).getDocuments { snapshot, error in
             if let error = error {
                 print("Error fetching pet data: \(error.localizedDescription)")
                 return
             }
-            guard let document = document, document.exists, let data = document.data() else {
-                print("No pet data found for this petId.")
+            guard let snapshot = snapshot,
+                  let document = snapshot.documents.first else {
+                print("No pet data found for pet name: \(petName)")
                 return
             }
             
+            let data = document.data()
             let petName = data["petName"] as? String ?? "Unknown"
             let petBreed = data["petBreed"] as? String ?? "Unknown"
             let petAge = data["petAge"] as? String ?? "Unknown"
@@ -181,30 +183,31 @@ extension Caretaker_Pet_Profile: UITableViewDataSource, UITableViewDelegate {
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let petId = petId else { return }
-        let option = tableOptions[indexPath.row]
-        
-        switch option {
-        case "Pet Vaccinations":
-            if let vaccinationDetailsVC = storyboard?.instantiateViewController(withIdentifier: "VaccinationDetailsVC") as? Vaccination_Details {
-                vaccinationDetailsVC.petId = petId
-                navigationController?.pushViewController(vaccinationDetailsVC, animated: true)
-            }
-        case "Pet Diet":
-            if let petDietVC = storyboard?.instantiateViewController(withIdentifier: "PetDietVC") as? Pet_Diet {
-                petDietVC.petId = petId
-                navigationController?.pushViewController(petDietVC, animated: true)
-            }
-        case "Pet Medications":
-            if let petMedicationVC = storyboard?.instantiateViewController(withIdentifier: "PetMedicationVC") as? Pet_Medications {
-                petMedicationVC.petId = petId
-                navigationController?.pushViewController(petMedicationVC, animated: true)
-            }
-        default:
-            break
-        }
-    }
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        guard let petName = petName else { return }
+//        let option = tableOptions[indexPath.row]
+//        
+//        switch option {
+//        case "Pet Vaccinations":
+//            if let vaccinationDetailsVC = storyboard?.instantiateViewController(withIdentifier: "VaccinationDetailsVC") as? Vaccination_Details {
+//                // Pass petName instead of petId
+//                vaccinationDetailsVC.petName = petName
+//                navigationController?.pushViewController(vaccinationDetailsVC, animated: true)
+//            }
+//        case "Pet Diet":
+//            if let petDietVC = storyboard?.instantiateViewController(withIdentifier: "PetDietVC") as? Pet_Diet {
+//                petDietVC.petName = petName
+//                navigationController?.pushViewController(petDietVC, animated: true)
+//            }
+//        case "Pet Medications":
+//            if let petMedicationVC = storyboard?.instantiateViewController(withIdentifier: "PetMedicationVC") as? Pet_Medications {
+//                petMedicationVC.petName = petName
+//                navigationController?.pushViewController(petMedicationVC, animated: true)
+//            }
+//        default:
+//            break
+//        }
+//    }
     
     // Optional: consistent cell height
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

@@ -31,6 +31,12 @@ class Caretaker_Bookings_Information: UITableViewController {
     var caretakerRequest: ScheduleCaretakerRequest?
     var dogWalkerRequest: ScheduleDogWalkerRequest?
     
+    
+    // NEW: A property to hold the pet name
+    var petName: String? {
+        return caretakerRequest?.petName ?? dogWalkerRequest?.petName
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -42,6 +48,17 @@ class Caretaker_Bookings_Information: UITableViewController {
         }
     }
     
+    // MARK: - Prepare for Segue to Pet Profile
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Check for either of the two segues that lead to the pet profile
+        if segue.identifier == "goToPetProfile" || segue.identifier == "goToPetProfileDogwalker" {
+            if let destination = segue.destination as? Caretaker_Pet_Profile {
+                // Pass the petName along
+                destination.petName = self.petName
+            }
+        }
+    }
+    
     
     @IBAction func petDetailsButtonTapped(_ sender: Any) {
         performSegue(withIdentifier: "goToPetProfile", sender: self)
@@ -49,7 +66,7 @@ class Caretaker_Bookings_Information: UITableViewController {
     
     
     @IBAction func petDetailsButtonTapped1(_ sender: Any) {
-        performSegue(withIdentifier: "goToPetProfile", sender: self)
+        performSegue(withIdentifier: "goToPetProfileDogwalker", sender: self)
     }
     
     
