@@ -2993,7 +2993,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999998807907104" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="info.circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Lfd-3P-3pM">
-                                                    <rect key="frame" x="20" y="15.666666666666664" width="22" height="20.666666666666671"/>
+                                                    <rect key="frame" x="20" y="15.666666666666666" width="22" height="20.666666666666671"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="22" id="ffr-DS-H3D"/>
                                                         <constraint firstAttribute="width" constant="22" id="oti-ff-wdc"/>
@@ -4390,7 +4390,7 @@
                                 </segments>
                             </segmentedControl>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="130" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="NDw-xy-Jb7">
-                                <rect key="frame" x="0.0" y="230" width="402" height="561"/>
+                                <rect key="frame" x="0.0" y="235" width="402" height="556"/>
                                 <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="CaretakerBookingsTableViewCell" rowHeight="170" id="oNA-4w-iS8" customClass="CaretakerBookingsTableViewCell" customModule="TabBarControllerPawPal" customModuleProvider="target">
@@ -4417,7 +4417,7 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Parent:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="q2p-mX-bWH">
-                                                            <rect key="frame" x="119.66666666666666" y="64" width="46" height="17"/>
+                                                            <rect key="frame" x="120" y="64" width="46" height="17"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                             <color key="textColor" systemColor="secondaryLabelColor"/>
                                                             <nil key="highlightedColor"/>
@@ -4441,10 +4441,7 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GqO-AC-9Q8">
-                                                            <rect key="frame" x="173.66666666666666" y="64" width="43.333333333333343" height="17"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="42" id="PQC-Q6-iUt"/>
-                                                            </constraints>
+                                                            <rect key="frame" x="174" y="64" width="35.333333333333343" height="17"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                             <color key="textColor" systemColor="secondaryLabelColor"/>
                                                             <nil key="highlightedColor"/>
@@ -4462,46 +4459,47 @@
                                                     <constraints>
                                                         <constraint firstItem="DcZ-Tj-Jdm" firstAttribute="leading" secondItem="53R-5Z-jrK" secondAttribute="trailing" constant="10" id="3wW-5z-EDr"/>
                                                         <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="FQ5-m9-X3r" secondAttribute="trailing" constant="12" id="4sT-ec-9bK"/>
-                                                        <constraint firstItem="q2p-mX-bWH" firstAttribute="centerX" secondItem="DcZ-Tj-Jdm" secondAttribute="centerX" id="6ta-QJ-QzW"/>
                                                         <constraint firstAttribute="trailing" secondItem="TeM-gg-909" secondAttribute="trailing" constant="5" id="AxK-A9-Pfe"/>
-                                                        <constraint firstItem="DcZ-Tj-Jdm" firstAttribute="top" secondItem="Evf-YC-5jU" secondAttribute="top" constant="10" id="BCk-6E-dCw"/>
                                                         <constraint firstItem="FQ5-m9-X3r" firstAttribute="top" secondItem="HO4-6g-2N0" secondAttribute="top" id="BGv-RP-CJq"/>
-                                                        <constraint firstItem="TeM-gg-909" firstAttribute="top" secondItem="Evf-YC-5jU" secondAttribute="top" constant="8" id="F57-09-y4E"/>
                                                         <constraint firstItem="M5t-iy-ToI" firstAttribute="leading" secondItem="53R-5Z-jrK" secondAttribute="trailing" constant="10" id="FaE-uW-T3w"/>
+                                                        <constraint firstItem="GqO-AC-9Q8" firstAttribute="leading" secondItem="q2p-mX-bWH" secondAttribute="trailing" constant="8" symbolic="YES" id="Gcr-2l-5ue"/>
+                                                        <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="GqO-AC-9Q8" secondAttribute="trailing" constant="12" id="HE9-Ea-Wrt"/>
                                                         <constraint firstItem="HO4-6g-2N0" firstAttribute="leading" secondItem="53R-5Z-jrK" secondAttribute="trailing" constant="10" id="HLH-a6-aS2"/>
                                                         <constraint firstItem="HO4-6g-2N0" firstAttribute="top" secondItem="q2p-mX-bWH" secondAttribute="bottom" constant="8" id="HQq-kJ-1x6"/>
+                                                        <constraint firstItem="53R-5Z-jrK" firstAttribute="centerY" secondItem="Evf-YC-5jU" secondAttribute="centerY" id="Icb-TK-Y1q"/>
                                                         <constraint firstItem="q2p-mX-bWH" firstAttribute="top" secondItem="M5t-iy-ToI" secondAttribute="bottom" constant="8" symbolic="YES" id="LzK-Er-iIO"/>
                                                         <constraint firstItem="53R-5Z-jrK" firstAttribute="leading" secondItem="Evf-YC-5jU" secondAttribute="leading" constant="10" id="PGU-9J-c4b"/>
                                                         <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="M5t-iy-ToI" secondAttribute="trailing" constant="20" symbolic="YES" id="Ptm-gp-VCC"/>
                                                         <constraint firstItem="TeM-gg-909" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="DcZ-Tj-Jdm" secondAttribute="trailing" constant="8" symbolic="YES" id="R4g-hE-jU8"/>
                                                         <constraint firstAttribute="height" constant="130" id="TY4-MD-y3c"/>
+                                                        <constraint firstItem="TeM-gg-909" firstAttribute="top" secondItem="Evf-YC-5jU" secondAttribute="top" constant="8" id="VUl-pP-GfI"/>
                                                         <constraint firstItem="M5t-iy-ToI" firstAttribute="top" secondItem="DcZ-Tj-Jdm" secondAttribute="bottom" constant="8" symbolic="YES" id="WEs-QM-gtC"/>
+                                                        <constraint firstItem="DcZ-Tj-Jdm" firstAttribute="top" secondItem="Evf-YC-5jU" secondAttribute="top" constant="10" id="XFu-VR-TXR"/>
+                                                        <constraint firstItem="q2p-mX-bWH" firstAttribute="leading" secondItem="53R-5Z-jrK" secondAttribute="trailing" constant="10" id="dQQ-93-i47"/>
                                                         <constraint firstItem="FQ5-m9-X3r" firstAttribute="leading" secondItem="HO4-6g-2N0" secondAttribute="trailing" constant="8" symbolic="YES" id="fbO-WT-ywX"/>
-                                                        <constraint firstItem="GqO-AC-9Q8" firstAttribute="leading" secondItem="q2p-mX-bWH" secondAttribute="trailing" constant="8" symbolic="YES" id="hQD-Me-4fw"/>
-                                                        <constraint firstItem="53R-5Z-jrK" firstAttribute="centerY" secondItem="Evf-YC-5jU" secondAttribute="centerY" id="hhd-3b-Ieg"/>
                                                         <constraint firstItem="GqO-AC-9Q8" firstAttribute="top" secondItem="q2p-mX-bWH" secondAttribute="top" id="nPM-N7-gi6"/>
                                                         <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="DcZ-Tj-Jdm" secondAttribute="trailing" constant="20" symbolic="YES" id="t6P-so-MSr"/>
-                                                        <constraint firstAttribute="trailing" relation="lessThanOrEqual" secondItem="GqO-AC-9Q8" secondAttribute="trailing" constant="145" id="vIf-ha-Y57"/>
                                                     </constraints>
                                                 </view>
                                             </subviews>
                                             <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
                                             <constraints>
-                                                <constraint firstItem="Evf-YC-5jU" firstAttribute="centerY" secondItem="A9w-K4-kdf" secondAttribute="centerY" id="i7R-ww-VEl"/>
+                                                <constraint firstItem="Evf-YC-5jU" firstAttribute="centerY" secondItem="A9w-K4-kdf" secondAttribute="centerY" id="GSo-t3-40A"/>
                                                 <constraint firstAttribute="trailing" secondItem="Evf-YC-5jU" secondAttribute="trailing" constant="20" symbolic="YES" id="rFS-mQ-e45"/>
                                                 <constraint firstItem="Evf-YC-5jU" firstAttribute="leading" secondItem="A9w-K4-kdf" secondAttribute="leading" constant="20" symbolic="YES" id="yV0-ZU-1bG"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
                                         <connections>
-                                            <outlet property="petBreedLabel" destination="M5t-iy-ToI" id="RET-Oa-kDA"/>
-                                            <outlet property="petDurationLabel" destination="FQ5-m9-X3r" id="LxV-ug-gQb"/>
-                                            <outlet property="petImage" destination="53R-5Z-jrK" id="5yk-l5-wTa"/>
-                                            <outlet property="petNameLabel" destination="DcZ-Tj-Jdm" id="R8I-xP-ZbC"/>
-                                            <outlet property="petOwnerLabel" destination="GqO-AC-9Q8" id="T6e-YR-0Cv"/>
+                                            <outlet property="bgView" destination="Evf-YC-5jU" id="EOW-rA-NP6"/>
+                                            <outlet property="petBreedLabel" destination="M5t-iy-ToI" id="NcG-bx-xNw"/>
+                                            <outlet property="petDurationLabel" destination="FQ5-m9-X3r" id="ujc-HX-IMs"/>
+                                            <outlet property="petImage" destination="53R-5Z-jrK" id="vnb-mO-xPg"/>
+                                            <outlet property="petNameLabel" destination="DcZ-Tj-Jdm" id="4oJ-DQ-3bl"/>
+                                            <outlet property="petOwnerLabel" destination="GqO-AC-9Q8" id="LpH-uo-84r"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="170" id="qw5-Er-zyJ" customClass="CaretakerBookingsTableViewCell" customModule="TabBarControllerPawPal" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="DogwalkerBookingsTableViewCell" rowHeight="170" id="qw5-Er-zyJ" customClass="DogwalkerBookingsTableViewCell" customModule="TabBarControllerPawPal" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="220" width="402" height="170"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="qw5-Er-zyJ" id="jr5-uN-m50">
@@ -4525,7 +4523,7 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Parent:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bUa-OC-trI">
-                                                            <rect key="frame" x="119.66666666666666" y="64" width="46" height="17"/>
+                                                            <rect key="frame" x="120" y="64" width="46" height="17"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                             <color key="textColor" systemColor="secondaryLabelColor"/>
                                                             <nil key="highlightedColor"/>
@@ -4549,10 +4547,7 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nwR-cS-FoI">
-                                                            <rect key="frame" x="173.66666666666666" y="64" width="43.333333333333343" height="17"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="42" id="6HL-tx-Tvw"/>
-                                                            </constraints>
+                                                            <rect key="frame" x="174" y="64" width="35.333333333333343" height="17"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                             <color key="textColor" systemColor="secondaryLabelColor"/>
                                                             <nil key="highlightedColor"/>
@@ -4568,9 +4563,9 @@
                                                     </subviews>
                                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                     <constraints>
-                                                        <constraint firstItem="nwR-cS-FoI" firstAttribute="leading" secondItem="bUa-OC-trI" secondAttribute="trailing" constant="8" symbolic="YES" id="2zu-Bz-RUm"/>
                                                         <constraint firstItem="nNq-H7-uC8" firstAttribute="top" secondItem="hG3-7z-Yer" secondAttribute="top" constant="10" id="4Yf-Ms-lib"/>
                                                         <constraint firstItem="bUa-OC-trI" firstAttribute="top" secondItem="HTq-Te-k7K" secondAttribute="bottom" constant="8" symbolic="YES" id="7Ea-ka-dOc"/>
+                                                        <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="nwR-cS-FoI" secondAttribute="trailing" constant="12" id="8de-bS-jB6"/>
                                                         <constraint firstAttribute="trailing" secondItem="6oB-zE-dbJ" secondAttribute="trailing" constant="5" id="BxO-6j-MLn"/>
                                                         <constraint firstItem="nwR-cS-FoI" firstAttribute="top" secondItem="bUa-OC-trI" secondAttribute="top" id="J7S-6P-kmF"/>
                                                         <constraint firstItem="Jap-pc-hOd" firstAttribute="centerY" secondItem="hG3-7z-Yer" secondAttribute="centerY" id="RHa-J4-aHg"/>
@@ -4582,12 +4577,12 @@
                                                         <constraint firstItem="HTq-Te-k7K" firstAttribute="top" secondItem="nNq-H7-uC8" secondAttribute="bottom" constant="8" symbolic="YES" id="bLn-Gk-9Cc"/>
                                                         <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="RYU-Hc-NoY" secondAttribute="trailing" constant="12" id="bOp-qz-3Gg"/>
                                                         <constraint firstItem="7dI-37-sE2" firstAttribute="top" secondItem="bUa-OC-trI" secondAttribute="bottom" constant="8" id="dQh-Ej-TSw"/>
-                                                        <constraint firstAttribute="trailing" relation="lessThanOrEqual" secondItem="nwR-cS-FoI" secondAttribute="trailing" constant="145" id="fEc-9k-D5a"/>
-                                                        <constraint firstItem="bUa-OC-trI" firstAttribute="centerX" secondItem="nNq-H7-uC8" secondAttribute="centerX" id="h7f-Ob-opT"/>
+                                                        <constraint firstItem="bUa-OC-trI" firstAttribute="leading" secondItem="Jap-pc-hOd" secondAttribute="trailing" constant="10" id="dnS-Vz-RCJ"/>
                                                         <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="HTq-Te-k7K" secondAttribute="trailing" constant="20" symbolic="YES" id="hDe-kp-cgM"/>
                                                         <constraint firstItem="6oB-zE-dbJ" firstAttribute="top" secondItem="hG3-7z-Yer" secondAttribute="top" constant="8" id="jxa-1p-NbF"/>
                                                         <constraint firstItem="6oB-zE-dbJ" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="nNq-H7-uC8" secondAttribute="trailing" constant="8" symbolic="YES" id="m71-Tk-R5w"/>
                                                         <constraint firstItem="7dI-37-sE2" firstAttribute="leading" secondItem="Jap-pc-hOd" secondAttribute="trailing" constant="10" id="mad-XH-KF3"/>
+                                                        <constraint firstItem="nwR-cS-FoI" firstAttribute="leading" secondItem="bUa-OC-trI" secondAttribute="trailing" constant="8" id="vXg-2u-eA9"/>
                                                         <constraint firstItem="RYU-Hc-NoY" firstAttribute="leading" secondItem="7dI-37-sE2" secondAttribute="trailing" constant="8" symbolic="YES" id="xhA-nc-Vlh"/>
                                                         <constraint firstItem="Jap-pc-hOd" firstAttribute="leading" secondItem="hG3-7z-Yer" secondAttribute="leading" constant="10" id="ykW-DO-rK9"/>
                                                     </constraints>
@@ -4601,15 +4596,27 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
+                                        <connections>
+                                            <outlet property="bgView" destination="hG3-7z-Yer" id="46G-cv-UYw"/>
+                                            <outlet property="petBreedLabel" destination="HTq-Te-k7K" id="eey-IX-g1f"/>
+                                            <outlet property="petDurationLabel" destination="RYU-Hc-NoY" id="Loi-en-cka"/>
+                                            <outlet property="petImage" destination="Jap-pc-hOd" id="SYG-12-bGw"/>
+                                            <outlet property="petNameLabel" destination="nNq-H7-uC8" id="jFq-zc-x7T"/>
+                                            <outlet property="petOwnerLabel" destination="nwR-cS-FoI" id="KJm-7B-XgV"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="4Jq-IO-XWb" id="4OZ-Lp-iCj"/>
+                                    <outlet property="delegate" destination="4Jq-IO-XWb" id="5br-1x-FZ2"/>
+                                </connections>
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Id4-T9-M3t"/>
                         <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="eN8-ld-imB" firstAttribute="top" secondItem="K2L-bn-Ydh" secondAttribute="bottom" constant="25" id="8JD-CP-CFI"/>
-                            <constraint firstItem="NDw-xy-Jb7" firstAttribute="top" secondItem="eN8-ld-imB" secondAttribute="bottom" constant="15" id="E9o-lF-rjN"/>
+                            <constraint firstItem="NDw-xy-Jb7" firstAttribute="top" secondItem="eN8-ld-imB" secondAttribute="bottom" constant="20" id="E9o-lF-rjN"/>
                             <constraint firstItem="K2L-bn-Ydh" firstAttribute="trailing" secondItem="NDw-xy-Jb7" secondAttribute="trailing" id="Ei1-Gc-3V5"/>
                             <constraint firstItem="Id4-T9-M3t" firstAttribute="trailing" secondItem="NDw-xy-Jb7" secondAttribute="trailing" id="RKK-rZ-VNm"/>
                             <constraint firstItem="K2L-bn-Ydh" firstAttribute="leading" secondItem="nt6-nm-OIe" secondAttribute="leading" id="cva-id-15U"/>
@@ -4623,7 +4630,7 @@
                     <navigationItem key="navigationItem" title="My Bookings" id="Fgw-5o-q26"/>
                     <connections>
                         <outlet property="bgView" destination="K2L-bn-Ydh" id="yc7-UW-Gw4"/>
-                        <outlet property="bookingsSegmentedController" destination="eN8-ld-imB" id="Wdh-yc-s65"/>
+                        <outlet property="bookingsSegmentedControl" destination="eN8-ld-imB" id="6Og-dz-1GW"/>
                         <outlet property="tableView" destination="NDw-xy-Jb7" id="iqE-u2-qCJ"/>
                     </connections>
                 </viewController>
@@ -4677,7 +4684,7 @@
         <!--Booking Info-->
         <scene sceneID="v55-09-YYo">
             <objects>
-                <tableViewController id="Y0p-jN-JzV" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="CaretakerBookingInfoVC" id="Y0p-jN-JzV" customClass="Caretaker_Bookings_Information" customModule="TabBarControllerPawPal" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" id="NdZ-jk-QfO">
                         <rect key="frame" x="0.0" y="0.0" width="402" height="874"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -4984,6 +4991,10 @@
                                                     <buttonConfiguration key="configuration" style="plain" title="Pet Details">
                                                         <fontDescription key="titleFontDescription" type="system" pointSize="15"/>
                                                     </buttonConfiguration>
+                                                    <connections>
+                                                        <action selector="petDetailsButtonTapped:" destination="Y0p-jN-JzV" eventType="touchUpInside" id="ap2-Sw-kKm"/>
+                                                        <segue destination="XtO-BC-Zd9" kind="show" identifier="goToPetProfile" id="dxt-nf-j0c"/>
+                                                    </connections>
                                                 </button>
                                             </subviews>
                                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -5115,6 +5126,15 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Booking Info" id="nUP-mG-DYK"/>
+                    <connections>
+                        <outlet property="caretakerEndDate" destination="FUf-JU-WJI" id="PSu-cz-W4e"/>
+                        <outlet property="caretakerEndTime" destination="0Jy-Ef-yEn" id="7tk-LO-Ln8"/>
+                        <outlet property="caretakerPetLocation" destination="Wzj-rc-OKV" id="tTm-zV-BFx"/>
+                        <outlet property="caretakerPetParentName" destination="XRe-M1-4CY" id="baX-zc-MY5"/>
+                        <outlet property="caretakerStartDate" destination="T0q-2E-O1T" id="xdO-km-JQc"/>
+                        <outlet property="caretakerStartTime" destination="fow-yH-ObS" id="YYy-gg-y8A"/>
+                        <outlet property="caretakerStatus" destination="2pG-eo-jK9" id="suF-aG-ZpQ"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qx2-PT-xlE" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -5725,7 +5745,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999998807907104" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="info.circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="KK3-rR-7cX">
-                                                    <rect key="frame" x="20" y="15.666666666666664" width="22" height="20.666666666666671"/>
+                                                    <rect key="frame" x="20" y="15.666666666666666" width="22" height="20.666666666666671"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="22" id="8yO-t5-QWt"/>
                                                         <constraint firstAttribute="height" constant="22" id="EdR-JW-N8Y"/>
@@ -5941,26 +5961,26 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Qgs-yO-oQA">
-                                <rect key="frame" x="101" y="82" width="200" height="200"/>
+                                <rect key="frame" x="101" y="126" width="200" height="200"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="200" id="XOd-Hb-PJA"/>
                                     <constraint firstAttribute="height" constant="200" id="yw4-Zm-Z1p"/>
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="40S-20-VYj">
-                                <rect key="frame" x="171.33333333333334" y="302" width="59.666666666666657" height="28.666666666666686"/>
+                                <rect key="frame" x="171.33333333333334" y="346" width="59.666666666666657" height="28.666666666666686"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="24"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TXO-wj-v6y">
-                                <rect key="frame" x="176.66666666666666" y="340.66666666666669" width="49" height="24"/>
+                                <rect key="frame" x="176.66666666666666" y="384.66666666666669" width="49" height="24"/>
                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
                                 <color key="textColor" systemColor="secondaryLabelColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="a47-bT-BTm">
-                                <rect key="frame" x="0.0" y="518.33333333333337" width="402" height="321.66666666666663"/>
+                                <rect key="frame" x="0.0" y="562.33333333333337" width="402" height="277.66666666666663"/>
                                 <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="PetDetailCell" rowHeight="60" id="LiR-xb-dG8" customClass="PetProfileTableViewCell" customModule="TabBarControllerPawPal" customModuleProvider="target">
@@ -6019,7 +6039,7 @@
                                 </connections>
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EhX-Wz-9uO">
-                                <rect key="frame" x="20" y="389.66666666666669" width="362" height="70"/>
+                                <rect key="frame" x="20" y="433.66666666666669" width="362" height="70"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="80" translatesAutoresizingMaskIntoConstraints="NO" id="tsI-vg-mUm">
                                         <rect key="frame" x="32" y="14.333333333333311" width="298" height="41.666666666666657"/>
@@ -6087,7 +6107,7 @@
                                 </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Pet Details" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cVD-ir-dby">
-                                <rect key="frame" x="19.999999999999993" y="489.66666666666669" width="116.33333333333331" height="28.666666666666686"/>
+                                <rect key="frame" x="19.999999999999993" y="533.66666666666663" width="116.33333333333331" height="28.666666666666629"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="24"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -6665,7 +6685,7 @@
         <!--Booking Info-->
         <scene sceneID="Pet-9M-RUG">
             <objects>
-                <tableViewController id="spL-77-8hz" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="DogWalkerBookingInfoVC" id="spL-77-8hz" customClass="Caretaker_Bookings_Information" customModule="TabBarControllerPawPal" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" id="X9o-qB-8U9">
                         <rect key="frame" x="0.0" y="0.0" width="402" height="874"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -6933,6 +6953,10 @@
                                                     <buttonConfiguration key="configuration" style="plain" title="Pet Details">
                                                         <fontDescription key="titleFontDescription" type="system" pointSize="15"/>
                                                     </buttonConfiguration>
+                                                    <connections>
+                                                        <action selector="petDetailsButtonTapped1:" destination="spL-77-8hz" eventType="touchUpInside" id="Rcr-49-PRr"/>
+                                                        <segue destination="XtO-BC-Zd9" kind="show" identifier="goToPetProfile" id="Y4j-0R-4BB"/>
+                                                    </connections>
                                                 </button>
                                             </subviews>
                                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -7064,6 +7088,14 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Booking Info" id="yex-8W-Kzl"/>
+                    <connections>
+                        <outlet property="dogWalkerDate" destination="ZQb-uc-lAH" id="MKd-8R-XGT"/>
+                        <outlet property="dogWalkerEndTime" destination="ISt-1n-h8V" id="fZB-p2-MZP"/>
+                        <outlet property="dogWalkerPetLocation" destination="AUM-BG-dNy" id="OTC-Du-TGQ"/>
+                        <outlet property="dogWalkerPetParentName" destination="rhc-Zy-GbP" id="W93-lv-4aT"/>
+                        <outlet property="dogWalkerStartTime" destination="bES-ke-Mw0" id="edr-4f-Qcg"/>
+                        <outlet property="dogWalkerStatus" destination="uFC-Zm-xBk" id="T7X-eh-pnm"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="AEc-hk-gli" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -7089,6 +7121,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
+        <segue reference="Y4j-0R-4BB"/>
         <segue reference="MFp-tt-uHV"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" systemColor="systemPinkColor"/>

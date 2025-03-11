@@ -1,19 +1,19 @@
 //
-//  Pet Profile.swift
+//  Caretaker Pet Profile.swift
 //  TabBarControllerPawPal
 //
-//  Created by admin19 on 01/01/25.
+//  Created by admin19 on 11/03/25.
 //
 
 import UIKit
 import FirebaseFirestore
 import FirebaseStorage
 
-class Pet_Profile: UIViewController {
+class Caretaker_Pet_Profile: UIViewController {
     
-    // The petId passed from My_Pets view controller
     var petId: String?
     
+    // MARK: - Outlets
     @IBOutlet weak var petImage: UIImageView!
     @IBOutlet var weightLabel: UILabel!
     @IBOutlet var genderLabel: UILabel!
@@ -31,7 +31,7 @@ class Pet_Profile: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print("Received Pet ID: \(petId ?? "No Pet ID")")
+        print("Received Pet ID (caretaker side): \(petId ?? "No Pet ID")")
         
         petDetailsTableView.dataSource = self
         petDetailsTableView.delegate = self
@@ -42,33 +42,34 @@ class Pet_Profile: UIViewController {
             print("Pet ID is missing!")
         }
         
-        // Set Gradient View
+        // Setup gradient background
         let gradientView = UIView(frame: view.bounds)
         gradientView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(gradientView)
         view.sendSubviewToBack(gradientView)
         
-        // Set Gradient inside the view
         let gradientLayer = CAGradientLayer()
         gradientLayer.frame = view.bounds
         gradientLayer.colors = [
-            UIColor.systemPink.withAlphaComponent(0.3).cgColor, // Start color
-            UIColor.clear.cgColor                              // End color
+            UIColor.systemPink.withAlphaComponent(0.3).cgColor,
+            UIColor.clear.cgColor
         ]
         gradientLayer.locations = [0.0, 1.0]
         gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)
-        gradientLayer.endPoint = CGPoint(x: 0.5, y: 0.5)
+        gradientLayer.endPoint   = CGPoint(x: 0.5, y: 0.5)
         gradientView.layer.insertSublayer(gradientLayer, at: 0)
         
+        // Round pet image into a circle
         petImage.layer.cornerRadius = petImage.frame.height / 2
         petImage.layer.masksToBounds = true
         
+        // Style the container view
         petInfo.layer.cornerRadius = 12
         petInfo.layer.masksToBounds = true
         petInfo.backgroundColor = UIColor.systemPink.withAlphaComponent(0.2)
     }
     
-    // Fetch pet data from Firestore using petId
+    // MARK: - Fetch pet data from Firestore using petId
     func fetchPetData(petId: String) {
         let db = Firestore.firestore()
         db.collection("Pets").document(petId).getDocument { document, error in
@@ -76,32 +77,33 @@ class Pet_Profile: UIViewController {
                 print("Error fetching pet data: \(error.localizedDescription)")
                 return
             }
-            if let document = document, document.exists, let data = document.data() {
-                let petName = data["petName"] as? String ?? "Unknown"
-                let petBreed = data["petBreed"] as? String ?? "Unknown"
-                let petAge = data["petAge"] as? String ?? "Unknown"
-                let petGender = data["petGender"] as? String ?? "Unknown"
-                let petWeight = data["petWeight"] as? String ?? "Unknown"
-                let petImageUrl = data["petImage"] as? String ?? ""
-                
-                DispatchQueue.main.async {
-                    self.nameLabel.text = petName
-                    self.breedLabel.text = petBreed
-                    self.ageLabel.text = petAge
-                    self.genderLabel.text = petGender
-                    self.weightLabel.text = petWeight
-                    self.petImage.loadPrefetchedImageFromUrl(petImageUrl)
-                }
-            } else {
+            guard let document = document, document.exists, let data = document.data() else {
                 print("No pet data found for this petId.")
+                return
+            }
+            
+            let petName = data["petName"] as? String ?? "Unknown"
+            let petBreed = data["petBreed"] as? String ?? "Unknown"
+            let petAge = data["petAge"] as? String ?? "Unknown"
+            let petGender = data["petGender"] as? String ?? "Unknown"
+            let petWeight = data["petWeight"] as? String ?? "Unknown"
+            let petImageUrl = data["petImage"] as? String ?? ""
+            
+            DispatchQueue.main.async {
+                self.nameLabel.text = petName
+                self.breedLabel.text = petBreed
+                self.ageLabel.text = petAge
+                self.genderLabel.text = petGender
+                self.weightLabel.text = petWeight
+                self.petImage.loadPrefetchedImageFromUrl(petImageUrl)
             }
         }
     }
 }
 
-// MARK: - Prefetched Image Extension
+// MARK: - Prefetched Image Extension (Same as in Pet_Profile)
 extension UIImageView {
-    func loadPrefetchedImageFromUrlOwner(_ urlString: String) {
+    func loadPrefetchedImageFromUrl(_ urlString: String) {
         guard let url = URL(string: urlString) else {
             DispatchQueue.main.async {
                 self.image = UIImage(named: "placeholder_image")
@@ -109,7 +111,6 @@ extension UIImageView {
             return
         }
         
-        // Use the URL's lastPathComponent as the file name
         let fileName = url.lastPathComponent
         let cachesDirectory = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
         let localURL = cachesDirectory.appendingPathComponent(fileName)
@@ -121,7 +122,7 @@ extension UIImageView {
                 self.image = image
             }
         } else {
-            // If not, download the image using ImageDownloader
+            // If not, download the image
             ImageDownloader.shared.downloadImage(from: url) { downloadedLocalURL in
                 if let downloadedLocalURL = downloadedLocalURL,
                    let image = UIImage(contentsOfFile: downloadedLocalURL.path) {
@@ -139,7 +140,7 @@ extension UIImageView {
 }
 
 // MARK: - UITableViewDataSource & UITableViewDelegate
-extension Pet_Profile: UITableViewDataSource, UITableViewDelegate {
+extension Caretaker_Pet_Profile: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tableOptions.count
@@ -153,10 +154,12 @@ extension Pet_Profile: UITableViewDataSource, UITableViewDelegate {
         
         let option = tableOptions[indexPath.row]
         cell.petDetailName.text = option
+        
+        // Style the icon background
         cell.petDetailImageBgView.layer.cornerRadius = cell.petDetailImageBgView.frame.height / 2
         cell.petDetailImageBgView.layer.masksToBounds = true
         
-        // Set the appropriate icon
+        // Pick the icon
         let icon: UIImage?
         switch option {
         case "Pet Vaccinations":
@@ -203,7 +206,7 @@ extension Pet_Profile: UITableViewDataSource, UITableViewDelegate {
         }
     }
     
-    // Set a consistent cell height if desired
+    // Optional: consistent cell height
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
     }

@@ -1,14 +1,14 @@
 //
-//  CaretakerBookingsTableViewCell.swift
+//  DogwalkerBookingsTableViewCell.swift
 //  TabBarControllerPawPal
 //
-//  Created by admin19 on 10/03/25.
+//  Created by admin19 on 11/03/25.
 //
 
 import UIKit
 
-class CaretakerBookingsTableViewCell: UITableViewCell {
-
+class DogwalkerBookingsTableViewCell: UITableViewCell {
+    
     @IBOutlet weak var petImage: UIImageView!
     @IBOutlet weak var petNameLabel: UILabel!
     @IBOutlet weak var petBreedLabel: UILabel!
