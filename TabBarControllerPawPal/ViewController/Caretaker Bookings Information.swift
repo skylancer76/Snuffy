@@ -50,7 +50,7 @@ class Caretaker_Bookings_Information: UITableViewController {
     
     // MARK: - Prepare for Segue to Pet Profile
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Check for either of the two segues that lead to the pet profile
+      
         if segue.identifier == "goToPetProfile" || segue.identifier == "goToPetProfileDogwalker" {
             if let destination = segue.destination as? Caretaker_Pet_Profile {
                 // Pass the petName along
@@ -61,12 +61,12 @@ class Caretaker_Bookings_Information: UITableViewController {
     
     
     @IBAction func petDetailsButtonTapped(_ sender: Any) {
-        performSegue(withIdentifier: "goToPetProfile", sender: self)
+   
     }
     
     
     @IBAction func petDetailsButtonTapped1(_ sender: Any) {
-        performSegue(withIdentifier: "goToPetProfileDogwalker", sender: self)
+        
     }
     
     

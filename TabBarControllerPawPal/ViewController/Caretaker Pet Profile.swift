@@ -12,6 +12,7 @@ import FirebaseStorage
 class Caretaker_Pet_Profile: UIViewController {
     
     var petName: String?
+    var petId: String?
     
     // MARK: - Outlets
     @IBOutlet weak var petImage: UIImageView!
@@ -83,6 +84,7 @@ class Caretaker_Pet_Profile: UIViewController {
                 return
             }
             
+            self.petId = document.documentID
             let data = document.data()
             let petName = data["petName"] as? String ?? "Unknown"
             let petBreed = data["petBreed"] as? String ?? "Unknown"
@@ -208,7 +210,42 @@ extension Caretaker_Pet_Profile: UITableViewDataSource, UITableViewDelegate {
 //            break
 //        }
 //    }
+//
     
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+            guard let petId = self.petId else {
+                // If petId is nil, we can’t navigate properly
+                print("No petId available yet.")
+                return
+            }
+        
+        let option = tableOptions[indexPath.row]
+                
+                switch option {
+                case "Pet Vaccinations":
+                    if let vaccinationDetailsVC = storyboard?.instantiateViewController(withIdentifier: "VaccinationDetails") as? Pet_Vaccination_Details {
+                        // Pass the petId to the detail screen
+                        vaccinationDetailsVC.petId = petId
+                        navigationController?.pushViewController(vaccinationDetailsVC, animated: true)
+                    }
+                    
+                case "Pet Diet":
+                    if let petDietVC = storyboard?.instantiateViewController(withIdentifier: "PetDiet") as? Pet_Diet_Details {
+                        petDietVC.petId = petId
+                        navigationController?.pushViewController(petDietVC, animated: true)
+                    }
+                    
+                case "Pet Medications":
+                    if let petMedicationVC = storyboard?.instantiateViewController(withIdentifier: "PetMedication") as? Pet_Medication_Details {
+                        petMedicationVC.petId = petId
+                        navigationController?.pushViewController(petMedicationVC, animated: true)
+                    }
+                    
+                default:
+                    break
+                }
+            }
     // Optional: consistent cell height
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60

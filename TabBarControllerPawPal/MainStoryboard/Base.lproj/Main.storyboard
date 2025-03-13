@@ -2993,7 +2993,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999998807907104" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="info.circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Lfd-3P-3pM">
-                                                    <rect key="frame" x="20" y="15.666666666666664" width="22" height="20.666666666666671"/>
+                                                    <rect key="frame" x="20" y="15.666666666666666" width="22" height="20.666666666666671"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="22" id="ffr-DS-H3D"/>
                                                         <constraint firstAttribute="width" constant="22" id="oti-ff-wdc"/>
@@ -5745,7 +5745,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999998807907104" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="info.circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="KK3-rR-7cX">
-                                                    <rect key="frame" x="20" y="15.666666666666664" width="22" height="20.666666666666671"/>
+                                                    <rect key="frame" x="20" y="15.666666666666666" width="22" height="20.666666666666671"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="22" id="8yO-t5-QWt"/>
                                                         <constraint firstAttribute="height" constant="22" id="EdR-JW-N8Y"/>
@@ -6157,7 +6157,7 @@
         <!--Vaccination Details-->
         <scene sceneID="jjl-AU-6DZ">
             <objects>
-                <viewController id="iVQ-gg-qBL" customClass="Vaccination_Details" customModule="TabBarControllerPawPal" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="VaccinationDetails" id="iVQ-gg-qBL" customClass="Pet_Vaccination_Details" customModule="TabBarControllerPawPal" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ZUZ-pa-RpX">
                         <rect key="frame" x="0.0" y="0.0" width="402" height="874"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -6166,7 +6166,7 @@
                                 <rect key="frame" x="0.0" y="106" width="402" height="768"/>
                                 <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="230" id="DGk-ld-f6v" customClass="VaccinationTableViewCell" customModule="TabBarControllerPawPal" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="VaccinationTableViewCell" rowHeight="230" id="DGk-ld-f6v" customClass="VaccinationTableViewCell" customModule="TabBarControllerPawPal" customModuleProvider="target">
                                         <rect key="frame" x="20" y="55.333332061767578" width="362" height="230"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="DGk-ld-f6v" id="hMB-oN-gzS">
@@ -6269,10 +6269,6 @@
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
-                                <connections>
-                                    <outlet property="dataSource" destination="iVQ-gg-qBL" id="coh-rK-4Iy"/>
-                                    <outlet property="delegate" destination="iVQ-gg-qBL" id="nrK-th-UyQ"/>
-                                </connections>
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="9eV-oV-0Z9"/>
@@ -6286,7 +6282,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="Vaccination Details" id="3ku-or-Ct8"/>
                     <connections>
-                        <outlet property="vaccinationTableView" destination="nNo-GF-Ne6" id="HXi-jr-yjY"/>
+                        <outlet property="vaccinationTableView" destination="nNo-GF-Ne6" id="FHy-R2-0SD"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="J8s-iy-jU7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -6314,7 +6310,7 @@
         <!--Pet Diet-->
         <scene sceneID="r2s-ol-bAi">
             <objects>
-                <viewController storyboardIdentifier="PetDietV" id="rjj-l6-M9f" customClass="Pet_Diet" customModule="TabBarControllerPawPal" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PetDiet" id="rjj-l6-M9f" customClass="Pet_Diet_Details" customModule="TabBarControllerPawPal" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Z2D-wp-VBs">
                         <rect key="frame" x="0.0" y="0.0" width="402" height="874"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -6323,7 +6319,7 @@
                                 <rect key="frame" x="0.0" y="106" width="402" height="768"/>
                                 <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="250" id="cU4-J1-rhG" customClass="PetDietTableViewCell" customModule="TabBarControllerPawPal" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="PetDietTableViewCell" rowHeight="250" id="cU4-J1-rhG" customClass="PetDietTableViewCell" customModule="TabBarControllerPawPal" customModuleProvider="target">
                                         <rect key="frame" x="20" y="55.333332061767578" width="362" height="250"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="cU4-J1-rhG" id="Frs-TR-83f">
@@ -6444,8 +6440,8 @@
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
-                                    <outlet property="dataSource" destination="rjj-l6-M9f" id="Ygi-H4-tyL"/>
-                                    <outlet property="delegate" destination="rjj-l6-M9f" id="7FA-Hy-1hl"/>
+                                    <outlet property="dataSource" destination="rjj-l6-M9f" id="njz-hW-J4i"/>
+                                    <outlet property="delegate" destination="rjj-l6-M9f" id="hEo-vw-Pqh"/>
                                 </connections>
                             </tableView>
                         </subviews>
@@ -6460,7 +6456,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="Pet Diet" id="Fhg-UC-Smk"/>
                     <connections>
-                        <outlet property="petDietTableView" destination="hyV-ho-zWZ" id="b3H-QX-sK5"/>
+                        <outlet property="petDietTableView" destination="hyV-ho-zWZ" id="5P4-J5-ovw"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Qo9-KH-2ro" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -6488,7 +6484,7 @@
         <!--Pet Medication-->
         <scene sceneID="lzJ-tH-iVF">
             <objects>
-                <viewController id="frb-hN-c0U" customClass="Pet_Medications" customModule="TabBarControllerPawPal" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PetMedication" id="frb-hN-c0U" customClass="Pet_Medication_Details" customModule="TabBarControllerPawPal" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="GD0-Ow-As6">
                         <rect key="frame" x="0.0" y="0.0" width="402" height="874"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -6497,7 +6493,7 @@
                                 <rect key="frame" x="0.0" y="106" width="402" height="768"/>
                                 <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="290" id="kIO-qT-sVZ" customClass="PetMedicationTableViewCell" customModule="TabBarControllerPawPal" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="PetMedicationTableViewCell" rowHeight="290" id="kIO-qT-sVZ" customClass="PetMedicationTableViewCell" customModule="TabBarControllerPawPal" customModuleProvider="target">
                                         <rect key="frame" x="20" y="55.333332061767578" width="362" height="290"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="kIO-qT-sVZ" id="gSK-gQ-Uul">
@@ -6634,10 +6630,6 @@
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
-                                <connections>
-                                    <outlet property="dataSource" destination="frb-hN-c0U" id="gXe-cS-GeT"/>
-                                    <outlet property="delegate" destination="frb-hN-c0U" id="ElF-Mr-fWQ"/>
-                                </connections>
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="IfV-lN-4cU"/>
@@ -6651,7 +6643,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="Pet Medication" id="Gwg-Mn-4Hz"/>
                     <connections>
-                        <outlet property="petMedicationTableView" destination="6VC-R4-hUh" id="DxD-u2-4wZ"/>
+                        <outlet property="petMedicationTableView" destination="6VC-R4-hUh" id="0mr-G6-5pQ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pVM-EH-a86" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -6949,7 +6941,8 @@
                                                     </buttonConfiguration>
                                                     <connections>
                                                         <action selector="petDetailsButtonTapped1:" destination="spL-77-8hz" eventType="touchUpInside" id="Rcr-49-PRr"/>
-                                                        <segue destination="XtO-BC-Zd9" kind="show" identifier="goToPetProfileDogwalker" id="Y4j-0R-4BB"/>
+                                                        <action selector="petDetailsButtonTapped:" destination="spL-77-8hz" eventType="touchUpInside" id="4Ff-Xz-iVv"/>
+                                                        <segue destination="XtO-BC-Zd9" kind="show" identifier="goToPetProfileDogwalker" id="Geh-Ok-7vh"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
@@ -7115,7 +7108,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="Y4j-0R-4BB"/>
+        <segue reference="Geh-Ok-7vh"/>
         <segue reference="MFp-tt-uHV"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" systemColor="systemPinkColor"/>
