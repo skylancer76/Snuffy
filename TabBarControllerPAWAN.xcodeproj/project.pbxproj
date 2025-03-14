@@ -196,7 +196,7 @@
 				DEVELOPMENT_TEAM = VZ6G589YY2;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TabBarControllerPawPal/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = PawPal;
+				INFOPLIST_KEY_CFBundleDisplayName = Snuffy;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = "";
@@ -227,7 +227,7 @@
 				DEVELOPMENT_TEAM = VZ6G589YY2;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TabBarControllerPawPal/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = PawPal;
+				INFOPLIST_KEY_CFBundleDisplayName = Snuffy;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = "";
