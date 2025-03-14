@@ -282,7 +282,7 @@ extension Caretaker_Bookings: UITableViewDataSource, UITableViewDelegate {
             
             cell.bgView.layer.cornerRadius = 10
             cell.bgView.layer.masksToBounds = false
-            cell.bgView.layer.shadowRadius = 3
+            cell.bgView.layer.shadowRadius = 5
             cell.bgView.layer.shadowOpacity = 0.1
             
             // Load pet image asynchronously.
@@ -328,7 +328,7 @@ extension Caretaker_Bookings: UITableViewDataSource, UITableViewDelegate {
             
             cell.bgView.layer.cornerRadius = 10
             cell.bgView.layer.masksToBounds = false
-            cell.bgView.layer.shadowRadius = 3
+            cell.bgView.layer.shadowRadius = 5
             cell.bgView.layer.shadowOpacity = 0.1
             
             if let urlString = request.petImageUrl,
@@ -357,7 +357,7 @@ extension Caretaker_Bookings: UITableViewDataSource, UITableViewDelegate {
     
     // Fixed row height.
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 150
+        return 160
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
