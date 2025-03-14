@@ -9,8 +9,10 @@ import UIKit
 import Firebase
 import FirebaseFirestore
 import FirebaseAuth
+import MessageUI
 
-class Bookings_Information: UITableViewController {
+
+class Bookings_Information: UITableViewController, MFMessageComposeViewControllerDelegate {
     
     // MARK: - IBOutlets for Caretaker Section (static cells)
     @IBOutlet weak var caretakerImageView: UIImageView!
@@ -82,21 +84,67 @@ class Bookings_Information: UITableViewController {
         }
     }
     
+//    @objc func openChat() {
+//         print("Chat button tapped")
+//
+//         guard let caretakerId = caretaker?.caretakerId,
+//               let userId = Auth.auth().currentUser?.uid else {
+//             print("Error: Caretaker ID or User ID is nil")
+//             return
+//         }
+//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//                if let chatVC = storyboard.instantiateViewController(withIdentifier: "ChatsViewController") as? Chats {
+//                    chatVC.userId = userId
+//                    chatVC.caretakerId = caretakerId
+//                    navigationController?.pushViewController(chatVC, animated: true)
+//                }
+//            }
+    
     @objc func openChat() {
-         print("Chat button tapped")
-
-         guard let caretakerId = caretaker?.caretakerId,
-               let userId = Auth.auth().currentUser?.uid else {
-             print("Error: Caretaker ID or User ID is nil")
-             return
-         }
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                if let chatVC = storyboard.instantiateViewController(withIdentifier: "ChatsViewController") as? Chats {
-                    chatVC.userId = userId
-                    chatVC.caretakerId = caretakerId
-                    navigationController?.pushViewController(chatVC, animated: true)
+        print("Chat button tapped")
+        
+        // Use iMessage (MFMessageComposeViewController) to open the messaging interface
+        guard let caretakerPhone = caretaker?.phoneNumber, !caretakerPhone.isEmpty else {
+            print("Caretaker phone number is nil or empty")
+            return
+        }
+        
+        if MFMessageComposeViewController.canSendText() {
+            let messageVC = MFMessageComposeViewController()
+            messageVC.messageComposeDelegate = self
+            messageVC.recipients = [caretakerPhone]
+            messageVC.body = "Hi, I would like to chat about my booking."
+            
+            // Check if attachments are supported
+            if messageVC.responds(to: #selector(MFMessageComposeViewController.addAttachmentData(_:typeIdentifier:filename:))) {
+                // Example: Attach an image (make sure "sampleImage" exists in your assets or bundle)
+                if let image = UIImage(named: "sampleImage"), let imageData = image.pngData() {
+                    let attached = messageVC.addAttachmentData(imageData, typeIdentifier: "public.png", filename: "sampleImage.png")
+                    print("Image attachment added: \(attached)")
                 }
+                
+                // Example: Attach a document (for example, a PDF from your app bundle)
+                if let docURL = Bundle.main.url(forResource: "sampleDocument", withExtension: "pdf"),
+                   let docData = try? Data(contentsOf: docURL) {
+                    let attached = messageVC.addAttachmentData(docData, typeIdentifier: "com.adobe.pdf", filename: "sampleDocument.pdf")
+                    print("Document attachment added: \(attached)")
+                }
+            } else {
+                print("Attachments are not supported on this device.")
             }
+            
+            present(messageVC, animated: true, completion: nil)
+        } else {
+            print("Device cannot send messages.")
+        }
+    }
+    
+        
+        // MARK: - MFMessageComposeViewControllerDelegate
+        func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
+            controller.dismiss(animated: true, completion: nil)
+        }
+        
     // MARK: - Booking UI
     private func updateBookingUI(with request: ScheduleCaretakerRequest) {
         
