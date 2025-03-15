@@ -159,12 +159,12 @@ class Bookings_Information: UITableViewController, MFMessageComposeViewControlle
         timeFormatter.timeStyle = .short
         
         // Start date/time
-        startDateLabel.text = dateFormatter.string(from: request.startDate)
-        startTimeLabel.text = timeFormatter.string(from: request.startDate)
+        startDateLabel.text = dateFormatter.string(from: request.startDate!)
+        startTimeLabel.text = timeFormatter.string(from: request.startDate!)
         
         // End date/time
-        endDateLabel.text = dateFormatter.string(from: request.endDate)
-        endTimeLabel.text = timeFormatter.string(from: request.endDate)
+        endDateLabel.text = dateFormatter.string(from: request.endDate!)
+        endTimeLabel.text = timeFormatter.string(from: request.endDate!)
         
         // Status
         statusLabel.text = request.status.capitalized  // e.g. "Accepted"

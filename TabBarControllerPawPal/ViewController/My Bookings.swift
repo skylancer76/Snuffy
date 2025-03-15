@@ -163,8 +163,8 @@ class My_Bookings: UIViewController, UITableViewDelegate, UITableViewDataSource 
             dateFormatter.timeStyle = .none
             
             // Display the start and end dates
-            cell.startDateLabel.text = dateFormatter.string(from: request.startDate)
-            cell.endDateLabel.text = dateFormatter.string(from: request.endDate)
+            cell.startDateLabel.text = dateFormatter.string(from: request.startDate!)
+            cell.endDateLabel.text = dateFormatter.string(from: request.endDate!)
             
             // Configure the rest of the caretaker cell (e.g., images, additional labels)
             cell.configureCell(with: request)

@@ -275,8 +275,8 @@ struct ScheduleCaretakerRequest: Codable {
     var userId: String
     var userName: String
     var petName: String
-    var startDate: Date
-    var endDate: Date
+    var startDate: Date?
+    var endDate: Date?
     var petPickup: Bool
     var petDropoff: Bool
     var instructions: String

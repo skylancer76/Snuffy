@@ -37,8 +37,19 @@ class BookingsTableViewCell: UITableViewCell {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .medium
         dateFormatter.timeStyle = .none
-        startDateLabel.text = "\(dateFormatter.string(from: request.startDate))"
-        endDateLabel.text = "\(dateFormatter.string(from: request.endDate))"
+//        startDateLabel.text = "\(dateFormatter.string(from: request.startDate))"
+//        endDateLabel.text = "\(dateFormatter.string(from: request.endDate))"
+        if let start = request.startDate {
+                startDateLabel.text = dateFormatter.string(from: start)
+            } else {
+                startDateLabel.text = ""
+            }
+            
+            if let end = request.endDate {
+                endDateLabel.text = dateFormatter.string(from: end)
+            } else {
+                endDateLabel.text = ""  
+            }
         
         // Ensure first letter of status is capitalized
         let formattedStatus = request.status.capitalized

@@ -83,10 +83,10 @@ class Caretaker_Bookings_Information: UITableViewController {
         let timeFormatter = DateFormatter()
         timeFormatter.timeStyle = .short
         
-        caretakerStartDate?.text = dateFormatter.string(from: request.startDate)
-        caretakerStartTime?.text = timeFormatter.string(from: request.startDate)
-        caretakerEndDate?.text = dateFormatter.string(from: request.endDate)
-        caretakerEndTime?.text = timeFormatter.string(from: request.endDate)
+        caretakerStartDate?.text = dateFormatter.string(from: request.startDate!)
+        caretakerStartTime?.text = timeFormatter.string(from: request.startDate!)
+        caretakerEndDate?.text = dateFormatter.string(from: request.endDate!)
+        caretakerEndTime?.text = timeFormatter.string(from: request.endDate!)
         
         caretakerStatus?.text = request.status.capitalized
         

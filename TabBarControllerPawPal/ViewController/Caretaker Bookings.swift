@@ -162,9 +162,7 @@ class Caretaker_Bookings: UIViewController {
             }
     }
     
-    /// Observe dog walker requests in "dogWalkerRequests"
     func observeDogWalkerRequests(userId: String) {
-        // For dog walker, the dogWalkerId in dogWalkerRequests equals the userId.
         dogWalkerListener = Firestore.firestore().collection("dogWalkerRequests")
             .whereField("dogWalkerId", isEqualTo: userId)
             .addSnapshotListener { [weak self] snapshot, error in
@@ -177,26 +175,63 @@ class Caretaker_Bookings: UIViewController {
                 var upcoming: [ScheduleDogWalkerRequest] = []
                 var completed: [ScheduleDogWalkerRequest] = []
                 
+                // Dispatch group to wait for pet detail queries
+                let group = DispatchGroup()
+                
                 for doc in snapshot?.documents ?? [] {
                     var data = doc.data()
                     data["requestId"] = doc.documentID
-                    if let request = ScheduleDogWalkerRequest(from: data) {
-                        if request.status.lowercased() == "completed" {
-                            completed.append(request)
-                        } else {
-                            upcoming.append(request)
+                    // Use petName to fetch additional details
+                    if let petName = data["petName"] as? String {
+                        group.enter()
+                        Firestore.firestore().collection("Pets")
+                            .whereField("petName", isEqualTo: petName)
+                            .getDocuments { petSnapshot, error in
+                                if let error = error {
+                                    print("Error fetching pet details for \(petName): \(error.localizedDescription)")
+                                    group.leave()
+                                    return
+                                }
+                                
+                                if let petDoc = petSnapshot?.documents.first {
+                                    let petData = petDoc.data()
+                                    data["petBreed"] = petData["petBreed"] as? String ?? "Unknown"
+                                    data["petImageUrl"] = petData["petImage"] as? String ?? ""
+                                } else {
+                                    print("No pet found for name: \(petName)")
+                                    data["petBreed"] = "Unknown"
+                                    data["petImageUrl"] = ""
+                                }
+                                
+                                if let request = ScheduleDogWalkerRequest(from: data) {
+                                    if request.status.lowercased() == "completed" {
+                                        completed.append(request)
+                                    } else {
+                                        upcoming.append(request)
+                                    }
+                                }
+                                group.leave()
+                            }
+                    } else {
+                       
+                        if let request = ScheduleDogWalkerRequest(from: data) {
+                            if request.status.lowercased() == "completed" {
+                                completed.append(request)
+                            } else {
+                                upcoming.append(request)
+                            }
                         }
                     }
                 }
                 
-                self.dogWalkerUpcomingBookings = upcoming
-                self.dogWalkerCompletedBookings = completed
-                
-                DispatchQueue.main.async {
+                group.notify(queue: .main) {
+                    self.dogWalkerUpcomingBookings = upcoming
+                    self.dogWalkerCompletedBookings = completed
                     self.tableView.reloadData()
                 }
             }
     }
+
     
     // MARK: - UI Setup
     func setupSegmentedControl() {
@@ -278,7 +313,22 @@ extension Caretaker_Bookings: UITableViewDataSource, UITableViewDelegate {
             cell.petNameLabel.text      = request.petName
             cell.petBreedLabel.text     = request.petBreed ?? "Unknown"
             cell.petOwnerLabel.text     = request.userName
-            cell.petDurationLabel.text  = request.duration
+//            cell.petDurationLabel.text  = request.duration
+            // If your request stores Date objects:
+            if let start = request.startDate,
+               let end = request.endDate {
+                let outputFormatter = DateFormatter()
+                outputFormatter.dateFormat = "dd.MM.yyyy"
+                
+                let startString = outputFormatter.string(from: start)
+                let endString   = outputFormatter.string(from: end)
+                
+                cell.petDurationLabel.text = "\(startString) to \(endString)"
+            } else {
+                // Fallback: if no dates, just show whatever `request.duration` was
+                cell.petDurationLabel.text = request.duration
+            }
+
             
             cell.bgView.layer.cornerRadius = 10
             cell.bgView.layer.masksToBounds = false
