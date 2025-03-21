@@ -17,7 +17,6 @@ class Bookings_Information: UITableViewController, MFMessageComposeViewControlle
     // MARK: - IBOutlets for Caretaker Section (static cells)
     @IBOutlet weak var caretakerImageView: UIImageView!
     @IBOutlet weak var caretakerNameLabel: UILabel!
-    @IBOutlet weak var caretakerExperienceLabel: UILabel!
     @IBOutlet weak var caretakerAddressLabel: UILabel!
     @IBOutlet var caretakerChatImageView: UIImageView!
     @IBOutlet weak var caretakerCallImageView: UIImageView!
@@ -83,22 +82,6 @@ class Bookings_Information: UITableViewController, MFMessageComposeViewControlle
             print("Failed to initiate call") // Debugging
         }
     }
-    
-//    @objc func openChat() {
-//         print("Chat button tapped")
-//
-//         guard let caretakerId = caretaker?.caretakerId,
-//               let userId = Auth.auth().currentUser?.uid else {
-//             print("Error: Caretaker ID or User ID is nil")
-//             return
-//         }
-//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//                if let chatVC = storyboard.instantiateViewController(withIdentifier: "ChatsViewController") as? Chats {
-//                    chatVC.userId = userId
-//                    chatVC.caretakerId = caretakerId
-//                    navigationController?.pushViewController(chatVC, animated: true)
-//                }
-//            }
     
     @objc func openChat() {
         print("Chat button tapped")
@@ -252,7 +235,6 @@ class Bookings_Information: UITableViewController, MFMessageComposeViewControlle
     // MARK: - Caretaker UI
     private func updateCaretakerUI(_ caretaker: Caretakers) {
         caretakerNameLabel.text = caretaker.name
-        caretakerExperienceLabel.text = "Exp: \(caretaker.experience) years"
         caretakerAddressLabel.text = caretaker.address
         
         // If caretaker has phone
@@ -265,16 +247,16 @@ class Bookings_Information: UITableViewController, MFMessageComposeViewControlle
         }
         
         // Load caretaker image
-        if let url = URL(string: caretaker.profilePic) {
+        if let url = URL(string: caretaker.profilePic!) {
             caretakerImageView.loadImage(from: url)
         } else {
             caretakerImageView.image = UIImage(named: "placeholder")
         }
     }
-    
+
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // Check if "Track Pet" cell is tapped
-        if indexPath.section == 2 && indexPath.row == 0 {  // Update based on correct section/row
+        // 1) If "Track Pet" cell is tapped (assumed section 2, row 0)
+        if indexPath.section == 2 && indexPath.row == 0 {
             guard let caretaker = self.caretaker,
                   let latitude = caretaker.latitude,
                   let longitude = caretaker.longitude else {
@@ -282,7 +264,6 @@ class Bookings_Information: UITableViewController, MFMessageComposeViewControlle
                 return
             }
             
-            // Navigate to MapViewController
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             if let mapVC = storyboard.instantiateViewController(withIdentifier: "Track_Pet_Map") as? Track_Pet_Map {
                 mapVC.caretakerLatitude = latitude
@@ -290,9 +271,20 @@ class Bookings_Information: UITableViewController, MFMessageComposeViewControlle
                 navigationController?.pushViewController(mapVC, animated: true)
             }
         }
+        // 2) If caretaker cell is tapped (assumed section 0, row 0)
+        else if indexPath.section == 0 && indexPath.row == 0 {
+            guard let caretaker = self.caretaker else { return }
+            
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            if let caretakerProfileVC = storyboard.instantiateViewController(withIdentifier: "Caretaker_Profile") as? Caretaker_Profile {
+                // Pass the caretaker’s ID and set the profile type
+                caretakerProfileVC.profileId = caretaker.caretakerId
+                caretakerProfileVC.profileType = .caretaker
+                navigationController?.pushViewController(caretakerProfileVC, animated: true)
+            }
+        }
     }
-    
-    
+
 }
 extension UIImageView {
     func loadImage(from url: URL) {

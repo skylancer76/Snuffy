@@ -16,10 +16,13 @@ class Caretakers: Codable {
     var name: String
     var email: String
     var password: String
-    var profilePic: String
+    var profilePic: String?
+    var petSitted : String?
+    var galleryImages: [String]?
     var bio: String
     var experience: Int
     var address: String
+    var rating: String?
     var location: [Double] // [latitude, longitude]
     var distanceAway: Double
     var status: String
@@ -34,16 +37,20 @@ class Caretakers: Codable {
             return location.count > 1 ? location[1] : nil
         }
     
+    
     init(
         caretakerId: String,
         name: String,
         email: String,
         password: String,
-        profilePic: String,
+        profilePic: String? = nil,
+        petSitted : String? = nil,
+        galleryImages: [String]? = nil,
         bio: String,
         experience: Int,
         address: String,
         location: [Double],
+        rating: String? = nil,
         distanceAway: Double = 0.0,
         status: String = "available",
         pendingRequests: [String] = [],
@@ -55,9 +62,12 @@ class Caretakers: Codable {
         self.email = email
         self.password = password
         self.profilePic = profilePic
+        self.petSitted = petSitted
+        self.galleryImages = galleryImages
         self.bio = bio
         self.experience = experience
         self.address = address
+        self.rating = rating
         self.location = location
         self.distanceAway = distanceAway
         self.status = status
@@ -76,8 +86,8 @@ class DogWalker: Codable {
     var name: String
     var email: String
     var password: String
-    var profilePic: String
-    var rating: String
+    var profilePic: String?
+    var rating: String?
     var address: String
     var location: [Double] // [latitude, longitude]
     var distanceAway: Double
@@ -124,15 +134,10 @@ class DogWalker: Codable {
     }
 }
 
-// MARK: - Booking Model
-//struct Bookings: Codable {
-//    var name : String
-//    var date: String
-//    var isCompleted: Bool
-//    var status: String?
-//    var price: String?
-//    var image: String
-//}
+enum ProfileType {
+    case caretaker
+    case dogwalker
+}
 
 // MARK: - Pet Data Model
 class PetData: Codable {
@@ -292,7 +297,7 @@ struct ScheduleCaretakerRequest: Codable {
     var latitude: Double?
     var longitude: Double?
     var duration: String
-    var timestamp: Date? // If you want to store the Firestore "timestamp" field
+    var timestamp: Date?
     
     init?(from data: [String: Any]) {
        

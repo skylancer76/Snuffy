@@ -5,6 +5,12 @@
 //  Created by admin19 on 16/12/24.
 //
 
+//  FirebaseManager.swift
+//  TabBarControllerPawPal
+//
+//  Created by admin19 on 16/12/24.
+//
+
 import FirebaseFirestore
 import FirebaseStorage
 import FirebaseAuth
@@ -32,7 +38,6 @@ class FirebaseManager {
     
     // MARK: - Caretaker Data Functions
     
-    /// Save caretaker data to Firestore.
     func saveCaretakerData(caretakers: [Caretakers], completion: @escaping (Error?) -> Void) {
         let group = DispatchGroup()
         
@@ -40,18 +45,22 @@ class FirebaseManager {
             let caretakerRef = db.collection("caretakers").document(caretaker.caretakerId)
             group.enter()
             
-            // Upload Profile Picture
-            uploadProfileImage(imageName: caretaker.profilePic, caretakerId: caretaker.caretakerId) { profileImageUrl, error in
+            // Provide a default if caretaker.profilePic is nil
+            let imageName = caretaker.profilePic ?? "placeholder_image"
+            
+            // Upload the profile image
+            uploadProfileImage(imageName: imageName, caretakerId: caretaker.caretakerId) { profileImageUrl, error in
                 if let error = error {
                     completion(error)
                     group.leave()
                     return
                 }
                 
-                // Update caretaker's profilePic field with the download URL (if any).
+                // Update caretaker object with the uploaded image URL (if any)
                 let updatedCaretaker = caretaker
                 updatedCaretaker.profilePic = profileImageUrl ?? ""
                 
+                // Now save the caretaker to Firestore
                 self.saveCaretakerToFirestore(caretaker: updatedCaretaker, caretakerRef: caretakerRef) { error in
                     completion(error)
                     group.leave()
@@ -59,10 +68,13 @@ class FirebaseManager {
             }
         }
         
+        // Once all uploads/saves are done, notify the caller
         group.notify(queue: .main) {
             completion(nil)
         }
     }
+
+
     
     /// Helper function to encode and save a caretaker object.
     func saveCaretakerToFirestore(caretaker: Caretakers, caretakerRef: DocumentReference, completion: @escaping (Error?) -> Void) {
@@ -290,7 +302,7 @@ class FirebaseManager {
             let dogWalkerRef = db.collection("dogwalkers").document(dogWalker.dogWalkerId)
             
             // If the profilePic string is already a URL, assume the image has been uploaded.
-            if dogWalker.profilePic.starts(with: "http") {
+            if let pic = dogWalker.profilePic, pic.starts(with: "http") {
                 self.saveDogWalkerToFirestore(dogWalker: dogWalker, dogWalkerRef: dogWalkerRef) { error in
                     if let error = error {
                         overallError = error
@@ -299,7 +311,8 @@ class FirebaseManager {
                 }
             } else {
                 // Upload the local image (profilePic holds the local asset name).
-                uploadDogWalkerProfileImage(imageName: dogWalker.profilePic, dogWalkerId: dogWalker.dogWalkerId) { profileImageUrl, error in
+                uploadDogWalkerProfileImage(imageName: dogWalker.profilePic ?? "placeholder",
+                                                dogWalkerId: dogWalker.dogWalkerId) { profileImageUrl, error in
                     if let error = error {
                         overallError = error
                         group.leave()
@@ -505,8 +518,8 @@ class FirebaseManager {
                     let distanceScore = 1.0 / (distance + 1.0)
                     
                     // Normalize rating (assuming maximum rating is 5)
-                    let rating = Double(dogWalker.rating) ?? 4.0
-                    let ratingScore = rating / 5.0
+                    let ratingValue = Double(dogWalker.rating ?? "4.0") ?? 4.0
+                    let ratingScore = ratingValue / 5.0
                     
                     // Combine scores with weights (adjust these weights as needed)
                     let combinedScore = (distanceScore * 0.7) + (ratingScore * 0.3)
