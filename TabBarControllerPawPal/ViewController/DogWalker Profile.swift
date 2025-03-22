@@ -134,7 +134,7 @@ class DogWalker_Profile: UITableViewController {
             walkerNameLabel.text = walker.name
         walkerRatingLabel.text = "Rating: \(String(describing: walker.rating))"
            
-        if let url = URL(string: walker.profilePic) {
+        if let url = URL(string: walker.profilePic!) {
                 walkerImageView.loadImage(from: url)
             } else {
                 walkerImageView.image = UIImage(named: "placeholder")

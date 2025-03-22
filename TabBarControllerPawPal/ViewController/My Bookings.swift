@@ -342,33 +342,46 @@ class My_Bookings: UIViewController, UITableViewDelegate, UITableViewDataSource 
         return 150
     }
     
-    // Called when a row is tapped
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // If booking is still pending, do not navigate
+
+        func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // Caretaker segment
         if bookingSegmentedControl.selectedSegmentIndex == 0 {
-            // Caretaker
-            let request = allCaretakerBookings[indexPath.row]
-            if request.status.lowercased() == "pending" {
+        let request = allCaretakerBookings[indexPath.row]
+         if request.status.lowercased() == "pending" {
+            let alert = UIAlertController(
+                title: "Request Pending",
+                message: "Your booking request is still pending. Please wait until the caretaker accepts your request.",
+                preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
                 return
             }
-            // Navigate to caretaker booking details
+            // Navigate to caretaker booking details if not pending
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             if let detailsVC = storyboard.instantiateViewController(withIdentifier: "BookingDetailsVC") as? Bookings_Information {
                 detailsVC.scheduleRequest = request
                 navigationController?.pushViewController(detailsVC, animated: true)
             }
-        } else {
-            // Dog Walker
+        }
+        // Dog Walker segment
+        else {
             let request = allDogWalkerBookings[indexPath.row]
             if request.status.lowercased() == "pending" {
+            let alert = UIAlertController(
+                title: "Request Pending",
+                message: "Your booking request is still pending. Please wait until the dog walker accepts your request.",
+                preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
                 return
             }
-            // Navigate to dog walker booking details
+            // Navigate to dog walker booking details if not pending
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             if let detailsVC = storyboard.instantiateViewController(withIdentifier: "DogWalkerBookingDetailsVC") as? DogWalker_Profile {
                 detailsVC.scheduleDogWalkerRequest = request
                 navigationController?.pushViewController(detailsVC, animated: true)
-            }
         }
-    }
+     }
+   }
+
 }

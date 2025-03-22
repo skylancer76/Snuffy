@@ -134,6 +134,21 @@ class DogWalker: Codable {
     }
 }
 
+enum BookingType {
+    case caretaker
+    case dogWalker
+}
+
+struct UpcomingBookingModel {
+    let bookingId: String
+    let bookingType: BookingType  // .caretaker or .dogWalker
+    let caretakerOrWalkerId: String
+    let caretakerOrWalkerName: String
+    let caretakerOrWalkerPhone: String
+    let caretakerOrWalkerImageURL: String
+    let petName: String
+}
+
 enum ProfileType {
     case caretaker
     case dogwalker

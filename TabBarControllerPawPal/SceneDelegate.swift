@@ -28,36 +28,36 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         swipeGesture.cancelsTouchesInView = false
         window?.addGestureRecognizer(swipeGesture)
         
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let testVC = storyboard.instantiateViewController(withIdentifier: "YourTestViewControllerID")
-        window?.rootViewController = testVC
-        window?.makeKeyAndVisible()
-        
-        
 //        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//        if let user = Auth.auth().currentUser {
-//            checkUserRole(userID: user.uid) { role in
-//                DispatchQueue.main.async {
-//                    switch role {
-//                    case "caretaker":
-//                        let caretakerVC = storyboard.instantiateViewController(withIdentifier: "CaretakerTabBarController") as? UITabBarController
-//                        self.window?.rootViewController = caretakerVC
-//                    case "dogwalker":
-//                        let dogwalkerVC = storyboard.instantiateViewController(withIdentifier: "CaretakerTabBarController") as? UITabBarController
-//                        self.window?.rootViewController = dogwalkerVC
-//                    default:
-//                        let userVC = storyboard.instantiateViewController(withIdentifier: "TabBarControllerID") as? UITabBarController
-//                        self.window?.rootViewController = userVC
-//                    }
-//                    self.window?.makeKeyAndVisible()
-//                }
-//            }
-//        } else {
-//            // If no user is logged in, show login screen
-//            let loginVC = storyboard.instantiateViewController(withIdentifier: "Start_screen")
-//            window?.rootViewController = loginVC
-//            window?.makeKeyAndVisible()
-//        }
+//        let testVC = storyboard.instantiateViewController(withIdentifier: "YourTestViewControllerID")
+//        window?.rootViewController = testVC
+//        window?.makeKeyAndVisible()
+        
+        
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        if let user = Auth.auth().currentUser {
+            checkUserRole(userID: user.uid) { role in
+                DispatchQueue.main.async {
+                    switch role {
+                    case "caretaker":
+                        let caretakerVC = storyboard.instantiateViewController(withIdentifier: "CaretakerTabBarController") as? UITabBarController
+                        self.window?.rootViewController = caretakerVC
+                    case "dogwalker":
+                        let dogwalkerVC = storyboard.instantiateViewController(withIdentifier: "CaretakerTabBarController") as? UITabBarController
+                        self.window?.rootViewController = dogwalkerVC
+                    default:
+                        let userVC = storyboard.instantiateViewController(withIdentifier: "TabBarControllerID") as? UITabBarController
+                        self.window?.rootViewController = userVC
+                    }
+                    self.window?.makeKeyAndVisible()
+                }
+            }
+        } else {
+            // If no user is logged in, show login screen
+            let loginVC = storyboard.instantiateViewController(withIdentifier: "Start_screen")
+            window?.rootViewController = loginVC
+            window?.makeKeyAndVisible()
+        }
     }
 
     func checkUserRole(userID: String, completion: @escaping (String) -> Void) {
