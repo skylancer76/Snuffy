@@ -3434,7 +3434,7 @@
         <!--Pet Diet-->
         <scene sceneID="HoD-xb-5Dm">
             <objects>
-                <viewController storyboardIdentifier="PetDietVC" id="WeM-mo-nU6" customClass="Pet_Diet" customModule="TabBarControllerPawPal" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController restorationIdentifier="PetDetailsVC" storyboardIdentifier="PetDetailsVC" id="WeM-mo-nU6" customClass="Pet_Diet" customModule="TabBarControllerPawPal" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="gSy-Jl-6z1">
                         <rect key="frame" x="0.0" y="0.0" width="402" height="874"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -3443,7 +3443,7 @@
                                 <rect key="frame" x="0.0" y="106" width="402" height="768"/>
                                 <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="PetDietTableViewCell" rowHeight="120" id="BaK-sM-8if" customClass="PetDietTableViewCell" customModule="TabBarControllerPawPal" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="PetsDietTableViewCell" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="PetsDietTableViewCell" rowHeight="120" id="BaK-sM-8if" customClass="PetsDietTableViewCell" customModule="TabBarControllerPawPal" customModuleProvider="target">
                                         <rect key="frame" x="20" y="55.333332061767578" width="362" height="120"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="BaK-sM-8if" id="yfD-OS-kIu">
@@ -3525,6 +3525,14 @@
                                                 <constraint firstItem="PyH-Lu-Vwf" firstAttribute="top" secondItem="yfD-OS-kIu" secondAttribute="top" id="rFo-TE-jNL"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="containerView" destination="PyH-Lu-Vwf" id="9U9-zo-tji"/>
+                                            <outlet property="iconBackgroundView" destination="3Pa-QI-lg7" id="f7W-bd-EgH"/>
+                                            <outlet property="mealIconImageView" destination="S6p-ju-LX0" id="GYL-jz-CAV"/>
+                                            <outlet property="mealNameLabel" destination="AwV-jv-fpb" id="P8V-A5-efp"/>
+                                            <outlet property="mealTypeLabel" destination="Xcn-Ym-oNn" id="beE-yB-grg"/>
+                                            <outlet property="servingTimeLabel" destination="aq9-ch-O6B" id="h4c-JX-0T1"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
@@ -3545,7 +3553,7 @@
                     <navigationItem key="navigationItem" title="Pet Diet" id="q0C-lA-D2m">
                         <barButtonItem key="rightBarButtonItem" image="plus" catalog="system" id="lLR-HG-fj3">
                             <connections>
-                                <action selector="addPetDiet:" destination="WeM-mo-nU6" id="qOn-RZ-mv1"/>
+                                <segue destination="Yol-67-c3E" kind="presentation" identifier="PetDietIdentifier" modalPresentationStyle="pageSheet" id="Dyq-kV-UNg"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -3562,7 +3570,7 @@
             <objects>
                 <tableViewController storyboardIdentifier="AddPetDietVC" id="EmV-kY-m0x" customClass="Add_Pet_Diet" customModule="TabBarControllerPawPal" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" id="zxq-4d-4CG">
-                        <rect key="frame" x="0.0" y="0.0" width="402" height="874"/>
+                        <rect key="frame" x="0.0" y="0.0" width="402" height="864"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
                         <sections>
@@ -3593,7 +3601,7 @@
                                                         <color key="titleColor" systemColor="labelColor"/>
                                                     </state>
                                                     <connections>
-                                                        <action selector="foodCategoryButtonTapped:" destination="EmV-kY-m0x" eventType="touchUpInside" id="xsA-aV-QbK"/>
+                                                        <action selector="mealTypeButtonTapped:" destination="EmV-kY-m0x" eventType="touchUpInside" id="Uz0-Od-PjW"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
@@ -3668,7 +3676,7 @@
                                                         <color key="titleColor" systemColor="labelColor"/>
                                                     </state>
                                                     <connections>
-                                                        <action selector="foodCategoryButtonTapped:" destination="EmV-kY-m0x" eventType="touchUpInside" id="2ci-vw-mpZ"/>
+                                                        <action selector="foodCategoryButtonTapped:" destination="EmV-kY-m0x" eventType="touchUpInside" id="yQU-cD-GzB"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
@@ -3781,13 +3789,26 @@
                     </tableView>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="Add Pet Diet " id="b41-wt-hRz">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="ifh-5X-Ztc">
+                            <connections>
+                                <action selector="cancelTapped:" destination="EmV-kY-m0x" id="nZa-ok-fWS"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Save" style="plain" id="8o1-Y0-skh">
                             <connections>
-                                <action selector="saveDiet:" destination="EmV-kY-m0x" id="nlC-mS-Mcz"/>
+                                <action selector="saveDiet:" destination="EmV-kY-m0x" id="6rT-8L-Fbx"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="feedingFrequencyTextField" destination="C8j-dg-m1c" id="vFh-KA-55J"/>
+                        <outlet property="foodCategoryButton" destination="9Mf-ld-tqV" id="DY8-9w-QRV"/>
+                        <outlet property="foodNameTextField" destination="fae-2r-Y7V" id="QNE-oX-wBu"/>
+                        <outlet property="mealTypeButton" destination="N1e-m7-NoN" id="FbE-6d-eGJ"/>
+                        <outlet property="portionSizeTextField" destination="gFr-Re-JuM" id="6XT-po-cdn"/>
+                        <outlet property="servingTimePicker" destination="o5M-sB-JwQ" id="Ngu-zy-hd1"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RMH-ay-hZW" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -3817,7 +3838,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Yol-67-c3E" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="0Cd-qk-81f">
-                        <rect key="frame" x="0.0" y="62" width="402" height="44"/>
+                        <rect key="frame" x="0.0" y="0.0" width="402" height="56"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -4175,7 +4196,7 @@
                                 <rect key="frame" x="0.0" y="106" width="402" height="768"/>
                                 <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="PetMedicationTableViewCell" rowHeight="120" id="Lut-F5-oni" customClass="PetMedicationTableViewCell" customModule="TabBarControllerPawPal" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="PetsDietTableViewCell" rowHeight="120" id="Lut-F5-oni" customClass="PetsMedicationDetailsTableViewCell" customModule="TabBarControllerPawPal" customModuleProvider="target">
                                         <rect key="frame" x="20" y="55.333332061767578" width="362" height="120"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Lut-F5-oni" id="Yia-95-J8N">
@@ -4257,6 +4278,14 @@
                                                 <constraint firstItem="D1g-5N-p3D" firstAttribute="leading" secondItem="Yia-95-J8N" secondAttribute="leading" id="rkZ-uY-qE3"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="containerView" destination="D1g-5N-p3D" id="Qax-UT-JVY"/>
+                                            <outlet property="dateRangeLabel" destination="gEf-8R-ccb" id="4Rm-lr-Kc6"/>
+                                            <outlet property="iconBackgroundView" destination="9fp-rX-PhD" id="TQ1-zb-eoe"/>
+                                            <outlet property="medicationIconImageView" destination="zUf-66-x1p" id="eHe-Hv-yIX"/>
+                                            <outlet property="medicineNameLabel" destination="a7B-Rw-0xH" id="nTP-Tz-PKF"/>
+                                            <outlet property="medicineTypeLabel" destination="n46-7v-hx4" id="G4P-AB-Onf"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
@@ -4277,7 +4306,7 @@
                     <navigationItem key="navigationItem" title="Pet Medication" id="Y1N-4B-FDS">
                         <barButtonItem key="rightBarButtonItem" image="plus" catalog="system" id="Fgx-d9-eMt">
                             <connections>
-                                <action selector="addPetMedication:" destination="gDY-G0-Z3Z" id="5I7-t1-Ujk"/>
+                                <segue destination="LkF-p2-b5Q" kind="presentation" identifier="AddPetMedicationSegue" modalPresentationStyle="pageSheet" id="jZy-ST-MMv"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -4294,7 +4323,7 @@
             <objects>
                 <tableViewController storyboardIdentifier="AddPetMedicationVC" id="LtB-fB-Jms" customClass="Add_Pet_Medications" customModule="TabBarControllerPawPal" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" id="tUb-pt-4iM">
-                        <rect key="frame" x="0.0" y="0.0" width="402" height="874"/>
+                        <rect key="frame" x="0.0" y="0.0" width="402" height="864"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
                         <sections>
@@ -4359,7 +4388,7 @@
                                                         <color key="titleColor" systemColor="labelColor"/>
                                                     </state>
                                                     <connections>
-                                                        <action selector="medicineTypeButtonTapped:" destination="LtB-fB-Jms" eventType="touchUpInside" id="gTz-LW-vyE"/>
+                                                        <action selector="medicineTypeButtonTapped:" destination="LtB-fB-Jms" eventType="touchUpInside" id="1Vj-dS-Tfc"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
@@ -4535,18 +4564,26 @@
                     </tableView>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="Add Pet Medication" id="Ry8-Tb-CWT">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="Amw-lN-QCG"/>
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="Amw-lN-QCG">
+                            <connections>
+                                <action selector="cancelTapped:" destination="LtB-fB-Jms" id="MQx-UW-Py9"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Save" style="plain" id="Oft-jR-8aB">
                             <connections>
-                                <action selector="saveMedication:" destination="LtB-fB-Jms" id="uzB-MQ-UnI"/>
+                                <action selector="saveMedication:" destination="LtB-fB-Jms" id="TP2-Rn-c4c"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
-                        <outlet property="medicineNameTextField" destination="p3q-qh-4Q5" id="ZED-sO-uEF"/>
-                        <outlet property="medicineTypeButton" destination="Ofd-Hf-1TC" id="ICJ-Ar-yvY"/>
-                        <outlet property="purposeTextField" destination="FJ6-Ar-l7r" id="B5l-yb-fDH"/>
+                        <outlet property="dosageTextField" destination="yBO-52-hcJ" id="omE-ji-iTp"/>
+                        <outlet property="endDatePicker" destination="idn-nE-Inw" id="UdE-9d-fcP"/>
+                        <outlet property="frequencyTextField" destination="EfZ-iX-CNh" id="Fcb-2f-ALb"/>
+                        <outlet property="medicineNameTextField" destination="p3q-qh-4Q5" id="Lpp-aM-Zon"/>
+                        <outlet property="medicineTypeButton" destination="Ofd-Hf-1TC" id="HCY-VP-ZQ8"/>
+                        <outlet property="purposeTextField" destination="FJ6-Ar-l7r" id="x1D-Qf-MpS"/>
+                        <outlet property="startDatePicker" destination="AE8-E6-xJ3" id="XuN-fr-Gv6"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Koh-TT-rnq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -4577,7 +4614,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="LkF-p2-b5Q" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="o39-8W-Wjq">
-                        <rect key="frame" x="0.0" y="62" width="402" height="44"/>
+                        <rect key="frame" x="0.0" y="0.0" width="402" height="56"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -7751,16 +7788,16 @@
             </objects>
             <point key="canvasLocation" x="5724" y="2484"/>
         </scene>
-        <!--Table View Controller-->
+        <!--Pets Diet Details-->
         <scene sceneID="XTs-be-aaf">
             <objects>
-                <tableViewController id="HQ2-03-cyl" sceneMemberID="viewController">
+                <tableViewController restorationIdentifier="Pets_Diet_Details" storyboardIdentifier="Pets_Diet_Details" id="HQ2-03-cyl" customClass="Pets_Diet_Details" customModule="TabBarControllerPawPal" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" id="wIl-Oh-Md9">
                         <rect key="frame" x="0.0" y="0.0" width="402" height="874"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
                         <sections>
-                            <tableViewSection headerTitle="Vaccination Details" id="VEx-fq-yRE">
+                            <tableViewSection headerTitle="Meal Details" id="VEx-fq-yRE">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="9TG-2j-hge">
                                         <rect key="frame" x="20" y="55.333332061767578" width="362" height="43.666667938232422"/>
@@ -7775,8 +7812,8 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999998807907104" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="syringe.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="mT4-fp-E0C">
-                                                    <rect key="frame" x="20" y="10.666666666666668" width="22" height="22.666666666666661"/>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999998807907104" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="fork.knife.circle" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="mT4-fp-E0C">
+                                                    <rect key="frame" x="20" y="11.666666666666666" width="22" height="20.666666666666671"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="22" id="WES-f1-U3k"/>
                                                         <constraint firstAttribute="width" constant="22" id="wCR-3u-0Rc"/>
@@ -7813,8 +7850,8 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999998807907104" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="calendar" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="lup-Z6-NmS">
-                                                    <rect key="frame" x="20" y="12.666666666666663" width="22" height="19"/>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999998807907104" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="cup.and.heat.waves" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="lup-Z6-NmS">
+                                                    <rect key="frame" x="20" y="10.999999999999996" width="22" height="21.666666666666675"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="22" id="Uez-u6-Ttf"/>
                                                         <constraint firstAttribute="width" constant="22" id="YGN-lx-aQN"/>
@@ -7851,8 +7888,8 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999998807907104" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="calendar" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="w6e-sU-dd4">
-                                                    <rect key="frame" x="20" y="12.666666666666663" width="22" height="19"/>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999998807907104" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="leaf" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="w6e-sU-dd4">
+                                                    <rect key="frame" x="20" y="12.666666666666668" width="22" height="19.333333333333332"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="22" id="3bB-I0-N6S"/>
                                                         <constraint firstAttribute="width" constant="22" id="zfx-dA-Hcv"/>
@@ -7878,7 +7915,7 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
-                            <tableViewSection headerTitle="Vaccination Details" id="OGS-02-3f1">
+                            <tableViewSection headerTitle="Feeding Details" id="OGS-02-3f1">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="XyV-Y8-8i7">
                                         <rect key="frame" x="20" y="242.33333396911621" width="362" height="43.666667938232422"/>
@@ -7899,8 +7936,8 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999998807907104" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="84H-eS-M37">
-                                                    <rect key="frame" x="20" y="11" width="22" height="22"/>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999998807907104" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="circle.bottomrighthalf.checkered" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="84H-eS-M37">
+                                                    <rect key="frame" x="20" y="11.666666666666666" width="22" height="20.666666666666671"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="22" id="kNs-k4-HcH"/>
                                                         <constraint firstAttribute="width" constant="22" id="w9r-OC-1XT"/>
@@ -8006,15 +8043,17 @@
                     <navigationItem key="navigationItem" id="Iyc-5C-hT8">
                         <barButtonItem key="rightBarButtonItem" title="Delete" id="HYc-H4-aYc">
                             <connections>
-                                <action selector="deleteButtonTapped:" destination="HQ2-03-cyl" id="3ro-Qa-UvN"/>
+                                <action selector="deleteDietTapped:" destination="HQ2-03-cyl" id="9DO-nm-dGs"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="dateOfVaccineLabel" destination="AkV-hk-O5C" id="buk-NE-Qr9"/>
-                        <outlet property="expiresLabel" destination="dnW-up-2QL" id="bW9-Xy-17j"/>
-                        <outlet property="expiryDateLabel" destination="tVV-gM-btN" id="EQR-CL-a83"/>
-                        <outlet property="vaccineNameLabel" destination="82S-g0-DmE" id="HkB-HQ-xlB"/>
+                        <outlet property="feedingFrequencyLabel" destination="tVV-gM-btN" id="Our-WY-PvE"/>
+                        <outlet property="foodCategoryLabel" destination="06q-kC-hez" id="VNo-3t-rLC"/>
+                        <outlet property="foodNameLabel" destination="AkV-hk-O5C" id="PBG-PT-0Hj"/>
+                        <outlet property="mealTypeLabel" destination="82S-g0-DmE" id="j5s-D4-Tja"/>
+                        <outlet property="portionSizeLabel" destination="dnW-up-2QL" id="4kS-fw-KBT"/>
+                        <outlet property="servingTimeLabel" destination="OG3-hA-1fX" id="DXZ-B1-xOt"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QGM-gB-q66" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -8039,16 +8078,16 @@
             </objects>
             <point key="canvasLocation" x="5724" y="3279"/>
         </scene>
-        <!--Table View Controller-->
+        <!--Pets Medication Details-->
         <scene sceneID="zhD-Rx-FPN">
             <objects>
-                <tableViewController id="EHB-a6-MAz" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="Pets_Medication_Details" id="EHB-a6-MAz" customClass="Pets_Medication_Details" customModule="TabBarControllerPawPal" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" id="DOI-1s-ZFL">
                         <rect key="frame" x="0.0" y="0.0" width="402" height="874"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
                         <sections>
-                            <tableViewSection headerTitle="Vaccination Details" id="FpT-LR-h9o">
+                            <tableViewSection headerTitle="Medicine Details" id="FpT-LR-h9o">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="VaO-hf-zKg">
                                         <rect key="frame" x="20" y="55.333332061767578" width="362" height="43.666667938232422"/>
@@ -8063,8 +8102,8 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999998807907104" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="syringe.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="3hU-qh-8Py">
-                                                    <rect key="frame" x="20" y="10.666666666666668" width="22" height="22.666666666666661"/>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999998807907104" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="pill.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="3hU-qh-8Py">
+                                                    <rect key="frame" x="20" y="11.666666666666664" width="22" height="21"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="22" id="bQm-QM-zzy"/>
                                                         <constraint firstAttribute="width" constant="22" id="dlA-7G-eqB"/>
@@ -8101,8 +8140,8 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999998807907104" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="calendar" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="DR0-zy-cPG">
-                                                    <rect key="frame" x="20" y="12.666666666666663" width="22" height="19"/>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999998807907104" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="cross.case.circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="DR0-zy-cPG">
+                                                    <rect key="frame" x="20" y="11.666666666666666" width="22" height="20.666666666666671"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="22" id="NKH-2j-lLv"/>
                                                         <constraint firstAttribute="height" constant="22" id="fI7-Q3-o2k"/>
@@ -8139,8 +8178,8 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999998807907104" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="calendar" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="bxW-b8-317">
-                                                    <rect key="frame" x="20" y="12.666666666666663" width="22" height="19"/>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999998807907104" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="pencil.and.list.clipboard" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="bxW-b8-317">
+                                                    <rect key="frame" x="20" y="9.6666666666666679" width="23.666666666666671" height="24.000000000000004"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="22" id="Cyy-cw-Saf"/>
                                                         <constraint firstAttribute="height" constant="22" id="PT8-b6-Poj"/>
@@ -8166,7 +8205,7 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
-                            <tableViewSection headerTitle="Vaccination Details" id="GBD-MX-aua">
+                            <tableViewSection headerTitle="Frequency &amp; Dosage" id="GBD-MX-aua">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="Ezq-Sw-O5A">
                                         <rect key="frame" x="20" y="242.33333396911621" width="362" height="43.666667938232422"/>
@@ -8225,8 +8264,8 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999998807907104" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="RdD-14-Hzx">
-                                                    <rect key="frame" x="20" y="11" width="22" height="22"/>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999998807907104" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="cross.vial.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="RdD-14-Hzx">
+                                                    <rect key="frame" x="20" y="10.33333333333333" width="22" height="23.666666666666671"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="22" id="rpg-uR-QG0"/>
                                                         <constraint firstAttribute="height" constant="22" id="zbX-ve-89X"/>
@@ -8246,7 +8285,7 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
-                            <tableViewSection headerTitle="Vaccination Details" id="4Qd-PY-vtw">
+                            <tableViewSection headerTitle="Medicine Duration" id="4Qd-PY-vtw">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="Cbc-b5-XCu">
                                         <rect key="frame" x="20" y="385.66666984558105" width="362" height="43.666667938232422"/>
@@ -8267,8 +8306,8 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999998807907104" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="calendar" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="XD0-d9-oQb">
-                                                    <rect key="frame" x="20" y="12.666666666666663" width="22" height="19"/>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999998807907104" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="calendar.badge.clock" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="XD0-d9-oQb">
+                                                    <rect key="frame" x="20" y="12.666666666666666" width="24.666666666666671" height="21.666666666666671"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="22" id="UJB-An-hWn"/>
                                                         <constraint firstAttribute="width" constant="22" id="qN7-uK-vLg"/>
@@ -8305,8 +8344,8 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999998807907104" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="calendar" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="9BH-tk-5YN">
-                                                    <rect key="frame" x="20" y="12.666666666666663" width="22" height="19"/>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999998807907104" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="calendar.badge.checkmark" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="9BH-tk-5YN">
+                                                    <rect key="frame" x="20" y="12.666666666666666" width="24.666666666666671" height="21.666666666666671"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="22" id="2kt-Un-63a"/>
                                                         <constraint firstAttribute="height" constant="22" id="gws-5H-1Y7"/>
@@ -8335,15 +8374,18 @@
                     <navigationItem key="navigationItem" id="aNZ-IR-XRY">
                         <barButtonItem key="rightBarButtonItem" title="Delete" id="emj-MD-FDf">
                             <connections>
-                                <action selector="deleteButtonTapped:" destination="EHB-a6-MAz" id="MsO-DE-qg5"/>
+                                <action selector="deleteDietTapped:" destination="EHB-a6-MAz" id="Dc1-b2-asr"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="dateOfVaccineLabel" destination="E4L-oB-TUO" id="6ob-d2-Jch"/>
-                        <outlet property="expiresLabel" destination="rnN-nY-ceK" id="pCs-2W-N9e"/>
-                        <outlet property="expiryDateLabel" destination="KVy-5c-Xi1" id="cCx-Xa-xYQ"/>
-                        <outlet property="vaccineNameLabel" destination="U6O-3h-JAq" id="tIc-sg-sy2"/>
+                        <outlet property="dosageLabel" destination="KVy-5c-Xi1" id="HgP-Qo-2L6"/>
+                        <outlet property="endDateLabel" destination="UuU-cz-hvM" id="6mg-Sf-jmx"/>
+                        <outlet property="frequencyLabel" destination="rnN-nY-ceK" id="Hqp-uN-FfJ"/>
+                        <outlet property="medicineNameLabel" destination="U6O-3h-JAq" id="s7u-hH-VgO"/>
+                        <outlet property="medicineTypeLabel" destination="E4L-oB-TUO" id="dFf-Ii-cJO"/>
+                        <outlet property="purposeConditionLabel" destination="LLp-NC-KaK" id="9Zp-QI-mRM"/>
+                        <outlet property="startDateLabel" destination="bLk-ia-9VH" id="LXH-Ss-zbj"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9Ti-3U-WHj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -8381,18 +8423,26 @@
         <image name="bell.badge.fill" catalog="system" width="117" height="128"/>
         <image name="bubble.left.and.bubble.right.fill" catalog="system" width="128" height="102"/>
         <image name="calendar" catalog="system" width="128" height="107"/>
+        <image name="calendar.badge.checkmark" catalog="system" width="128" height="109"/>
+        <image name="calendar.badge.clock" catalog="system" width="128" height="109"/>
         <image name="calendar.badge.exclamationmark" catalog="system" width="128" height="109"/>
         <image name="checkmark.circle.fill" catalog="system" width="128" height="123"/>
         <image name="checkmark.square.fill" catalog="system" width="128" height="114"/>
         <image name="chevron.right" catalog="system" width="97" height="128"/>
+        <image name="circle.bottomrighthalf.checkered" catalog="system" width="128" height="123"/>
         <image name="clock.fill" catalog="system" width="128" height="123"/>
+        <image name="cross.case.circle.fill" catalog="system" width="128" height="123"/>
+        <image name="cross.vial.fill" catalog="system" width="91" height="128"/>
+        <image name="cup.and.heat.waves" catalog="system" width="128" height="116"/>
         <image name="ellipsis.circle" catalog="system" width="128" height="123"/>
         <image name="eye.slash.fill" catalog="system" width="128" height="96"/>
+        <image name="fork.knife.circle" catalog="system" width="128" height="123"/>
         <image name="heart.fill" catalog="system" width="128" height="107"/>
         <image name="house.circle.fill" catalog="system" width="128" height="123"/>
         <image name="house.fill" catalog="system" width="128" height="104"/>
         <image name="indianrupeesign.circle.fill" catalog="system" width="128" height="123"/>
         <image name="info.circle.fill" catalog="system" width="128" height="123"/>
+        <image name="leaf" catalog="system" width="128" height="111"/>
         <image name="list.clipboard.fill" catalog="system" width="98" height="128"/>
         <image name="location.circle.fill" catalog="system" width="128" height="123"/>
         <image name="map.fill" catalog="system" width="128" height="110"/>
@@ -8401,10 +8451,12 @@
         <image name="pawprint.circle" catalog="system" width="128" height="123"/>
         <image name="pawprint.circle.fill" catalog="system" width="128" height="123"/>
         <image name="pawprint.fill" catalog="system" width="128" height="112"/>
+        <image name="pencil.and.list.clipboard" catalog="system" width="114" height="128"/>
         <image name="person.2.fill" catalog="system" width="128" height="86"/>
         <image name="person.circle.fill" catalog="system" width="128" height="123"/>
         <image name="person.fill" catalog="system" width="128" height="120"/>
         <image name="phone.circle.fill" catalog="system" width="128" height="123"/>
+        <image name="pill.fill" catalog="system" width="128" height="123"/>
         <image name="pills.fill" catalog="system" width="128" height="104"/>
         <image name="plus" catalog="system" width="128" height="113"/>
         <image name="seal" catalog="system" width="128" height="124"/>

@@ -24,12 +24,20 @@ class Vaccination_Details: UIViewController {
         vaccinationTableView.dataSource = self
         vaccinationTableView.delegate = self
         
-        // Fetch data if we have a pet ID
+        // Observe "VaccinationDataAdded" so we can refresh instantly
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleVaccinationDataAdded(_:)),
+            name: NSNotification.Name("VaccinationDataAdded"),
+            object: nil
+        )
+        
+        // Initial fetch if petId is available
         if let petId = petId {
             fetchVaccinationData(petId: petId)
         }
         
-        // Set up gradient background
+        // Gradient background
         let gradientView = UIView(frame: view.bounds)
         gradientView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(gradientView)
@@ -46,18 +54,31 @@ class Vaccination_Details: UIViewController {
         gradientLayer.endPoint = CGPoint(x: 0.5, y: 0.5)
         gradientView.layer.insertSublayer(gradientLayer, at: 0)
         
-        // Make table view background clear
         vaccinationTableView.backgroundColor = .clear
     }
     
+    deinit {
+        // Remove the observer when this VC is deallocated
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    // Refresh each time the view appears
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        // Refresh data each time this view appears
         if let petId = petId {
             fetchVaccinationData(petId: petId)
         }
     }
     
+    // MARK: - Handle Notification
+    @objc func handleVaccinationDataAdded(_ notification: Notification) {
+        // Called when Add_Vaccination posts "VaccinationDataAdded"
+        if let petId = petId {
+            fetchVaccinationData(petId: petId)
+        }
+    }
+    
+    // MARK: - Fetch
     func fetchVaccinationData(petId: String) {
         let db = Firestore.firestore()
         
@@ -82,7 +103,6 @@ class Vaccination_Details: UIViewController {
                 let notifyUponExpiry = data["notifyUponExpiry"] as? Bool ?? false
                 let notes = data["notes"] as? String
                 
-                // Construct the local model
                 let vaccination = VaccinationDetails(
                     vaccineId: document.documentID,
                     vaccineName: vaccineName,
@@ -102,15 +122,12 @@ class Vaccination_Details: UIViewController {
         }
     }
 
-    // Present Add Vaccination as a page sheet
+    // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "AddVaccinationDetails" {
-            // If your destination is embedded in a navigation controller,
-            // grab the top view controller.
             if let navController = segue.destination as? UINavigationController,
                let addVaccinationVC = navController.topViewController as? Add_Vaccination {
                 addVaccinationVC.petId = petId
-                // Optionally set the modal presentation style in code:
                 addVaccinationVC.modalPresentationStyle = .pageSheet
             } else if let addVaccinationVC = segue.destination as? Add_Vaccination {
                 addVaccinationVC.petId = petId
@@ -119,30 +136,7 @@ class Vaccination_Details: UIViewController {
         }
     }
 
-    
-    // Deletion logic
-    @objc func deleteButtonTapped(_ sender: UIButton) {
-        let index = sender.tag
-        let vaccination = vaccinationDetails[index]
-        guard let petId = petId, let vaccineId = vaccination.vaccineId else { return }
-        
-        let db = Firestore.firestore()
-        db.collection("Pets")
-          .document(petId)
-          .collection("Vaccinations")
-          .document(vaccineId)
-          .delete { error in
-            if let error = error {
-                print("Error deleting document: \(error.localizedDescription)")
-            } else {
-                print("Document successfully deleted")
-                self.vaccinationDetails.remove(at: index)
-                DispatchQueue.main.async {
-                    self.vaccinationTableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
-                }
-            }
-        }
-    }
+
 }
 
 // MARK: - UITableViewDataSource & UITableViewDelegate
@@ -161,11 +155,9 @@ extension Vaccination_Details: UITableViewDataSource, UITableViewDelegate {
         
         let vaccination = vaccinationDetails[indexPath.row]
         
-        // Show only vaccine name & date on the cell
+        // Show only vaccine name & date
         cell.vaccineNameLabel.text = vaccination.vaccineName
         cell.dateLabel.text = "Given on \(vaccination.dateOfVaccination)"
-    
-        
         cell.backgroundColor = .clear
         
         return cell
@@ -176,7 +168,9 @@ extension Vaccination_Details: UITableViewDataSource, UITableViewDelegate {
         return 100
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    // Tap -> show detail
+    func tableView(_ tableView: UITableView,
+                   didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let selectedVaccination = vaccinationDetails[indexPath.row]
         
@@ -184,13 +178,7 @@ extension Vaccination_Details: UITableViewDataSource, UITableViewDelegate {
             detailVC.petId = petId
             detailVC.vaccination = selectedVaccination
             
-            // If you want to push it:
             navigationController?.pushViewController(detailVC, animated: true)
-            
-            // Or present modally:
-            // detailVC.modalPresentationStyle = .pageSheet
-            // present(detailVC, animated: true)
         }
     }
-
 }

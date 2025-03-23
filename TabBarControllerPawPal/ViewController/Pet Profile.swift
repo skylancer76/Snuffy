@@ -190,7 +190,7 @@ extension Pet_Profile: UITableViewDataSource, UITableViewDelegate {
             }
 
         case "Pet Diet":
-            if let petDietVC = storyboard?.instantiateViewController(withIdentifier: "PetDietVC") as? Pet_Diet {
+            if let petDietVC = storyboard?.instantiateViewController(withIdentifier: "PetDetailsVC") as? Pet_Diet {
                 petDietVC.petId = petId
                 navigationController?.pushViewController(petDietVC, animated: true)
             }

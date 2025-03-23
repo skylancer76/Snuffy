@@ -37,18 +37,23 @@ class Add_Pet_Medications: UITableViewController {
         endDatePicker.datePickerMode = .date
     }
     
-    // Action for when the medicine type button is tapped.
+    // MARK: - Medicine Type Selection
     @IBAction func medicineTypeButtonTapped(_ sender: UIButton) {
-        let alert = UIAlertController(title: "Select Medicine Type", message: nil, preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: "Select Medicine Type",
+                                      message: nil,
+                                      preferredStyle: .actionSheet)
         
+        // Add an action for each medicine type
         for type in medicineTypes {
             alert.addAction(UIAlertAction(title: type, style: .default, handler: { _ in
                 self.medicineTypeButton.setTitle(type, for: .normal)
             }))
         }
+        
+        // Add a cancel action
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         
-        // For iPad compatibility.
+        // iPad popover anchor
         if let popoverController = alert.popoverPresentationController {
             popoverController.sourceView = sender
             popoverController.sourceRect = sender.bounds
@@ -57,7 +62,7 @@ class Add_Pet_Medications: UITableViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    // Save the pet medication details to Firestore.
+    // MARK: - Save
     @IBAction func saveMedication(_ sender: UIBarButtonItem) {
         guard let petId = petId else {
             print("Pet ID is missing!")
@@ -65,18 +70,31 @@ class Add_Pet_Medications: UITableViewController {
         }
         
         // Retrieve values from UI.
-        let medicineName = medicineNameTextField.text ?? ""
+        let medicineName = medicineNameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         let medicineType = medicineTypeButton.title(for: .normal) ?? ""
-        let purpose = purposeTextField.text ?? ""
-        let frequency = frequencyTextField.text ?? ""
-        let dosage = dosageTextField.text ?? ""
+        let purpose = purposeTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        let frequency = frequencyTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        let dosage = dosageTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         
+        // Validate that required details are provided.
+        if medicineName.isEmpty || purpose.isEmpty || frequency.isEmpty || dosage.isEmpty {
+            let alert = UIAlertController(
+                title: "Incomplete Details",
+                message: "Please fill in all required fields before saving.",
+                preferredStyle: .alert
+            )
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            return
+        }
+        
+        // Format dates as dd/MM/yyyy
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd/MM/yyyy"
         let startDate = dateFormatter.string(from: startDatePicker.date)
         let endDate = dateFormatter.string(from: endDatePicker.date)
         
-        // Create a PetMedicationDetails object (medicationId remains nil so Firestore auto‑generates it).
+        // Create a PetMedicationDetails object (Firestore auto-generates ID)
         let medication = PetMedicationDetails(
             medicineName: medicineName,
             medicineType: medicineType,
@@ -87,21 +105,38 @@ class Add_Pet_Medications: UITableViewController {
             endDate: endDate
         )
         
+        // Save to Firestore
         FirebaseManager.shared.savePetMedicationData(petId: petId, medication: medication) { error in
             if let error = error {
                 print("Failed to save medication: \(error.localizedDescription)")
             } else {
                 print("Medication saved successfully!")
-                let alertController = UIAlertController(title: nil, message: "Pet Medication Data Added", preferredStyle: .alert)
+                
+                let alertController = UIAlertController(
+                    title: nil,
+                    message: "Pet Medication Data Added",
+                    preferredStyle: .alert
+                )
                 self.present(alertController, animated: true, completion: nil)
                 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                    alertController.dismiss(animated: true, completion: {
-                        NotificationCenter.default.post(name: NSNotification.Name("PetMedicationDataAdded"), object: nil)
-                        self.navigationController?.popViewController(animated: true)
-                    })
+                    alertController.dismiss(animated: true) {
+                        NotificationCenter.default.post(
+                            name: NSNotification.Name("PetMedicationDataAdded"),
+                            object: nil
+                        )
+                        // Dismiss the modal sheet
+                        self.dismiss(animated: true, completion: nil)
+                    }
                 }
             }
         }
+    }
+
+    
+    // MARK: - Cancel
+    @IBAction func cancelTapped(_ sender: UIBarButtonItem) {
+        // Since this is presented modally, dismiss
+        self.dismiss(animated: true, completion: nil)
     }
 }

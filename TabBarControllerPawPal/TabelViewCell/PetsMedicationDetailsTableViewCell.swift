@@ -1,28 +1,30 @@
 //
-//  VaccinationsDetailsTableViewCell.swift
+//  PetsMedicationDetailsTableViewCell.swift
 //  TabBarControllerPawPal
 //
-//  Created by user@61 on 23/03/25.
+//  Created by user@61 on 24/03/25.
 //
 
 import UIKit
 
-class VaccinationsDetailsTableViewCell: UITableViewCell {
+class PetsMedicationDetailsTableViewCell: UITableViewCell {
     
     @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var iconBackgroundView: UIView!
-    @IBOutlet weak var syringeIconImageView: UIImageView!
-    @IBOutlet weak var vaccineNameLabel: UILabel!
-    @IBOutlet weak var dateLabel: UILabel!
+    @IBOutlet weak var medicationIconImageView: UIImageView!
+    
+    @IBOutlet weak var medicineNameLabel: UILabel!
+    @IBOutlet weak var medicineTypeLabel: UILabel!
+    @IBOutlet weak var dateRangeLabel: UILabel!
 
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        // Rounded corners for the container
+        
         containerView.layer.cornerRadius = 12
         containerView.layer.masksToBounds = true
         
-        // Circle for the icon background
+        // Circular icon background
         iconBackgroundView.layer.cornerRadius = iconBackgroundView.frame.width / 2
         iconBackgroundView.layer.masksToBounds = true
         
@@ -34,8 +36,7 @@ class VaccinationsDetailsTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
-        iconBackgroundView.layer.cornerRadius = iconBackgroundView.frame.width / 2
-
     }
 
 }
+

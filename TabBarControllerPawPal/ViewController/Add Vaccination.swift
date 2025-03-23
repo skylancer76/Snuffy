@@ -83,7 +83,7 @@ class Add_Vaccination: UITableViewController, UITextViewDelegate {
     // MARK: - Properties
     var petId: String?
     
-    // Include "Other" directly in the list
+    // Vaccine list + "Other" option
     let vaccineOptions = [
         "DHPPi", "Kennel Cough", "Distemper", "RL",
         "Lyme Disease", "Lepto", "Parainfluenza",
@@ -92,6 +92,7 @@ class Add_Vaccination: UITableViewController, UITextViewDelegate {
         "Other"
     ]
     
+    // Track which vaccine is chosen
     var selectedVaccineName: String?
     
     // MARK: - Lifecycle
@@ -115,14 +116,17 @@ class Add_Vaccination: UITableViewController, UITextViewDelegate {
         // Make the notes text view editable
         notesTextView.delegate = self
         notesTextView.isEditable = true
-        // If you want it scrollable inside the cell, set isScrollEnabled = true
-        // If you want the cell to grow as you type, set isScrollEnabled = false
+        // notesTextView.isScrollEnabled = false // if you want it to grow automatically
+        
+        // Initially hide expiry-related rows if switch is OFF
+        tableView.beginUpdates()
+        tableView.endUpdates()
     }
     
     // MARK: - Actions
     
     @IBAction func expiresSwitchToggled(_ sender: UISwitch) {
-        // Animate collapse/expand of the expiry date row
+        // Animate collapse/expand of expiry date + notify row
         tableView.beginUpdates()
         tableView.endUpdates()
     }
@@ -172,10 +176,12 @@ class Add_Vaccination: UITableViewController, UITextViewDelegate {
         
         present(alert, animated: true)
     }
+    
     @IBAction func cancelButtonTapped(_ sender: UIBarButtonItem) {
-        // Dismiss the current screen
-        self.dismiss(animated: true, completion: nil)
+        // Since this is presented modally, dismiss
+        dismiss(animated: true, completion: nil)
     }
+    
     @IBAction func saveVaccination(_ sender: UIBarButtonItem) {
         print("Save Button Clicked")
         
@@ -183,23 +189,41 @@ class Add_Vaccination: UITableViewController, UITextViewDelegate {
             print("Pet ID is missing!")
             return
         }
-        guard let vaccineName = selectedVaccineName else {
-            print("Please select a vaccine")
+        
+        // 1) Ensure the user selected a vaccine
+        guard let vaccineName = selectedVaccineName, vaccineName != "Select" else {
+            let alert = UIAlertController(
+                title: "Vaccine Missing",
+                message: "Please select or enter a vaccine name before saving.",
+                preferredStyle: .alert
+            )
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            present(alert, animated: true)
             return
         }
         
+        // 2) Format the date of vaccination and expiry
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd/MM/yyyy"
         
+        let dateOfVaccination = dateFormatter.string(from: dateOfVaccinePicker.date)
+        
+        var expiryDateString: String? = nil
+        if expiresSwitch.isOn {
+            expiryDateString = dateFormatter.string(from: expiryDatePicker.date)
+        }
+        
+        // 3) Build the model
         let vaccination = VaccinationDetails(
             vaccineName: vaccineName,
-            dateOfVaccination: dateFormatter.string(from: dateOfVaccinePicker.date),
+            dateOfVaccination: dateOfVaccination,
             expires: expiresSwitch.isOn,
-            expiryDate: expiresSwitch.isOn ? dateFormatter.string(from: expiryDatePicker.date) : nil,
-            notifyUponExpiry: notifyUponExpirySwitch.isOn,
+            expiryDate: expiryDateString,
+            notifyUponExpiry: expiresSwitch.isOn ? notifyUponExpirySwitch.isOn : false,
             notes: notesTextView.text
         )
         
+        // 4) Save to Firestore
         FirebaseManager.shared.saveVaccinationData(petId: petId, vaccination: vaccination) { error in
             if let error = error {
                 print("Failed to save vaccination: \(error.localizedDescription)")
@@ -229,27 +253,18 @@ class Add_Vaccination: UITableViewController, UITextViewDelegate {
 
 // MARK: - UITableViewDelegate
 extension Add_Vaccination {
-
-    // Collapses or expands the Expiry Date row (Section 1, Row 1 in this example).
-    // Leaves the "Notes" row to the storyboard's set height (Section 2, Row 0).
+    
+    // Hide Expiry Date (row 1) & Notify Switch (row 2) if expiresSwitch is OFF
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
 
-        // Example layout:
-        // Section 0: Vaccine Name & Date
-        // Section 1: row 0 => "Expires" switch
-        //            row 1 => "Expiry Date"
-        //            row 2 => "Notify upon expiry"
-        // Section 2: row 0 => "Notes" cell
-
-        // Collapse "Expiry Date" cell if switch is off
-        if indexPath.section == 1 && indexPath.row == 1 {
-            return expiresSwitch.isOn ? UITableView.automaticDimension : 0
+        
+        if indexPath.section == 1 {
+            // Hide row 1 (expiry date) & row 2 (notify upon expiry) if switch is off
+            if (indexPath.row == 1 || indexPath.row == 2) {
+                return expiresSwitch.isOn ? UITableView.automaticDimension : 0
+            }
         }
-
-        // For the Notes row (section 2, row 0), let the storyboard’s static height apply.
-        // If you do want a fixed height in code, you can do:
-        // if indexPath.section == 2 && indexPath.row == 0 { return 100 }
-
+        
         return UITableView.automaticDimension
     }
 }
