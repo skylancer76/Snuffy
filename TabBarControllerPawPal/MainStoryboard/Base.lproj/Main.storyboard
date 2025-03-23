@@ -2316,7 +2316,7 @@
                                 <rect key="frame" x="0.0" y="106" width="402" height="768"/>
                                 <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="VaccinationTableViewCell" rowHeight="120" id="Mct-9w-uAA" customClass="VaccinationTableViewCell" customModule="TabBarControllerPawPal" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="VaccinationTableViewCell" rowHeight="120" id="Mct-9w-uAA" customClass="VaccinationsDetailsTableViewCell" customModule="TabBarControllerPawPal" customModuleProvider="target">
                                         <rect key="frame" x="20" y="55.333332061767578" width="362" height="120"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Mct-9w-uAA" id="Xpe-e6-met">
@@ -2381,6 +2381,13 @@
                                                 <constraint firstAttribute="bottom" secondItem="kgy-aP-tO4" secondAttribute="bottom" constant="20" symbolic="YES" id="zcX-2t-tyi"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="containerView" destination="kgy-aP-tO4" id="Krr-j0-oLm"/>
+                                            <outlet property="dateLabel" destination="AhE-Ww-h2k" id="Y1d-6D-JAw"/>
+                                            <outlet property="iconBackgroundView" destination="cUU-8k-O6m" id="dDY-z4-ML0"/>
+                                            <outlet property="syringeIconImageView" destination="WS7-ZB-3fD" id="mue-tJ-aC7"/>
+                                            <outlet property="vaccineNameLabel" destination="CNe-7M-enQ" id="xI2-Yo-XXm"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
@@ -2401,7 +2408,7 @@
                     <navigationItem key="navigationItem" title="Vaccination Details" id="Q0H-xh-O1L">
                         <barButtonItem key="rightBarButtonItem" image="plus" catalog="system" id="y1F-fe-Q5C">
                             <connections>
-                                <action selector="addVaccination:" destination="Q9x-eD-Bmm" id="TOt-3J-SWH"/>
+                                <segue destination="G8R-90-tdN" kind="presentation" identifier="AddVaccinationDetails" modalPresentationStyle="pageSheet" id="h7f-rw-Ppy"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -2418,7 +2425,7 @@
             <objects>
                 <tableViewController storyboardIdentifier="AddVaccinationVC" id="fPk-K3-Bqz" customClass="Add_Vaccination" customModule="TabBarControllerPawPal" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" id="Ef0-w4-Iw6">
-                        <rect key="frame" x="0.0" y="0.0" width="402" height="874"/>
+                        <rect key="frame" x="0.0" y="0.0" width="402" height="864"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
                         <sections>
@@ -2449,7 +2456,7 @@
                                                         <color key="titleColor" systemColor="labelColor"/>
                                                     </state>
                                                     <connections>
-                                                        <action selector="foodCategoryButtonTapped:" destination="EmV-kY-m0x" eventType="touchUpInside" id="hax-03-RYo"/>
+                                                        <action selector="selectVaccineTapped:" destination="fPk-K3-Bqz" eventType="touchUpInside" id="zwp-Le-Yud"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
@@ -2511,6 +2518,9 @@
                                                 </label>
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="D7A-Da-wjZ">
                                                     <rect key="frame" x="293" y="6.3333333333333321" width="51" height="30.999999999999996"/>
+                                                    <connections>
+                                                        <action selector="expiresSwitchToggled:" destination="fPk-K3-Bqz" eventType="valueChanged" id="jfF-oZ-PUA"/>
+                                                    </connections>
                                                 </switch>
                                             </subviews>
                                             <constraints>
@@ -2592,6 +2602,9 @@
                                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="yPF-Ab-5KL">
                                                     <rect key="frame" x="20" y="11" width="322" height="78"/>
                                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="80" id="ldA-px-tRV"/>
+                                                    </constraints>
                                                     <color key="textColor" systemColor="labelColor"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -2614,13 +2627,25 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Add Vaccine" id="W4C-zK-Gy7">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="PNt-24-Ctf"/>
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="PNt-24-Ctf">
+                            <connections>
+                                <action selector="cancelButtonTapped:" destination="fPk-K3-Bqz" id="T5O-0m-AVM"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Save" id="48p-i0-muC">
                             <connections>
                                 <action selector="saveVaccination:" destination="fPk-K3-Bqz" id="sQH-W6-Xdj"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="dateOfVaccinePicker" destination="8OU-g3-VLd" id="19I-CM-ix4"/>
+                        <outlet property="expiresSwitch" destination="D7A-Da-wjZ" id="cSZ-gr-Iah"/>
+                        <outlet property="expiryDatePicker" destination="RE9-1P-RMo" id="hVY-Mz-b9Q"/>
+                        <outlet property="notesTextView" destination="yPF-Ab-5KL" id="xNy-Yg-zES"/>
+                        <outlet property="notifyUponExpirySwitch" destination="1v3-X7-ea8" id="zZf-so-Wwv"/>
+                        <outlet property="vaccineNameButton" destination="aiv-xm-ztc" id="QsP-LV-uNA"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Pp9-TV-GAO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -3242,7 +3267,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999998807907104" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="info.circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Lfd-3P-3pM">
-                                                    <rect key="frame" x="20" y="15.666666666666664" width="22" height="20.666666666666671"/>
+                                                    <rect key="frame" x="20" y="15.666666666666666" width="22" height="20.666666666666671"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="22" id="ffr-DS-H3D"/>
                                                         <constraint firstAttribute="width" constant="22" id="oti-ff-wdc"/>
@@ -3910,10 +3935,10 @@
             </objects>
             <point key="canvasLocation" x="3911.9402985074626" y="868.42105263157885"/>
         </scene>
-        <!--Table View Controller-->
+        <!--Particular Vaccine-->
         <scene sceneID="WHK-Ce-pJK">
             <objects>
-                <tableViewController id="cRH-eN-Vec" sceneMemberID="viewController">
+                <tableViewController restorationIdentifier="Particular_Vaccine" storyboardIdentifier="Particular_Vaccine" id="cRH-eN-Vec" customClass="Particular_Vaccine" customModule="TabBarControllerPawPal" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" id="PtT-B8-QFX">
                         <rect key="frame" x="0.0" y="0.0" width="402" height="874"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -4103,8 +4128,20 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="Wav-fJ-FZV">
-                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="trash" id="FMY-jZ-dEf"/>
+                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="trash" id="FMY-jZ-dEf">
+                            <connections>
+                                <action selector="deleteButtonTapped:" destination="cRH-eN-Vec" id="Ixd-s9-K65"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="dateOfVaccineLabel" destination="u1h-Xr-5ml" id="paS-6v-cd7"/>
+                        <outlet property="expiresLabel" destination="oNg-i2-tVf" id="QRL-KU-chI"/>
+                        <outlet property="expiryDateLabel" destination="3oq-0e-5eC" id="uQW-NX-elZ"/>
+                        <outlet property="notes" destination="jL8-fh-nf5" id="Gfg-32-bQ3"/>
+                        <outlet property="notifySwitch" destination="yS7-oO-x32" id="OWX-8h-58j"/>
+                        <outlet property="vaccineNameLabel" destination="IQU-TY-1vn" id="euc-aG-WRd"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Wlk-Bo-kIB" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -4117,7 +4154,7 @@
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="VIv-09-qBp"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="zCL-7f-7yh">
-                        <rect key="frame" x="0.0" y="62" width="402" height="44"/>
+                        <rect key="frame" x="0.0" y="0.0" width="402" height="56"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -6177,7 +6214,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999998807907104" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="info.circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="KK3-rR-7cX">
-                                                    <rect key="frame" x="20" y="15.666666666666664" width="22" height="20.666666666666671"/>
+                                                    <rect key="frame" x="20" y="15.666666666666666" width="22" height="20.666666666666671"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="22" id="8yO-t5-QWt"/>
                                                         <constraint firstAttribute="height" constant="22" id="EdR-JW-N8Y"/>

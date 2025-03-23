@@ -258,32 +258,59 @@ class PetMedicationDetails: Codable {
 }
 
 // MARK: - Vaccination Details Model
+//class VaccinationDetails: Codable {
+//    
+//    var vaccineId: String?
+//    var vaccineName: String
+//    var vaccineType: String
+//    var dateOfVaccination: String
+//    var expiryDate: String
+//    var nextDueDate: String
+//
+//    init(
+//        vaccineId: String? = nil,
+//        vaccineName: String,
+//        vaccineType: String,
+//        dateOfVaccination: String,
+//        expiryDate: String,
+//        nextDueDate: String
+//    ) {
+//        self.vaccineId = vaccineId
+//        self.vaccineName = vaccineName
+//        self.vaccineType = vaccineType
+//        self.dateOfVaccination = dateOfVaccination
+//        self.expiryDate = expiryDate
+//        self.nextDueDate = nextDueDate
+//    }
+//}
+
 class VaccinationDetails: Codable {
-    
     var vaccineId: String?
     var vaccineName: String
-    var vaccineType: String
     var dateOfVaccination: String
-    var expiryDate: String
-    var nextDueDate: String
+    var expires: Bool
+    var expiryDate: String?
+    var notifyUponExpiry: Bool
+    var notes: String?
 
     init(
         vaccineId: String? = nil,
         vaccineName: String,
-        vaccineType: String,
         dateOfVaccination: String,
-        expiryDate: String,
-        nextDueDate: String
+        expires: Bool,
+        expiryDate: String? = nil,
+        notifyUponExpiry: Bool,
+        notes: String? = nil
     ) {
         self.vaccineId = vaccineId
         self.vaccineName = vaccineName
-        self.vaccineType = vaccineType
         self.dateOfVaccination = dateOfVaccination
+        self.expires = expires
         self.expiryDate = expiryDate
-        self.nextDueDate = nextDueDate
+        self.notifyUponExpiry = notifyUponExpiry
+        self.notes = notes
     }
 }
-
 
 
 
