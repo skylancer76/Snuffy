@@ -184,10 +184,13 @@ extension Pet_Profile: UITableViewDataSource, UITableViewDelegate {
         
         switch option {
         case "Pet Vaccinations":
-            if let vaccinationDetailsVC = storyboard?.instantiateViewController(withIdentifier: "VaccinationDetailsVC") as? Vaccination_Details {
-                vaccinationDetailsVC.petId = petId
-                navigationController?.pushViewController(vaccinationDetailsVC, animated: true)
-            }
+//            if let vaccinationDetailsVC = storyboard?.instantiateViewController(withIdentifier: "VaccinationDetailsVC") as? Vaccinations_Details {
+//                vaccinationDetailsVC.petId = petId
+//                navigationController?.pushViewController(vaccinationDetailsVC, animated: true)
+//            }
+            let vaccinationsVC = Vaccinations_Details() // Using the default initializer
+                    vaccinationsVC.petId = petId
+                    navigationController?.pushViewController(vaccinationsVC, animated: true)
         case "Pet Diet":
             if let petDietVC = storyboard?.instantiateViewController(withIdentifier: "PetDietVC") as? Pet_Diet {
                 petDietVC.petId = petId
