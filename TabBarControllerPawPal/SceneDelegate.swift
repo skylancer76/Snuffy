@@ -28,12 +28,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         swipeGesture.cancelsTouchesInView = false
         window?.addGestureRecognizer(swipeGesture)
         
-//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//        let testVC = storyboard.instantiateViewController(withIdentifier: "YourTestViewControllerID")
-//        window?.rootViewController = testVC
-//        window?.makeKeyAndVisible()
-        
-        
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         if let user = Auth.auth().currentUser {
             checkUserRole(userID: user.uid) { role in

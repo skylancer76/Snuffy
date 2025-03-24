@@ -65,7 +65,7 @@ class Pet_Profile: UIViewController {
         
         petInfo.layer.cornerRadius = 12
         petInfo.layer.masksToBounds = true
-        petInfo.backgroundColor = UIColor.systemPink.withAlphaComponent(0.2)
+        petInfo.backgroundColor = UIColor.systemPink.withAlphaComponent(0.1)
     }
     
     // Fetch pet data from Firestore using petId

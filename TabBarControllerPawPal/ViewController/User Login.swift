@@ -11,6 +11,7 @@ import FirebaseFirestore
 
 class User_Login: UIViewController {
 
+    @IBOutlet weak var appLogo: UIImageView!
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var loginButton: UIButton!
@@ -18,8 +19,12 @@ class User_Login: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        loginButton.layer.cornerRadius = 10
+        appLogo.layer.cornerRadius = appLogo.frame.height / 2
+        appLogo.layer.masksToBounds = true
+        
+        loginButton.layer.cornerRadius = 25
         loginButton.layer.masksToBounds = true
+        
         passwordTextField.isSecureTextEntry = true
     }
     

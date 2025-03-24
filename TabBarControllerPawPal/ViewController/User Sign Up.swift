@@ -13,6 +13,7 @@ import FirebaseFirestore
 class User_Sign_Up: UIViewController {
 
     
+    @IBOutlet weak var appLogo: UIImageView!
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
@@ -27,11 +28,14 @@ class User_Sign_Up: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        signUpButton.layer.cornerRadius = 10
+        signUpButton.layer.cornerRadius = 25
         signUpButton.layer.masksToBounds = true
         passwordTextField.isSecureTextEntry = true
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tapGesture)
+        
+        appLogo.layer.cornerRadius = appLogo.frame.height / 2
+        appLogo.layer.masksToBounds = true
 
     }
     @objc func dismissKeyboard() {
