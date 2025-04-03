@@ -30,18 +30,22 @@ class My_Pets: UIViewController {
         
         // Set Gradient inside the view
         let gradientLayer = CAGradientLayer()
-        gradientLayer.frame = view.bounds // Match the frame of the view
+        gradientLayer.frame = view.bounds
         gradientLayer.colors = [
-            UIColor.systemPink.withAlphaComponent(0.3).cgColor, // Start color
-            UIColor.clear.cgColor                               // End color
+            UIColor.systemPink.withAlphaComponent(0.3).cgColor,
+            UIColor.clear.cgColor
         ]
-        gradientLayer.locations = [0.0, 1.0]                     // Gradually fade
-        gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)       // Top-center
-        gradientLayer.endPoint = CGPoint(x: 0.5, y: 0.5)         // Bottom-center
+        gradientLayer.locations = [0.0, 1.0]
+        gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)
+        gradientLayer.endPoint = CGPoint(x: 0.5, y: 0.5)
         gradientView.layer.insertSublayer(gradientLayer, at: 0)
         
-        // Clear background color of collection view
+        
+        addPetButton.layer.cornerRadius = 10
+        addPetButton.layer.masksToBounds = true
+        
         myPets.backgroundColor = .clear
+        backgroundView.backgroundColor = .clear
         
         // Collection View delegates
         myPets.delegate = self
@@ -52,9 +56,6 @@ class My_Pets: UIViewController {
         
         // Set layout for collection view
         myPets.collectionViewLayout = createLayout()
-        
-        // Clear background
-        backgroundView.backgroundColor = .clear
     }
     
     // Add Pet Buttton function

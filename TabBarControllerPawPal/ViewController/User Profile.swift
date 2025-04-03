@@ -37,29 +37,6 @@ class User_Profile: UITableViewController {
         guard let userId = Auth.auth().currentUser?.uid else { return }
         
         let db = Firestore.firestore()
-        //            db.collection("users").document(userId).getDocument { (document, error) in
-        //                if let document = document, document.exists, let data = document.data() {
-        //
-        //                    let name = data["name"] as? String ?? "User"
-        //                    let email = data["email"] as? String ?? "No Email"
-        //                    let profileImageUrl = data["profileImageUrl"] as? String
-        //
-        //                    self.nameLabel.text = name
-        //                    self.emailLabel.text = email
-        //
-        //                    if let imageUrl = profileImageUrl {
-        //                        self.loadProfileImage(from: imageUrl)
-        //                    } else {
-        //                        self.setInitialsAsProfileImage(name: name)
-        //                    }
-        //
-        //                } else {
-        //                    print("Error fetching user data: \(error?.localizedDescription ?? "Unknown error")")
-        //                    self.nameLabel.text = "User"
-        //                    self.emailLabel.text = "No Email"
-        //                    self.setInitialsAsProfileImage(name: "User")
-        //                }
-        //            }
         db.collection("users").document(userId).getDocument { (document, error) in
             if let document = document, document.exists, let data = document.data() {
                 self.updateProfileUI(with: data)
@@ -162,12 +139,6 @@ class User_Profile: UITableViewController {
                 print("Error signing out: \(error.localizedDescription)")
             }
         }
-        
-//    func redirectToLogin() {
-//        let loginVC = storyboard?.instantiateViewController(withIdentifier: "login") as! User_Login
-//        loginVC.modalPresentationStyle = .fullScreen
-//        present(loginVC, animated: true, completion: nil)
-//    }
 
     func redirectToLogin() {
             do {

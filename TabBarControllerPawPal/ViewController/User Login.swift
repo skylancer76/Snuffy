@@ -5,152 +5,6 @@
 //  Created by admin19 on 14/12/24.
 //
 
-//import UIKit
-//import FirebaseAuth
-//import FirebaseFirestore
-//
-//class User_Login: UIViewController {
-//
-//    @IBOutlet weak var appLogo: UIImageView!
-//    @IBOutlet weak var emailTextField: UITextField!
-//    @IBOutlet weak var passwordTextField: UITextField!
-//    @IBOutlet weak var loginButton: UIButton!
-//    
-//    override func viewDidLoad() {
-//        super.viewDidLoad()
-//        
-//        appLogo.layer.cornerRadius = appLogo.frame.height / 2
-//        appLogo.layer.masksToBounds = true
-//        
-//        loginButton.layer.cornerRadius = 25
-//        loginButton.layer.masksToBounds = true
-//        
-//        passwordTextField.isSecureTextEntry = true
-//    }
-//    
-//    @IBAction func passwordViewTapped(_ sender: UIButton) {
-//        passwordTextField.isSecureTextEntry.toggle()
-//        let imageName = passwordTextField.isSecureTextEntry ? "eye.slash.fill" : "eye.fill"
-//        sender.setImage(UIImage(systemName: imageName), for: .normal)
-//    }
-//    
-//    @IBAction func loginClicked(_ sender: Any) {
-//        guard let email = emailTextField.text, !email.isEmpty,
-//              let password = passwordTextField.text, !password.isEmpty else {
-//            showAlert("Error", "Please fill in all fields")
-//            return
-//        }
-//        
-//        // Firebase Login
-//        Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
-//            if let error = error {
-//                self.showAlert("Login Failed", error.localizedDescription)
-//                return
-//            }
-//            
-//            guard let user = authResult?.user else {
-//                self.showAlert("Error", "User not found")
-//                return
-//            }
-//            
-//            // Use DispatchGroup to combine caretaker and dog walker checks
-//            let group = DispatchGroup()
-//            var isCaretaker = false
-//            var isDogwalker = false
-//            
-//            group.enter()
-//            self.checkIfUserIsCaretaker(userID: user.uid) { result in
-//                isCaretaker = result
-//                group.leave()
-//            }
-//            
-//            group.enter()
-//            self.checkIfUserIsDogWalker(userID: user.uid) { result in
-//                isDogwalker = result
-//                group.leave()
-//            }
-//            
-//            group.notify(queue: .main) {
-//                if isCaretaker || isDogwalker {
-//                    self.navigateToCaretakerHome()
-//                } else {
-//                    self.navigateToRegularHome()
-//                }
-//            }
-//        }
-//    }
-//    
-//    // MARK: - Role Checking Methods
-//    
-//    func checkIfUserIsCaretaker(userID: String, completion: @escaping (Bool) -> Void) {
-//        let db = Firestore.firestore()
-//        let caretakersRef = db.collection("caretakers")
-//        
-//        caretakersRef.whereField("caretakerId", isEqualTo: userID).getDocuments { snapshot, error in
-//            if let error = error {
-//                print("Error verifying caretaker role: \(error.localizedDescription)")
-//                completion(false)
-//                return
-//            }
-//            if let snapshot = snapshot, !snapshot.documents.isEmpty {
-//                completion(true)
-//            } else {
-//                completion(false)
-//            }
-//        }
-//    }
-//    
-//    func checkIfUserIsDogWalker(userID: String, completion: @escaping (Bool) -> Void) {
-//        let db = Firestore.firestore()
-//        let dogWalkersRef = db.collection("dogwalkers")
-//        
-//        dogWalkersRef.whereField("dogWalkerId", isEqualTo: userID).getDocuments { snapshot, error in
-//            if let error = error {
-//                print("Error verifying dog walker role: \(error.localizedDescription)")
-//                completion(false)
-//                return
-//            }
-//            if let snapshot = snapshot, !snapshot.documents.isEmpty {
-//                completion(true)
-//            } else {
-//                completion(false)
-//            }
-//        }
-//    }
-//    
-//    // MARK: - Navigation Methods
-//    
-//    func navigateToCaretakerHome() {
-//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//        if let caretakerTabBarVC = storyboard.instantiateViewController(withIdentifier: "CaretakerTabBarController") as? UITabBarController {
-//            caretakerTabBarVC.modalPresentationStyle = .fullScreen
-//            self.present(caretakerTabBarVC, animated: true, completion: nil)
-//        } else {
-//            self.showAlert("Error", "Caretaker home could not be loaded.")
-//        }
-//    }
-//    
-//    func navigateToRegularHome() {
-//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//        if let userTabBarVC = storyboard.instantiateViewController(withIdentifier: "TabBarControllerID") as? UITabBarController {
-//            userTabBarVC.modalPresentationStyle = .fullScreen
-//            self.present(userTabBarVC, animated: true, completion: nil)
-//        } else {
-//            self.showAlert("Error", "User home could not be loaded.")
-//        }
-//    }
-//    
-//    // MARK: - Helper
-//    
-//    func showAlert(_ title: String, _ message: String) {
-//        let alert = UIAlertController(title: title,
-//                                      message: message,
-//                                      preferredStyle: .alert)
-//        alert.addAction(UIAlertAction(title: "OK", style: .default))
-//        present(alert, animated: true, completion: nil)
-//    }
-//}
-
 import UIKit
 import FirebaseAuth
 import FirebaseFirestore
@@ -164,6 +18,23 @@ class User_Login: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Gradient Background Setup
+        let gradientView = UIView(frame: view.bounds)
+        gradientView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(gradientView)
+        view.sendSubviewToBack(gradientView)
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.frame = view.bounds
+        gradientLayer.colors = [
+            UIColor.systemPink.withAlphaComponent(0.3).cgColor,
+            UIColor.clear.cgColor
+        ]
+        gradientLayer.locations = [0.0, 1.0]
+        gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)
+        gradientLayer.endPoint = CGPoint(x: 0.5, y: 0.5)
+        gradientView.layer.insertSublayer(gradientLayer, at: 0)
+        
         
         appLogo.layer.cornerRadius = appLogo.frame.height / 2
         appLogo.layer.masksToBounds = true
