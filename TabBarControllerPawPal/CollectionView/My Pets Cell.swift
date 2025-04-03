@@ -22,7 +22,7 @@ class My_Pets_Cell: UICollectionViewCell {
         // Validate the image URL string.
         guard let imageUrlString = pet.petImage,
               let url = URL(string: imageUrlString) else {
-            petImage.image = UIImage(named: "placeholder_image")
+            petImage.image = UIImage(named: "DogPlaceholder")
             return
         }
         
@@ -47,11 +47,11 @@ class My_Pets_Cell: UICollectionViewCell {
                     }
                 } else {
                     DispatchQueue.main.async {
-                        self.petImage.image = UIImage(named: "placeholder_image")
+                        self.petImage.image = UIImage(named: "DogPlaceholder")
                     }
                 }
             }
-            petImage.image = UIImage(named: "placeholder_image")
+            petImage.image = UIImage(named: "DogPlaceholder")
         }
     }
 }

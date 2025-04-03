@@ -708,7 +708,7 @@
                                 </constraints>
                             </view>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v4n-tM-O6K">
-                                <rect key="frame" x="0.0" y="138" width="402" height="633"/>
+                                <rect key="frame" x="0.0" y="158" width="402" height="633"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xS6-7K-7uy">
                                         <rect key="frame" x="0.0" y="0.0" width="402" height="1800"/>
@@ -2184,7 +2184,11 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" largeTitleDisplayMode="never" id="Oqg-V6-msX">
-                        <barButtonItem key="rightBarButtonItem" image="ellipsis.circle" catalog="system" id="oNN-FE-ATY"/>
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="ellipsis.circle" catalog="system" id="aoB-EY-86r">
+                            <connections>
+                                <action selector="editPet:" destination="36O-dH-kRi" id="eOb-Lm-FcZ"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="ageLabel" destination="TaN-ZD-xlh" id="9ko-QT-qcC"/>
@@ -2315,7 +2319,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KdV-NR-NPT" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4831" y="2484"/>
+            <point key="canvasLocation" x="4770" y="2484"/>
         </scene>
         <!--Add Vaccine-->
         <scene sceneID="Za5-IP-g6r">
@@ -3164,7 +3168,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999998807907104" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="info.circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Lfd-3P-3pM">
-                                                    <rect key="frame" x="20" y="15.666666666666664" width="22" height="20.666666666666671"/>
+                                                    <rect key="frame" x="20" y="15.666666666666666" width="22" height="20.666666666666671"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="22" id="ffr-DS-H3D"/>
                                                         <constraint firstAttribute="width" constant="22" id="oti-ff-wdc"/>
@@ -6114,7 +6118,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999998807907104" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="info.circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="KK3-rR-7cX">
-                                                    <rect key="frame" x="20" y="15.666666666666664" width="22" height="20.666666666666671"/>
+                                                    <rect key="frame" x="20" y="15.666666666666666" width="22" height="20.666666666666671"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="22" id="8yO-t5-QWt"/>
                                                         <constraint firstAttribute="height" constant="22" id="EdR-JW-N8Y"/>
@@ -7666,7 +7670,11 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" largeTitleDisplayMode="never" id="qDt-Hi-fE8">
-                        <barButtonItem key="rightBarButtonItem" title="Item" image="square.and.arrow.up" catalog="system" id="B7i-xY-8f5"/>
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="square.and.arrow.up" catalog="system" id="B7i-xY-8f5">
+                            <connections>
+                                <action selector="shareCaretaker:" destination="Ij5-hn-wKm" id="2LI-2J-1Nw"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="addressLabel" destination="n2C-lD-1Em" id="KYJ-LO-1IO"/>
@@ -8346,7 +8354,7 @@
     <inferredMetricsTieBreakers>
         <segue reference="Geh-Ok-7vh"/>
         <segue reference="VRy-M2-YRb"/>
-        <segue reference="rAl-cH-HIV"/>
+        <segue reference="DZQ-DS-aGG"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" systemColor="systemPinkColor"/>
     <resources>

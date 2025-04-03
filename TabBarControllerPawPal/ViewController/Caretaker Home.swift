@@ -174,12 +174,12 @@ class Caretaker_Home: UIViewController, UITableViewDelegate, UITableViewDataSour
                                 }
                             } else {
                                 DispatchQueue.main.async {
-                                    cell.petImageView.image = UIImage(named: "placeholder")
+                                    cell.petImageView.image = UIImage(named: "DogPlaceholder")
                                 }
                             }
                         }
                     } else {
-                        cell.petImageView.image = UIImage(named: "placeholder")
+                        cell.petImageView.image = UIImage(named: "DogPlaceholder")
                     }
                     
                     cell.acceptButton.tag = indexPath.row
@@ -208,12 +208,12 @@ class Caretaker_Home: UIViewController, UITableViewDelegate, UITableViewDataSour
                                 }
                             } else {
                                 DispatchQueue.main.async {
-                                    cell.petImageView.image = UIImage(named: "placeholder")
+                                    cell.petImageView.image = UIImage(named: "DogPlaceholder")
                                 }
                             }
                         }
                     } else {
-                        cell.petImageView.image = UIImage(named: "placeholder")
+                        cell.petImageView.image = UIImage(named: "DogPlaceholder")
                     }
                     
                     cell.acceptButton.tag = dogWalkerIndex

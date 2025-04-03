@@ -137,7 +137,7 @@ class DogWalker_Profile: UITableViewController {
         if let url = URL(string: walker.profilePic!) {
                 walkerImageView.loadImage(from: url)
             } else {
-                walkerImageView.image = UIImage(named: "placeholder")
+                walkerImageView.image = UIImage(named: "CaretakerPlaceholder")
             }
         }
     

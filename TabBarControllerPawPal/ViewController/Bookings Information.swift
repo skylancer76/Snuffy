@@ -250,7 +250,7 @@ class Bookings_Information: UITableViewController, MFMessageComposeViewControlle
         if let url = URL(string: caretaker.profilePic!) {
             caretakerImageView.loadImage(from: url)
         } else {
-            caretakerImageView.image = UIImage(named: "placeholder")
+            caretakerImageView.image = UIImage(named: "CaretakerPlaceholder")
         }
     }
 
@@ -286,13 +286,34 @@ class Bookings_Information: UITableViewController, MFMessageComposeViewControlle
     }
 
 }
+
+//extension UIImageView {
+//    func loadImage(from url: URL) {
+//        DispatchQueue.global().async {
+//            if let data = try? Data(contentsOf: url),
+//               let image = UIImage(data: data) {
+//                DispatchQueue.main.async {
+//                    self.image = image
+//                }
+//            }
+//        }
+//    }
+//}
+
 extension UIImageView {
-    func loadImage(from url: URL) {
+    func loadImage(from url: URL, placeholder: UIImage? = UIImage(named: "CaretakerPlaceholder")) {
+        // Set the placeholder image immediately on the main thread
+        DispatchQueue.main.async {
+            self.image = placeholder
+        }
+        
+        // Download the image in the background
         DispatchQueue.global().async {
             if let data = try? Data(contentsOf: url),
-               let image = UIImage(data: data) {
+               let downloadedImage = UIImage(data: data) {
+                // Update the image view on the main thread with the downloaded image
                 DispatchQueue.main.async {
-                    self.image = image
+                    self.image = downloadedImage
                 }
             }
         }

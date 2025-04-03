@@ -206,6 +206,13 @@ class Caretaker_Profile: UIViewController, CLLocationManagerDelegate {
             }
         }
     }
+    
+    
+    @IBAction func shareCaretaker(_ sender: UIBarButtonItem) {
+        
+        
+    }
+    
 }
 
 // MARK: - UICollectionView

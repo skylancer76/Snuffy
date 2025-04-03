@@ -22,6 +22,8 @@ class Pet_Profile: UIViewController {
     @IBOutlet var nameLabel: UILabel!
     @IBOutlet weak var petInfo: UIView!
     
+    
+    
     // Outlet for TableView
     @IBOutlet weak var petDetailsTableView: UITableView!
     
@@ -97,6 +99,56 @@ class Pet_Profile: UIViewController {
             }
         }
     }
+    
+    
+    @IBAction func editPet(_ sender: UIBarButtonItem) {
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+            
+            // Add "Edit Pet Details" option
+//            let editAction = UIAlertAction(title: "Edit Pet Details", style: .default) { [weak self] _ in
+//                self?.editPetDetails()
+//            }
+            
+            // Add "Delete Pet" option
+            let deleteAction = UIAlertAction(title: "Delete Pet", style: .destructive) { [weak self] _ in
+                self?.deletePet()
+            }
+            
+            // Add Cancel option
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            
+//            alertController.addAction(editAction)
+            alertController.addAction(deleteAction)
+            alertController.addAction(cancelAction)
+            
+            // Configure the popover presentation
+            if let popoverController = alertController.popoverPresentationController {
+                popoverController.barButtonItem = sender
+                popoverController.permittedArrowDirections = .up
+                popoverController.delegate = self
+            }
+            
+            present(alertController, animated: true, completion: nil)
+
+    }
+    
+    
+    private func deletePet() {
+        guard let petId = petId else { return }
+        
+        let db = Firestore.firestore()
+        db.collection("Pets").document(petId).delete { [weak self] error in
+            if let error = error {
+                print("Error deleting pet: \(error.localizedDescription)")
+            } else {
+                print("Pet deleted successfully.")
+                // Navigate back to My Pets
+                self?.navigationController?.popViewController(animated: true)
+            }
+        }
+    }
+
+
 }
 
 // MARK: - Prefetched Image Extension
@@ -207,5 +259,12 @@ extension Pet_Profile: UITableViewDataSource, UITableViewDelegate {
     // Set a consistent cell height if desired
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
+    }
+}
+
+extension Pet_Profile: UIPopoverPresentationControllerDelegate {
+    // This forces the popover presentation style on all devices (including iPhone)
+    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+        return .none
     }
 }
