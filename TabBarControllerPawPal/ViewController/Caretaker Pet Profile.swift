@@ -223,13 +223,13 @@ extension Caretaker_Pet_Profile: UITableViewDataSource, UITableViewDelegate {
         let option = tableOptions[indexPath.row]
                 
                 switch option {
-//                case "Pet Vaccinations":
-//                    if let vaccinationDetailsVC = storyboard?.instantiateViewController(withIdentifier: "VaccinationDetails") as? Pet_Vaccination_Details {
-//                        // Pass the petId to the detail screen
-//                        vaccinationDetailsVC.petId = petId
-//                        navigationController?.pushViewController(vaccinationDetailsVC, animated: true)
-//                    }
-//                    
+                case "Pet Vaccinations":
+                    if let vaccinationDetailsVC = storyboard?.instantiateViewController(withIdentifier: "VaccinationDetails") as? Pet_Vaccination_Details {
+                        // Pass the petId to the detail screen
+                        vaccinationDetailsVC.petId = petId
+                        navigationController?.pushViewController(vaccinationDetailsVC, animated: true)
+                    }
+                 
                 case "Pet Diet":
                     if let petDietVC = storyboard?.instantiateViewController(withIdentifier: "PetDiet") as? Pet_Diet_Details {
                         petDietVC.petId = petId

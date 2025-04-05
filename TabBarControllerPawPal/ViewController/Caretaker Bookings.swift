@@ -335,6 +335,7 @@ extension Caretaker_Bookings: UITableViewDataSource, UITableViewDelegate {
             cell.bgView.layer.shadowRadius = 5
             cell.bgView.layer.shadowOpacity = 0.1
             
+            cell.petImage.image = UIImage(named: "DogPlaceholder")
             // Load pet image asynchronously.
             if let urlString = request.petImageUrl,
                let url = URL(string: urlString) {
@@ -346,12 +347,12 @@ extension Caretaker_Bookings: UITableViewDataSource, UITableViewDelegate {
                         }
                     } else {
                         DispatchQueue.main.async {
-                            cell.petImage.image = UIImage(named: "placeholder")
+                            cell.petImage.image = UIImage(named: "DogPlaceholder")
                         }
                     }
                 }
             } else {
-                cell.petImage.image = UIImage(named: "placeholder")
+                cell.petImage.image = UIImage(named: "DogPlaceholder")
             }
             
             cell.backgroundColor = .clear
@@ -381,6 +382,7 @@ extension Caretaker_Bookings: UITableViewDataSource, UITableViewDelegate {
             cell.bgView.layer.shadowRadius = 5
             cell.bgView.layer.shadowOpacity = 0.1
             
+            cell.petImage.image = UIImage(named: "DogPlaceholder")
             if let urlString = request.petImageUrl,
                let url = URL(string: urlString) {
                 DispatchQueue.global().async {
@@ -391,12 +393,12 @@ extension Caretaker_Bookings: UITableViewDataSource, UITableViewDelegate {
                         }
                     } else {
                         DispatchQueue.main.async {
-                            cell.petImage.image = UIImage(named: "placeholder")
+                            cell.petImage.image = UIImage(named: "DogPlaceholder")
                         }
                     }
                 }
             } else {
-                cell.petImage.image = UIImage(named: "placeholder")
+                cell.petImage.image = UIImage(named: "DogPlaceholder")
             }
             
             cell.backgroundColor = .clear
