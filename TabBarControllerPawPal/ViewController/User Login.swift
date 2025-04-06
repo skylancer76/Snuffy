@@ -35,48 +35,45 @@ class User_Login: UIViewController {
         gradientLayer.endPoint = CGPoint(x: 0.5, y: 0.5)
         gradientView.layer.insertSublayer(gradientLayer, at: 0)
         
-        
         appLogo.layer.cornerRadius = appLogo.frame.height / 2
         appLogo.layer.masksToBounds = true
         loginButton.layer.cornerRadius = 10
         loginButton.layer.masksToBounds = true
         passwordTextField.isSecureTextEntry = true
+        
         setupActivityIndicator()
         emailErrorLabel.isHidden = true
+        
         emailTextField.addTarget(self, action: #selector(emailTextFieldDidChange(_:)), for: .editingChanged)
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapView))
-            tapGesture.cancelsTouchesInView = false
-            view.addGestureRecognizer(tapGesture)
-
-
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
+        
+        // Set self as delegate for text fields for border highlighting
+        emailTextField.delegate = self
+        passwordTextField.delegate = self
     }
     
     @objc private func didTapView() {
-
         view.endEditing(true)
-        
-        // Hide the error label and reset border
+        // Hide error label and reset email field border
         emailErrorLabel.isHidden = true
         emailTextField.layer.borderWidth = 0
         emailTextField.layer.borderColor = UIColor.clear.cgColor
     }
-
     
     @objc private func emailTextFieldDidChange(_ textField: UITextField) {
         guard let email = textField.text else { return }
         
+        // Always use systemPink for the border regardless of validity
+        textField.layer.borderWidth = 1
+        textField.layer.borderColor = UIColor.systemPink.cgColor
+        textField.layer.cornerRadius = 8
+        
         if isValidEmail(email) {
-            // Example feedback: green border for valid email
-            textField.layer.borderWidth = 0
-            textField.layer.borderColor = UIColor.clear.cgColor
-
             emailErrorLabel.isHidden = true
         } else {
-            // Red border for invalid email (or remove border if you prefer)
             emailErrorLabel.isHidden = false
-            textField.layer.borderWidth = 1
-            textField.layer.borderColor = UIColor.systemRed.cgColor
-            textField.layer.cornerRadius = 8
         }
     }
     
@@ -151,7 +148,7 @@ class User_Login: UIViewController {
         indicator.hidesWhenStopped = true
         return indicator
     }()
-
+    
     private func setupActivityIndicator() {
         view.addSubview(activityIndicator)
         NSLayoutConstraint.activate([
@@ -159,12 +156,12 @@ class User_Login: UIViewController {
             activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
-
+    
     private func showLoadingIndicator() {
         activityIndicator.startAnimating()
         view.isUserInteractionEnabled = false
     }
-
+    
     private func hideLoadingIndicator() {
         activityIndicator.stopAnimating()
         view.isUserInteractionEnabled = true
@@ -238,5 +235,34 @@ class User_Login: UIViewController {
                                       preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         present(alert, animated: true, completion: nil)
+    }
+}
+
+// MARK: - UITextFieldDelegate for Border Highlighting
+
+extension User_Login: UITextFieldDelegate {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        // When editing begins, show a systemPink border
+        textField.layer.borderWidth = 1
+        textField.layer.borderColor = UIColor.systemPink.cgColor
+        textField.layer.cornerRadius = 8
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        // For emailTextField, if not empty and valid, remove the border; otherwise, keep it.
+        if textField == emailTextField {
+            if let email = textField.text, !email.isEmpty, isValidEmail(email) {
+                textField.layer.borderWidth = 0
+                textField.layer.borderColor = UIColor.clear.cgColor
+            } else {
+                // Keep the systemPink border if invalid
+                textField.layer.borderWidth = 1
+                textField.layer.borderColor = UIColor.systemPink.cgColor
+            }
+        } else {
+            // For passwordTextField, remove the border when editing ends.
+            textField.layer.borderWidth = 0
+            textField.layer.borderColor = UIColor.clear.cgColor
+        }
     }
 }

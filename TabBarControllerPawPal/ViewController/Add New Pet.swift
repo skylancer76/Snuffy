@@ -21,15 +21,14 @@ class Add_New_Pet: UITableViewController, UIImagePickerControllerDelegate, UINav
     @IBOutlet weak var petAgeButton: UIButton!
     @IBOutlet weak var petGenderButton: UIButton!
     @IBOutlet weak var petWeightButton: UIButton!
-    @IBOutlet weak var imageSelectButton: UIButton!
+    @IBOutlet weak var uploadPetPicture: UIButton!
     @IBOutlet weak var addButton: UIBarButtonItem!
+    @IBOutlet weak var petProfilePicture: UIImageView!
     
     weak var delegate: AddNewPetDelegate?
     var selectedImage: UIImage?
     var selectedGender: String?
     var selectedBreed: String?
-    
-    // If you already have a FirebaseManager & PetData, those remain unchanged
     
     // MARK: - Data Arrays
     private let ageData = (1...30).map { "\($0) Year" }
@@ -74,6 +73,8 @@ class Add_New_Pet: UITableViewController, UIImagePickerControllerDelegate, UINav
         setupUI()
         setupActivityIndicator()
         setupDropDownMenus()
+        
+        petProfilePicture.layer.cornerRadius = petProfilePicture.bounds.height / 2
     }
     
     private func setupActivityIndicator() {
@@ -109,9 +110,7 @@ class Add_New_Pet: UITableViewController, UIImagePickerControllerDelegate, UINav
         petWeightButton.addTarget(self, action: #selector(showWeightPicker), for: .touchUpInside)
         
         // --- Select Image Button ---
-        imageSelectButton.titleLabel?.font = UIFont.systemFont(ofSize: 14)
-        imageSelectButton.setTitle("Upload", for: .normal)
-        imageSelectButton.addTarget(self, action: #selector(selectImage), for: .touchUpInside)
+        uploadPetPicture.addTarget(self, action: #selector(selectImage), for: .touchUpInside)
         
         // Add the hidden text field for pickers
         hiddenTextField.isHidden = true
@@ -229,17 +228,25 @@ class Add_New_Pet: UITableViewController, UIImagePickerControllerDelegate, UINav
 
     func imagePickerController(_ picker: UIImagePickerController,
                                didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
+        // Safely unwrap either editedImage or originalImage
         if let editedImage = info[.editedImage] as? UIImage {
             selectedImage = editedImage
-            imageSelectButton.setTitle("Image Uploaded", for: .normal)
-            imageSelectButton.setTitleColor(.systemGreen, for: .normal)
+        } else if let originalImage = info[.originalImage] as? UIImage {
+            selectedImage = originalImage
         }
+        
+        // Set the imageView's image to the chosen image
+        if let chosenImage = selectedImage {
+            petProfilePicture.image = chosenImage
+            // Hide the upload button
+            uploadPetPicture.isHidden = true
+        }
+        
         dismiss(animated: true, completion: nil)
     }
 
     // MARK: - Add Pet Action
     @IBAction func AddButtonTapped(_ sender: Any) {
-        // Retrieve age/weight from the buttons instead of text fields
         guard let petName = petNameTextField.text, !petName.isEmpty,
               let petBreed = selectedBreed, !petBreed.isEmpty,
               let petGender = selectedGender,
@@ -367,15 +374,14 @@ class Add_New_Pet: UITableViewController, UIImagePickerControllerDelegate, UINav
         petGenderButton.setTitle("Select Gender", for: .normal)
         petGenderButton.setTitleColor(.tertiaryLabel, for: .normal)
         
-        // Reset Age & Weight buttons to defaults
         petAgeButton.setTitle("Value", for: .normal)
         petAgeButton.setTitleColor(.tertiaryLabel, for: .normal)
         
         petWeightButton.setTitle("Value", for: .normal)
         petWeightButton.setTitleColor(.tertiaryLabel, for: .normal)
         
-        imageSelectButton.setTitle("Select Image", for: .normal)
-        imageSelectButton.setTitleColor(.systemBlue, for: .normal)
+        petProfilePicture.image = nil
+        uploadPetPicture.isHidden = false
         
         selectedImage = nil
     }

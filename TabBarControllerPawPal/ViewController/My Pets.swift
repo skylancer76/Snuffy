@@ -169,8 +169,8 @@ extension My_Pets: UICollectionViewDataSource, UICollectionViewDelegate {
         cell.contentView.layer.cornerRadius = 12
         cell.backgroundColor = .clear
         cell.layer.masksToBounds = false
-        cell.layer.shadowRadius = 5
-        cell.layer.shadowOpacity = 0.1
+        cell.layer.shadowOffset = CGSize(width: 2, height: 2)
+        cell.layer.shadowOpacity = 0.2
         return cell
     }
     

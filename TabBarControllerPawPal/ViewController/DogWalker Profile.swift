@@ -41,10 +41,6 @@ class DogWalker_Profile: UITableViewController {
                 let callTapGesture = UITapGestureRecognizer(target: self, action: #selector(callWalkerTapped))
                 walkerCallImageView.addGestureRecognizer(callTapGesture)
                 walkerCallImageView.isUserInteractionEnabled = true
-
-                let chatTapGesture = UITapGestureRecognizer(target: self, action: #selector(openChat))
-                walkerChatImageView.addGestureRecognizer(chatTapGesture)
-                walkerChatImageView.isUserInteractionEnabled = true
                 
                 if let request = scheduleDogWalkerRequest {
                     updateDogWalkerBookingUI(with: request)
@@ -58,16 +54,6 @@ class DogWalker_Profile: UITableViewController {
             if let url = URL(string: "tel://\(phone.replacingOccurrences(of: " ", with: ""))"),
                UIApplication.shared.canOpenURL(url) {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
-            }
-        }
-        
-        @objc func openChat() {
-            guard let walkerId = dogWalker?.dogWalkerId, let userId = Auth.auth().currentUser?.uid else { return }
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            if let chatVC = storyboard.instantiateViewController(withIdentifier: "ChatsViewController") as? Chats {
-                chatVC.userId = userId
-                chatVC.caretakerId = walkerId
-                navigationController?.pushViewController(chatVC, animated: true)
             }
         }
     

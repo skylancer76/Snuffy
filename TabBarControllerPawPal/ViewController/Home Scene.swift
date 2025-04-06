@@ -15,6 +15,8 @@ class Home_Scene: UIViewController {
     @IBOutlet weak var petSittingBgView: UIView!
     @IBOutlet weak var petWalkingBgView: UIView!
     @IBOutlet weak var scrollView: UIView!
+    @IBOutlet weak var petSittingImage: UIImageView!
+    @IBOutlet weak var petWalkingImage: UIImageView!
     
     @IBOutlet weak var homePetsCollectionView: UICollectionView!
     
@@ -45,15 +47,19 @@ class Home_Scene: UIViewController {
         
         // Pet Sitting Background View
         petSittingBgView.layer.cornerRadius = 10
+        petSittingImage.layer.cornerRadius = 10
         petSittingBgView.layer.masksToBounds = false
         petSittingBgView.layer.shadowRadius = 5
-        petSittingBgView.layer.shadowOpacity = 0.1
+        petSittingBgView.layer.shadowOffset = CGSize(width: 2, height: 2)
+        petSittingBgView.layer.shadowOpacity = 0.2
         
         // Pet Walking Background View
         petWalkingBgView.layer.cornerRadius = 10
+        petWalkingImage.layer.cornerRadius = 10
         petWalkingBgView.layer.masksToBounds = false
+        petWalkingBgView.layer.shadowOffset = CGSize(width: 2, height: 2)
         petWalkingBgView.layer.shadowRadius = 5
-        petWalkingBgView.layer.shadowOpacity = 0.1
+        petWalkingBgView.layer.shadowOpacity = 0.2
         
         homePetsCollectionView.delegate = self
         homePetsCollectionView.dataSource = self
@@ -210,18 +216,21 @@ extension Home_Scene: UICollectionViewDataSource, UICollectionViewDelegate, UICo
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if homePets.isEmpty || indexPath.item == homePets.count {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AddPetCell", for: indexPath)
+            cell.backgroundColor = .clear
             cell.contentView.layer.cornerRadius = 12
             cell.contentView.layer.masksToBounds = true
+            cell.contentView.backgroundColor = .systemPink.withAlphaComponent(0.2)
             return cell
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PetCells", for: indexPath) as! MyPetsCell
             let pet = homePets[indexPath.item]
             cell.configure(with: pet)
-            cell.contentView.layer.cornerRadius = 12
+            
             cell.backgroundColor = .clear
+            cell.contentView.layer.cornerRadius = 12
             cell.layer.masksToBounds = false
-            cell.layer.shadowRadius = 5
-            cell.layer.shadowOpacity = 0.1
+            cell.layer.shadowOffset = CGSize(width: 2, height: 2)
+            cell.layer.shadowOpacity = 0.2
             return cell
         }
     }
@@ -247,7 +256,7 @@ extension Home_Scene: UICollectionViewDataSource, UICollectionViewDelegate, UICo
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 150, height: 190)
+        return CGSize(width: 150, height: 200)
     }
     
     func collectionView(_ collectionView: UICollectionView,

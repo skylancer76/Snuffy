@@ -167,6 +167,10 @@ class My_Bookings: UIViewController, UITableViewDelegate, UITableViewDataSource 
 
             cell.backgroundColor = .clear
             cell.bgView.layer.cornerRadius = 10
+            cell.contentView.layer.shadowRadius = 3
+            cell.contentView.layer.shadowOffset = CGSize(width: 1, height: 1)
+            cell.contentView.layer.shadowOpacity = 0.2
+            cell.contentView.layer.masksToBounds = false
             cell.statusButton.tag = indexPath.row
             cell.statusButton.addTarget(self, action: #selector(updateStatus(_:)), for: .touchUpInside)
 
@@ -195,6 +199,10 @@ class My_Bookings: UIViewController, UITableViewDelegate, UITableViewDataSource 
 
             cell.backgroundColor = .clear
             cell.bgView.layer.cornerRadius = 10
+            cell.contentView.layer.shadowRadius = 3
+            cell.contentView.layer.shadowOffset = CGSize(width: 1, height: 1)
+            cell.contentView.layer.shadowOpacity = 0.2
+            cell.contentView.layer.masksToBounds = false
             cell.statusButton.tag = indexPath.row
             cell.statusButton.addTarget(self, action: #selector(updateStatus(_:)), for: .touchUpInside)
 

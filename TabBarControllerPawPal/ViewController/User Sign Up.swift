@@ -54,7 +54,6 @@ class User_Sign_Up: UIViewController {
         gradientLayer.endPoint = CGPoint(x: 0.5, y: 0.5)
         gradientView.layer.insertSublayer(gradientLayer, at: 0)
         
-        
         appLogo.layer.cornerRadius = appLogo.frame.height / 2
         appLogo.layer.masksToBounds = true
         signUpButton.layer.cornerRadius = 10
@@ -72,26 +71,27 @@ class User_Sign_Up: UIViewController {
         
         // Setup the activity indicator in the view
         setupActivityIndicator()
+        
+        // Set self as delegate for text fields for border highlighting
+        nameTextField.delegate = self
+        emailTextField.delegate = self
+        passwordTextField.delegate = self
     }
     
     // MARK: - Email Validation in Real-Time
     @objc private func emailTextFieldDidChange(_ textField: UITextField) {
         guard let email = textField.text else { return }
         
+        // Always use systemPink for the border color
+        textField.layer.borderWidth = 1
+        textField.layer.borderColor = UIColor.systemPink.cgColor
+        textField.layer.cornerRadius = 8
+        
         if isValidEmail(email) {
-            // Valid email → hide error label and remove border
             emailErrorLabel.isHidden = true
-            textField.layer.borderWidth = 0
-            textField.layer.borderColor = UIColor.clear.cgColor
         } else {
-            // Invalid email → show error label and red border
             emailErrorLabel.isHidden = false
             emailErrorLabel.text = "Invalid email format"
-            emailErrorLabel.textColor = .systemRed
-            
-            textField.layer.borderWidth = 1
-            textField.layer.borderColor = UIColor.systemRed.cgColor
-            textField.layer.cornerRadius = 8
         }
     }
     
@@ -99,11 +99,10 @@ class User_Sign_Up: UIViewController {
         // Dismiss keyboard
         view.endEditing(true)
         
-        // Hide error label and reset text field border
+        // Hide error label and reset email field border if needed
         emailErrorLabel.isHidden = true
         emailTextField.layer.borderWidth = 0
         emailTextField.layer.borderColor = UIColor.clear.cgColor
-        
     }
     
     private func isValidEmail(_ email: String) -> Bool {
@@ -126,6 +125,7 @@ class User_Sign_Up: UIViewController {
     }
     
     func updateTermsButtonAppearance() {
+        let config = UIImage.SymbolConfiguration(scale: .medium)
         let checkboxImage = hasAgreedToTerms ? UIImage(systemName: "checkmark.square.fill") : UIImage(systemName: "square")
         termsButton.setImage(checkboxImage, for: .normal)
         termsButton.tintColor = .systemPurple
@@ -164,7 +164,6 @@ class User_Sign_Up: UIViewController {
             }
             
             // Save Firestore data based on selected role.
-            // Do not hide the spinner here; let each Firestore save method hide it.
             if selectedIndex == 0 {
                 self.saveUserDataToFirestore(uid: user.uid, name: name, email: email, role: "Pet Owner")
             } else if selectedIndex == 1 {
@@ -176,7 +175,6 @@ class User_Sign_Up: UIViewController {
     }
     
     // MARK: - Firestore Save Methods
-    
     func saveUserDataToFirestore(uid: String, name: String, email: String, role: String) {
         let userData: [String: Any] = [
             "uid": uid,
@@ -187,7 +185,6 @@ class User_Sign_Up: UIViewController {
         ]
            
         db.collection("users").document(uid).setData(userData) { error in
-            // Hide the spinner after saving data (or error)
             self.hideLoadingIndicator()
             if let error = error {
                 self.showAlert(title: "Error", message: "Failed to save user data: \(error.localizedDescription)")
@@ -253,7 +250,7 @@ class User_Sign_Up: UIViewController {
     
     // MARK: - Navigation
     func navigateToHomeScreen() {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil) // Make sure this matches your storyboard name
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
         if let tabBarVC = storyboard.instantiateViewController(withIdentifier: "TabBarControllerID") as? UITabBarController {
             tabBarVC.modalPresentationStyle = .fullScreen
             self.present(tabBarVC, animated: true, completion: nil)
@@ -290,5 +287,33 @@ class User_Sign_Up: UIViewController {
             })
         )
         present(alert, animated: true, completion: nil)
+    }
+}
+
+// MARK: - UITextFieldDelegate for Border Highlighting
+extension User_Sign_Up: UITextFieldDelegate {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        // When editing begins, set the border to systemPink
+        textField.layer.borderWidth = 1
+        textField.layer.borderColor = UIColor.systemPink.cgColor
+        textField.layer.cornerRadius = 8
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        // For the email text field, if valid, remove the border; otherwise, keep it.
+        if textField == emailTextField {
+            if let email = textField.text, !email.isEmpty, isValidEmail(email) {
+                textField.layer.borderWidth = 0
+                textField.layer.borderColor = UIColor.clear.cgColor
+            } else {
+                // Keep systemPink border if email is invalid
+                textField.layer.borderWidth = 1
+                textField.layer.borderColor = UIColor.systemPink.cgColor
+            }
+        } else {
+            // For other text fields, clear the border when editing ends.
+            textField.layer.borderWidth = 0
+            textField.layer.borderColor = UIColor.clear.cgColor
+        }
     }
 }
