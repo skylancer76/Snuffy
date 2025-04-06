@@ -144,27 +144,39 @@ class Pet_Diet: UIViewController {
 extension Pet_Diet: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return petDietDetails.count
+        // If no pet diet details, show one cell (the "No Diet" cell)
+        if petDietDetails.isEmpty {
+            return 1
+        } else {
+            return petDietDetails.count
+        }
     }
+    
     
     func tableView(_ tableView: UITableView,
                    cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(
-            withIdentifier: "PetsDietTableViewCell",
-            for: indexPath
-        ) as! PetsDietTableViewCell
-        
-        let diet = petDietDetails[indexPath.row]
-        
-        // Display only Meal Name, Meal Type, and Time
-        cell.mealNameLabel.text = diet.foodName       // 1. Meal Name
-        cell.mealTypeLabel.text = diet.mealType         // 2. Meal Type
-        cell.servingTimeLabel.text = diet.servingTime   // 3. Time
-        
-        cell.backgroundColor = .clear
-        return cell
+        if petDietDetails.isEmpty {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "NoPetDiet", for: indexPath) as! No_Diet
+            cell.nodiet.text = "No diet found"
+            cell.backgroundColor = .clear
+            return cell
+        } else {
+            let cell = tableView.dequeueReusableCell(
+                withIdentifier: "PetsDietTableViewCell",
+                for: indexPath
+            ) as! PetsDietTableViewCell
+            
+            let diet = petDietDetails[indexPath.row]
+            
+            // Display only Meal Name, Meal Type, and Time
+            cell.mealNameLabel.text = diet.foodName       // 1. Meal Name
+            cell.mealTypeLabel.text = diet.mealType         // 2. Meal Type
+            cell.servingTimeLabel.text = diet.servingTime   // 3. Time
+            
+            cell.backgroundColor = .clear
+            return cell
+        }
     }
-    
     // Set cell height similar to Vaccination table
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 100

@@ -143,24 +143,45 @@ class Vaccination_Details: UIViewController {
 extension Vaccination_Details: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return vaccinationDetails.count
+        
+        if vaccinationDetails.isEmpty {
+            return 1
+        } else {
+            
+            return vaccinationDetails.count
+        }
     }
+
+    
+
     
     func tableView(_ tableView: UITableView,
                    cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(
-            withIdentifier: "VaccinationTableViewCell",
-            for: indexPath
-        ) as! VaccinationsDetailsTableViewCell
         
-        let vaccination = vaccinationDetails[indexPath.row]
-        
-        // Show only vaccine name & date
-        cell.vaccineNameLabel.text = vaccination.vaccineName
-        cell.dateLabel.text = "Given on \(vaccination.dateOfVaccination)"
-        cell.backgroundColor = .clear
-        
-        return cell
+        if vaccinationDetails.isEmpty {
+            let cell = tableView.dequeueReusableCell(
+                withIdentifier: "NoVaccinationCell",
+                for: indexPath
+            ) as! No_Vaccination
+            
+            // Set the label to read "No vaccination found"
+            cell.novaccination.text = "No vaccination found"
+            return cell
+        } else {
+            let cell = tableView.dequeueReusableCell(
+                withIdentifier: "VaccinationTableViewCell",
+                for: indexPath
+            ) as! VaccinationsDetailsTableViewCell
+            
+            let vaccination = vaccinationDetails[indexPath.row]
+            
+            // Show only vaccine name & date
+            cell.vaccineNameLabel.text = vaccination.vaccineName
+            cell.dateLabel.text = "Given on \(vaccination.dateOfVaccination)"
+            cell.backgroundColor = .clear
+            
+            return cell
+        }
     }
     
     // Example fixed cell height

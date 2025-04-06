@@ -171,34 +171,43 @@ class Pet_Medications: UIViewController, UITableViewDataSource, UITableViewDeleg
     }
     
     // MARK: - UITableViewDataSource
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return petMedications.count
+        // If no medications, show one row for the "No Medication" cell.
+        if petMedications.isEmpty {
+            return 1
+        } else {
+            return petMedications.count
+        }
     }
     
     func tableView(_ tableView: UITableView,
                    cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // Dequeue your custom cell
-        let cell = tableView.dequeueReusableCell(
-            withIdentifier: "PetsMedicationTableViewCell",
-            for: indexPath
-        ) as! PetsMedicationDetailsTableViewCell
-        
-        let medication = petMedications[indexPath.row]
-        
-        // 1) Medicine Name
-        cell.medicineNameLabel.text = medication.medicineName
-        
-        // 2) Medicine Type
-        cell.medicineTypeLabel.text = medication.medicineType
-        
-        // 3) Date Range (already formatted as dd.MM.yy in fetch)
-        cell.dateRangeLabel.text = "\(medication.startDate) - \(medication.endDate)"
-        
-        cell.backgroundColor = .clear
-        return cell
+        if petMedications.isEmpty {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "NoPetMedication", for: indexPath) as! No_Medication
+            cell.medicineNameLabel.text = "No medication found"
+            cell.backgroundColor = .clear
+            return cell
+        } else {
+            let cell = tableView.dequeueReusableCell(
+                withIdentifier: "PetsMedicationTableViewCell",
+                for: indexPath
+            ) as! PetsMedicationDetailsTableViewCell
+            
+            let medication = petMedications[indexPath.row]
+            
+            // 1) Medicine Name
+            cell.medicineNameLabel.text = medication.medicineName
+            
+            // 2) Medicine Type
+            cell.medicineTypeLabel.text = medication.medicineType
+            
+            // 3) Date Range (already formatted as dd.MM.yy in fetch)
+            cell.dateRangeLabel.text = "\(medication.startDate) - \(medication.endDate)"
+            
+            cell.backgroundColor = .clear
+            return cell
+        }
     }
-    
     // MARK: - UITableViewDelegate
     
     func tableView(_ tableView: UITableView,
