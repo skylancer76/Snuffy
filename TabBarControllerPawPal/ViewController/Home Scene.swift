@@ -237,21 +237,27 @@ extension Home_Scene: UICollectionViewDataSource, UICollectionViewDelegate, UICo
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if homePets.isEmpty || indexPath.item == homePets.count {
-            presentAddPetPageSheet()
+            MoveToMyPets()
         } else {
             let selectedPet = homePets[indexPath.item]
             performSegue(withIdentifier: "ShowPetProfileFromHome", sender: selectedPet)
         }
     }
     
-    func presentAddPetPageSheet() {
-        guard let addPetVC = storyboard?.instantiateViewController(withIdentifier: "AddNewPet") as? Add_New_Pet else {
+    func MoveToMyPets() {
+        
+        guard let mainTabBarController = storyboard?.instantiateViewController(withIdentifier: "TabBarControllerID") as? UITabBarController else {
+            print("Failed to instantiate main tab bar controller")
             return
         }
-        let navController = UINavigationController(rootViewController: addPetVC)
-        navController.modalPresentationStyle = .pageSheet
-        present(navController, animated: true, completion: nil)
+        
+        mainTabBarController.selectedIndex = 2
+
+        mainTabBarController.modalPresentationStyle = .fullScreen
+        present(mainTabBarController, animated: true, completion: nil)
     }
+
+
     
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,

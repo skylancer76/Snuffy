@@ -31,12 +31,17 @@ class Bookings_Information: UITableViewController, MFMessageComposeViewControlle
     @IBOutlet weak var pickupLocationLabel: UILabel!
     //    @IBOutlet weak var instructionsLabel: UILabel!
     
+    var activityIndicator: UIActivityIndicatorView!
     var scheduleRequest: ScheduleCaretakerRequest?
     var caretaker: Caretakers?
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
+        setupActivityIndicator()
+        activityIndicator.startAnimating()
         
         caretakerImageView.layer.cornerRadius = 8
         caretakerImageView.clipsToBounds = true
@@ -82,6 +87,14 @@ class Bookings_Information: UITableViewController, MFMessageComposeViewControlle
             print("Failed to initiate call") // Debugging
         }
     }
+    
+    func setupActivityIndicator() {
+            activityIndicator = UIActivityIndicatorView(style: .large)
+            activityIndicator.center = view.center
+            activityIndicator.hidesWhenStopped = true
+            view.addSubview(activityIndicator)
+        }
+        
     
     @objc func openChat() {
         print("Chat button tapped")
@@ -247,10 +260,15 @@ class Bookings_Information: UITableViewController, MFMessageComposeViewControlle
         }
         
         // Load caretaker image
-        if let url = URL(string: caretaker.profilePic!) {
-            caretakerImageView.loadImage(from: url)
+        if let url = URL(string: caretaker.profilePic!)  {
+            caretakerImageView.loadImage(from: url, completion: {
+                self.activityIndicator.stopAnimating()
+            })
+
         } else {
             caretakerImageView.image = UIImage(named: "CaretakerPlaceholder")
+                        activityIndicator.stopAnimating()
+                    
         }
     }
 
@@ -287,35 +305,31 @@ class Bookings_Information: UITableViewController, MFMessageComposeViewControlle
 
 }
 
-//extension UIImageView {
-//    func loadImage(from url: URL) {
-//        DispatchQueue.global().async {
-//            if let data = try? Data(contentsOf: url),
-//               let image = UIImage(data: data) {
-//                DispatchQueue.main.async {
-//                    self.image = image
-//                }
-//            }
-//        }
-//    }
-//}
+
 
 extension UIImageView {
-    func loadImage(from url: URL, placeholder: UIImage? = UIImage(named: "CaretakerPlaceholder")) {
-        // Set the placeholder image immediately on the main thread
+    func loadImage(from url: URL, placeholder: UIImage? = UIImage(named: "CaretakerPlaceholder"), completion: (() -> Void)? = nil) {
+        
         DispatchQueue.main.async {
             self.image = placeholder
         }
         
-        // Download the image in the background
+        
         DispatchQueue.global().async {
             if let data = try? Data(contentsOf: url),
-               let downloadedImage = UIImage(data: data) {
-                // Update the image view on the main thread with the downloaded image
+               let downloadedImage = UIImage(data: data){
                 DispatchQueue.main.async {
                     self.image = downloadedImage
+                    completion?()
+                }
+            } else {
+                DispatchQueue.main.async {
+                    self.image = placeholder
+                    completion?()
                 }
             }
         }
     }
 }
+    
+

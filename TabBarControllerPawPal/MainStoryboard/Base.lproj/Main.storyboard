@@ -1489,7 +1489,7 @@
         <!--My Pets-->
         <scene sceneID="XT8-qm-dz2">
             <objects>
-                <viewController id="An7-pO-EDi" userLabel="My Pets" customClass="My_Pets" customModule="TabBarControllerPawPal" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="My_Pets" id="An7-pO-EDi" userLabel="My Pets" customClass="My_Pets" customModule="TabBarControllerPawPal" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="CMV-yh-paf">
                         <rect key="frame" x="0.0" y="0.0" width="402" height="874"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -3021,7 +3021,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999998807907104" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="info.circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Lfd-3P-3pM">
-                                                    <rect key="frame" x="20" y="15.666666666666666" width="22" height="20.666666666666671"/>
+                                                    <rect key="frame" x="20" y="15.666666666666664" width="22" height="20.666666666666671"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="22" id="ffr-DS-H3D"/>
                                                         <constraint firstAttribute="width" constant="22" id="oti-ff-wdc"/>
@@ -3981,7 +3981,7 @@
         <!--Pet Medication-->
         <scene sceneID="Ca0-6g-fyV">
             <objects>
-                <viewController storyboardIdentifier="PetMedicationVC" id="gDY-G0-Z3Z" customClass="Pet_Medication_Details" customModule="TabBarControllerPawPal" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PetMedicationVC" id="gDY-G0-Z3Z" customClass="Pet_Medications" customModule="TabBarControllerPawPal" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="B9h-3c-Eus">
                         <rect key="frame" x="0.0" y="0.0" width="402" height="874"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -3990,7 +3990,7 @@
                                 <rect key="frame" x="0.0" y="106" width="402" height="768"/>
                                 <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="120" id="Lut-F5-oni" customClass="PetsMedicationDetailsTableViewCell" customModule="TabBarControllerPawPal" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="PetsMedicationTableViewCell" rowHeight="120" id="Lut-F5-oni" customClass="PetsMedicationDetailsTableViewCell" customModule="TabBarControllerPawPal" customModuleProvider="target">
                                         <rect key="frame" x="20" y="55.333332061767578" width="362" height="120"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Lut-F5-oni" id="Yia-95-J8N">
@@ -4105,7 +4105,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="petMedicationTableView" destination="8AD-yj-n8D" id="PQS-bR-mkK"/>
+                        <outlet property="petMedicationTableView" destination="8AD-yj-n8D" id="hVX-Mc-md9"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="biP-Or-7Sw" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -5978,7 +5978,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.69999998807907104" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="info.circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="KK3-rR-7cX">
-                                                    <rect key="frame" x="20" y="15.666666666666666" width="22" height="20.666666666666671"/>
+                                                    <rect key="frame" x="20" y="15.666666666666664" width="22" height="20.666666666666671"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="22" id="8yO-t5-QWt"/>
                                                         <constraint firstAttribute="height" constant="22" id="EdR-JW-N8Y"/>
@@ -9021,7 +9021,7 @@
     <inferredMetricsTieBreakers>
         <segue reference="dxt-nf-j0c"/>
         <segue reference="VRy-M2-YRb"/>
-        <segue reference="rAl-cH-HIV"/>
+        <segue reference="DZQ-DS-aGG"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" systemColor="systemPinkColor"/>
     <resources>

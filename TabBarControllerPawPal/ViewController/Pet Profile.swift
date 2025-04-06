@@ -30,10 +30,14 @@ class Pet_Profile: UIViewController {
     // Data to populate the table
     let tableOptions = ["Pet Vaccinations", "Pet Diet", "Pet Medications"]
     
+    var activityIndicator: UIActivityIndicatorView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         print("Received Pet ID: \(petId ?? "No Pet ID")")
+        setupActivityIndicator()
+        activityIndicator.startAnimating()
         
         petDetailsTableView.dataSource = self
         petDetailsTableView.delegate = self
@@ -70,12 +74,22 @@ class Pet_Profile: UIViewController {
         petInfo.backgroundColor = UIColor.systemPink.withAlphaComponent(0.1)
     }
     
+    func setupActivityIndicator() {
+        activityIndicator = UIActivityIndicatorView(style: .large)
+        activityIndicator.center = view.center
+        activityIndicator.hidesWhenStopped = true
+        view.addSubview(activityIndicator)
+    }
+    
     // Fetch pet data from Firestore using petId
     func fetchPetData(petId: String) {
         let db = Firestore.firestore()
         db.collection("Pets").document(petId).getDocument { document, error in
             if let error = error {
                 print("Error fetching pet data: \(error.localizedDescription)")
+                DispatchQueue.main.async {
+                    self.activityIndicator.stopAnimating()
+                }
                 return
             }
             if let document = document, document.exists, let data = document.data() {
@@ -93,9 +107,14 @@ class Pet_Profile: UIViewController {
                     self.genderLabel.text = petGender
                     self.weightLabel.text = petWeight
                     self.petImage.loadPrefetchedImageFromUrl(petImageUrl)
+                    
+                    self.activityIndicator.stopAnimating()
                 }
             } else {
                 print("No pet data found for this petId.")
+                DispatchQueue.main.async {
+                    self.activityIndicator.stopAnimating()
+                }
             }
         }
     }

@@ -26,6 +26,7 @@ class DogWalker_Profile: UITableViewController {
     @IBOutlet weak var pickupLocationLabel: UILabel!
     
     
+    var activityIndicator: UIActivityIndicatorView!
     
     var scheduleDogWalkerRequest: ScheduleDogWalkerRequest?
     var dogWalker: DogWalker?
@@ -33,7 +34,8 @@ class DogWalker_Profile: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        
+        setupActivityIndicator()
+        activityIndicator.startAnimating()
         
         walkerImageView.layer.cornerRadius = 8
                 walkerImageView.clipsToBounds = true
@@ -47,7 +49,12 @@ class DogWalker_Profile: UITableViewController {
                     fetchDogWalkerDetails(dogWalkerId: request.dogWalkerId)
                 }
     }
-
+    func setupActivityIndicator() {
+         activityIndicator = UIActivityIndicatorView(style: .large)
+         activityIndicator.center = view.center
+         activityIndicator.hidesWhenStopped = true
+         view.addSubview(activityIndicator)
+     }
     
     @objc func callWalkerTapped() {
             guard let phone = dogWalker?.phoneNumber, !phone.isEmpty else { return }
@@ -110,22 +117,33 @@ class DogWalker_Profile: UITableViewController {
                             self.updateDogWalkerUI(decodedWalker)
                         }
                     } catch {
-                        print("Error decoding dog walker data: \(error.localizedDescription)")
+                        DispatchQueue.main.async {
+                                                    self.activityIndicator.stopAnimating()
+                                                }
+                    }
+                                    } else {
+                                        DispatchQueue.main.async {
+                                            self.activityIndicator.stopAnimating()
+                                        }
                     }
                 }
             }
-    }
+    
     
     private func updateDogWalkerUI(_ walker: DogWalker) {
             walkerNameLabel.text = walker.name
         walkerRatingLabel.text = "Rating: \(String(describing: walker.rating))"
            
         if let url = URL(string: walker.profilePic!) {
-                walkerImageView.loadImage(from: url)
+            walkerImageView.loadImage(from: url, completion: {
+                            self.activityIndicator.stopAnimating()
+                        })
             } else {
                 walkerImageView.image = UIImage(named: "CaretakerPlaceholder")
+                            activityIndicator.stopAnimating()
+                        }
             }
-        }
+        
     
     
     
@@ -150,3 +168,4 @@ class DogWalker_Profile: UITableViewController {
     }
 }
     
+

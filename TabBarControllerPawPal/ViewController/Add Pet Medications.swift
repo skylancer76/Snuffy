@@ -24,6 +24,8 @@ class Add_Pet_Medications: UITableViewController {
     // Options for the medicine type.
     let medicineTypes = ["Tablet", "Syrup", "Ointment", "Injection"]
     
+    var activityIndicator: UIActivityIndicatorView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -35,6 +37,20 @@ class Add_Pet_Medications: UITableViewController {
         // Configure the date pickers to show only date.
         startDatePicker.datePickerMode = .date
         endDatePicker.datePickerMode = .date
+        
+        setupActivityIndicator()
+    }
+    
+    
+    func setupActivityIndicator() {
+        activityIndicator = UIActivityIndicatorView(style: .large)
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.hidesWhenStopped = true
+        view.addSubview(activityIndicator)
+        NSLayoutConstraint.activate([
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
     }
     
     // MARK: - Medicine Type Selection
@@ -105,34 +121,39 @@ class Add_Pet_Medications: UITableViewController {
             endDate: endDate
         )
         
+        activityIndicator.startAnimating()
         // Save to Firestore
         FirebaseManager.shared.savePetMedicationData(petId: petId, medication: medication) { error in
-            if let error = error {
-                print("Failed to save medication: \(error.localizedDescription)")
-            } else {
-                print("Medication saved successfully!")
+            DispatchQueue.main.async {
                 
-                let alertController = UIAlertController(
-                    title: nil,
-                    message: "Pet Medication Data Added",
-                    preferredStyle: .alert
-                )
-                self.present(alertController, animated: true, completion: nil)
+                self.activityIndicator.stopAnimating()
                 
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                    alertController.dismiss(animated: true) {
-                        NotificationCenter.default.post(
-                            name: NSNotification.Name("PetMedicationDataAdded"),
-                            object: nil
-                        )
-                        // Dismiss the modal sheet
-                        self.dismiss(animated: true, completion: nil)
+                if let error = error {
+                    print("Failed to save medication: \(error.localizedDescription)")
+                } else {
+                    print("Medication saved successfully!")
+                    
+                    let alertController = UIAlertController(
+                        title: nil,
+                        message: "Pet Medication Data Added",
+                        preferredStyle: .alert
+                    )
+                    self.present(alertController, animated: true, completion: nil)
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                        alertController.dismiss(animated: true) {
+                            NotificationCenter.default.post(
+                                name: NSNotification.Name("PetMedicationDataAdded"),
+                                object: nil
+                            )
+                            // Dismiss the modal sheet
+                            self.dismiss(animated: true, completion: nil)
+                        }
                     }
                 }
             }
         }
     }
-
     
     // MARK: - Cancel
     @IBAction func cancelTapped(_ sender: UIBarButtonItem) {

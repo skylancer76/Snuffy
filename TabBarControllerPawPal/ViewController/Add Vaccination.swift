@@ -34,10 +34,12 @@ class Add_Vaccination: UITableViewController, UITextViewDelegate {
     // Track which vaccine is chosen
     var selectedVaccineName: String?
     
+    var activityIndicator: UIActivityIndicatorView!
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        setupActivityIndicator()
     }
     
     // MARK: - Setup
@@ -60,6 +62,13 @@ class Add_Vaccination: UITableViewController, UITextViewDelegate {
         // Initially hide expiry-related rows if switch is OFF
         tableView.beginUpdates()
         tableView.endUpdates()
+    }
+    
+    func setupActivityIndicator() {
+        activityIndicator = UIActivityIndicatorView(style: .large)
+        activityIndicator.center = view.center
+        activityIndicator.hidesWhenStopped = true
+        view.addSubview(activityIndicator)
     }
     
     // MARK: - Actions
@@ -160,33 +169,45 @@ class Add_Vaccination: UITableViewController, UITextViewDelegate {
             notes: notesTextView.text
         )
         
-        // 4) Save to Firestore
+        activityIndicator.startAnimating()
+        
+       
         FirebaseManager.shared.saveVaccinationData(petId: petId, vaccination: vaccination) { error in
-            if let error = error {
-                print("Failed to save vaccination: \(error.localizedDescription)")
-            } else {
-                print("Vaccination saved successfully!")
-                
-                let alertController = UIAlertController(
-                    title: nil,
-                    message: "Vaccination Data Added",
-                    preferredStyle: .alert
-                )
-                self.present(alertController, animated: true, completion: nil)
-                
-                // Dismiss alert after 1 second, then dismiss this modal
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                    alertController.dismiss(animated: true) {
-                        NotificationCenter.default.post(name: NSNotification.Name("VaccinationDataAdded"), object: nil)
+            DispatchQueue.main.async {
+                self.activityIndicator.stopAnimating()
                         
-                        // Dismiss the modal sheet (instead of pop)
-                        self.dismiss(animated: true, completion: nil)
+                    if let error = error {
+                        print("Failed to save vaccination: \(error.localizedDescription)")
+                        let errorAlert = UIAlertController(
+                            title: "Error",
+                            message: "Failed to save vaccination: \(error.localizedDescription)",
+                            preferredStyle: .alert
+                        )
+                        errorAlert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                        self.present(errorAlert, animated: true)
+                            } else {
+                                print("Vaccination saved successfully!")
+                            
+                                let alertController = UIAlertController(
+                                title: nil,
+                                message: "Vaccination Data Added",
+                                preferredStyle: .alert
+                                )
+                                self.present(alertController, animated: true, completion: nil)
+                            
+                            
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                                alertController.dismiss(animated: true) {
+                                    NotificationCenter.default.post(name:
+                                    NSNotification.Name("VaccinationDataAdded"), object: nil)
+                                    self.dismiss(animated: true, completion: nil)
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
-    }
-}
 
 // MARK: - UITableViewDelegate
 extension Add_Vaccination {

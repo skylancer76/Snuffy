@@ -36,6 +36,8 @@ class Caretaker_Profile: UIViewController, CLLocationManagerDelegate {
     let locationManager = CLLocationManager()
     var currentUserLocation: CLLocation?
     
+    var activityIndicator: UIActivityIndicatorView!
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -85,6 +87,17 @@ class Caretaker_Profile: UIViewController, CLLocationManagerDelegate {
             let width = (galleryCollectionView.bounds.width - (spacing * 3)) / 2
             flowLayout.itemSize = CGSize(width: width, height: width * 1.3)
         }
+        
+        setupLocationManager()
+        setupActivityIndicator()
+                
+    }
+    
+    func setupActivityIndicator() {
+        activityIndicator = UIActivityIndicatorView(style: .large)
+        activityIndicator.center = view.center
+        activityIndicator.hidesWhenStopped = true
+        view.addSubview(activityIndicator)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -167,13 +180,16 @@ class Caretaker_Profile: UIViewController, CLLocationManagerDelegate {
             ratingLabel.text = "N/A"
         }
         
-        // Profile Pic
-        if let profilePic = caretaker.profilePic,
-           let url = URL(string: profilePic) {
-            profileImageView.loadImage(from: url)
-        } else {
-            profileImageView.image = UIImage(named: "placeholder")
-        }
+        activityIndicator.startAnimating()
+                if let profilePic = caretaker.profilePic,
+                   let url = URL(string: profilePic) {
+                    profileImageView.loadImage(from: url, completion: {
+                        self.activityIndicator.stopAnimating()
+                    })
+                } else {
+                    profileImageView.image = UIImage(named: "placeholder")
+                    activityIndicator.stopAnimating()
+                }
         
         // Gallery
         galleryImageNames = caretaker.galleryImages ?? []

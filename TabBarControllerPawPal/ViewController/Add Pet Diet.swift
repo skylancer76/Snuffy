@@ -26,6 +26,8 @@ class Add_Pet_Diet: UITableViewController {
     // Options for the meal type
     let mealTypes = ["Breakfast", "Lunch", "Dinner"]
     
+    var activityIndicator: UIActivityIndicatorView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -40,7 +42,22 @@ class Add_Pet_Diet: UITableViewController {
         // 3) Set default for Food Category and color
         foodCategoryButton.setTitle(foodCategories.first, for: .normal)
 //        foodCategoryButton.setTitleColor(.tertiaryLabel, for: .normal)
+        
+        setupActivityIndicator()
     }
+    
+    func setupActivityIndicator() {
+        activityIndicator = UIActivityIndicatorView(style: .large)
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.hidesWhenStopped = true
+        view.addSubview(activityIndicator)
+        NSLayoutConstraint.activate([
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+    }
+    
+
     
     // MARK: - Meal Type Selection
     @IBAction func mealTypeButtonTapped(_ sender: UIButton) {
@@ -127,8 +144,14 @@ class Add_Pet_Diet: UITableViewController {
                 servingTime: servingTime
             )
             
+        activityIndicator.startAnimating()
             // Save to Firestore
             FirebaseManager.shared.savePetDietData(petId: petId, diet: diet) { error in
+                
+                DispatchQueue.main.async {
+                                
+                self.activityIndicator.stopAnimating()
+                    
                 if let error = error {
                     print("Failed to save pet diet: \(error.localizedDescription)")
                 } else {
@@ -144,6 +167,7 @@ class Add_Pet_Diet: UITableViewController {
                             NotificationCenter.default.post(name: NSNotification.Name("PetDietDataAdded"), object: nil)
                             // Dismiss the modal sheet
                             self.dismiss(animated: true, completion: nil)
+                        }
                         }
                     }
                 }
