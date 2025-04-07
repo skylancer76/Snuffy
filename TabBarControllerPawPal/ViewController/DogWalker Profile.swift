@@ -132,7 +132,7 @@ class DogWalker_Profile: UITableViewController {
     
     private func updateDogWalkerUI(_ walker: DogWalker) {
             walkerNameLabel.text = walker.name
-        walkerRatingLabel.text = "Rating: \(String(describing: walker.rating))"
+        walkerRatingLabel.text = "\(walker.rating!) ★" 
            
         if let url = URL(string: walker.profilePic!) {
             walkerImageView.loadImage(from: url, completion: {

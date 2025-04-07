@@ -117,6 +117,11 @@ class Add_New_Pet: UITableViewController, UIImagePickerControllerDelegate, UINav
         view.addSubview(hiddenTextField)
     }
     
+    @IBAction func cancelButtonTapped(_ sender: UIBarButtonItem) {
+        // Since this is presented modally, dismiss
+        dismiss(animated: true, completion: nil)
+    }
+    
     // MARK: - Breed & Gender Drop-Downs
     func setupDropDownMenus() {
         // Breed Selection Menu
