@@ -109,32 +109,30 @@ class Pet_Particular_Vaccine: UITableViewController {
     }
     
     // MARK: - Hide Section Headers
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         
-        // Hide Section 1 header if there's no expiry
         if section == 1 {
             if let v = vaccination,
                v.expires,
                let expDate = v.expiryDate,
                !expDate.isEmpty {
-                return UITableView.automaticDimension
+                return "Expiry Info"
             } else {
-                return 0
+                return nil
             }
         }
         
-        // Hide Section 2 header if there are no notes
+       
         if section == 2 {
             if let v = vaccination,
                let notesText = v.notes,
                !notesText.isEmpty {
-                return UITableView.automaticDimension
+                return "Notes"
             } else {
-                return 0
+                return nil
             }
         }
         
-        // Default
-        return UITableView.automaticDimension
+        return nil
     }
 }
