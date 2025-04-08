@@ -252,6 +252,9 @@
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" alpha="0.69999998807907104" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" text="for tails that wag" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VrT-F0-lYu">
                                                 <rect key="frame" x="120" y="243.33333333333331" width="162" height="28"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="28" id="zWE-na-Z0b"/>
+                                                </constraints>
                                                 <fontDescription key="fontDescription" name="ChalkboardSE-Regular" family="Chalkboard SE" pointSize="20"/>
                                                 <color key="textColor" systemColor="systemPinkColor"/>
                                                 <nil key="highlightedColor"/>
@@ -283,12 +286,12 @@
                                             <constraint firstItem="n1B-fr-bPZ" firstAttribute="top" secondItem="m2f-nw-2EH" secondAttribute="top" constant="35" id="XQc-ZH-mwc"/>
                                             <constraint firstItem="uud-jy-GjD" firstAttribute="leading" secondItem="m2f-nw-2EH" secondAttribute="leading" constant="16" id="YvQ-oL-tp3"/>
                                             <constraint firstItem="KIX-Hg-0ga" firstAttribute="leading" secondItem="m2f-nw-2EH" secondAttribute="leading" constant="16" id="Yxq-aS-EOr"/>
+                                            <constraint firstItem="VrT-F0-lYu" firstAttribute="centerX" secondItem="m2f-nw-2EH" secondAttribute="centerX" id="aPH-6g-ysy"/>
                                             <constraint firstItem="KWN-wn-jBC" firstAttribute="top" secondItem="HR0-A7-XFT" secondAttribute="bottom" constant="10" id="e7C-GN-Zsl"/>
                                             <constraint firstItem="eo3-0M-z1B" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="m2f-nw-2EH" secondAttribute="leading" constant="20" symbolic="YES" id="kFr-vH-Trw"/>
                                             <constraint firstItem="uud-jy-GjD" firstAttribute="top" secondItem="A61-TT-gtF" secondAttribute="bottom" constant="5" id="obV-dv-egC"/>
                                             <constraint firstItem="eo3-0M-z1B" firstAttribute="top" secondItem="A61-TT-gtF" secondAttribute="bottom" constant="42.5" id="q9K-0D-yBH"/>
                                             <constraint firstItem="VrT-F0-lYu" firstAttribute="top" secondItem="2VN-qw-zNP" secondAttribute="bottom" id="sPR-1C-Ao7"/>
-                                            <constraint firstItem="VrT-F0-lYu" firstAttribute="centerX" secondItem="m2f-nw-2EH" secondAttribute="centerX" id="vdV-NE-jfG"/>
                                             <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="uud-jy-GjD" secondAttribute="trailing" constant="20" symbolic="YES" id="yT4-9N-X1f"/>
                                         </constraints>
                                     </view>
@@ -419,6 +422,9 @@
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" alpha="0.69999998807907104" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="for tails that wag" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jbe-9K-yuy">
                                                 <rect key="frame" x="120" y="226" width="162" height="28"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="28" id="V6x-x9-ug7"/>
+                                                </constraints>
                                                 <fontDescription key="fontDescription" name="ChalkboardSE-Regular" family="Chalkboard SE" pointSize="20"/>
                                                 <color key="textColor" systemColor="systemPinkColor"/>
                                                 <nil key="highlightedColor"/>
@@ -1685,27 +1691,27 @@
                         <sections>
                             <tableViewSection id="4bQ-6f-KjV">
                                 <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="250" id="EK1-ox-dH3">
-                                        <rect key="frame" x="20" y="18" width="362" height="250"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" rowHeight="200" id="EK1-ox-dH3">
+                                        <rect key="frame" x="20" y="18" width="362" height="200"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="EK1-ox-dH3" id="VGB-W3-SGG">
-                                            <rect key="frame" x="0.0" y="0.0" width="362" height="250"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="362" height="200"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="buw-el-S6M">
-                                                    <rect key="frame" x="91" y="35" width="180" height="180"/>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="buw-el-S6M">
+                                                    <rect key="frame" x="91" y="10" width="180" height="180"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="180" id="Yj7-kc-BPt"/>
                                                         <constraint firstAttribute="width" constant="180" id="jUB-2j-N5P"/>
                                                     </constraints>
                                                 </imageView>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uWr-dc-FpR">
-                                                    <rect key="frame" x="91.666666666666671" y="93.333333333333329" width="178.66666666666663" height="63.666666666666671"/>
+                                                    <rect key="frame" x="94.333333333333329" y="69" width="173.66666666666669" height="62.333333333333343"/>
                                                     <state key="normal" title="Button"/>
                                                     <buttonConfiguration key="configuration" style="plain" imagePlacement="top" title="Upload your pet's pic" imagePadding="10" titleAlignment="trailing">
                                                         <imageReference key="image" image="camera.shutter.button.fill" catalog="system" symbolScale="large"/>
                                                         <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage" weight="regular"/>
-                                                        <fontDescription key="titleFontDescription" type="system" pointSize="16"/>
+                                                        <fontDescription key="titleFontDescription" type="system" weight="medium" pointSize="15"/>
                                                     </buttonConfiguration>
                                                 </button>
                                             </subviews>
@@ -1723,7 +1729,7 @@
                             <tableViewSection headerTitle="Enter Pet Details" id="2YL-JQ-BD5">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="sst-Yb-V7N">
-                                        <rect key="frame" x="20" y="324" width="362" height="43.666667938232422"/>
+                                        <rect key="frame" x="20" y="274" width="362" height="43.666667938232422"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="sst-Yb-V7N" id="kHd-YT-Jjc">
                                             <rect key="frame" x="0.0" y="0.0" width="362" height="43.666667938232422"/>
@@ -1751,7 +1757,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="Gj8-8H-6vs">
-                                        <rect key="frame" x="20" y="367.66666793823242" width="362" height="44.333332061767578"/>
+                                        <rect key="frame" x="20" y="317.66666793823242" width="362" height="44.333332061767578"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Gj8-8H-6vs" id="Vsp-ib-Lq5">
                                             <rect key="frame" x="0.0" y="0.0" width="362" height="44.333332061767578"/>
@@ -1784,7 +1790,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="4LI-SC-itC">
-                                        <rect key="frame" x="20" y="412" width="362" height="43.666667938232422"/>
+                                        <rect key="frame" x="20" y="362" width="362" height="43.666667938232422"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="4LI-SC-itC" id="Zo0-6B-88j">
                                             <rect key="frame" x="0.0" y="0.0" width="362" height="43.666667938232422"/>
@@ -1816,7 +1822,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="Pdq-g6-O6A">
-                                        <rect key="frame" x="20" y="455.66666793823242" width="362" height="45"/>
+                                        <rect key="frame" x="20" y="405.66666793823242" width="362" height="45"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Pdq-g6-O6A" id="bZ6-t7-747">
                                             <rect key="frame" x="0.0" y="0.0" width="362" height="45"/>
@@ -1849,7 +1855,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="sl2-Ss-fCM">
-                                        <rect key="frame" x="20" y="500.66666793823242" width="362" height="43.666667938232422"/>
+                                        <rect key="frame" x="20" y="450.66666793823242" width="362" height="43.666667938232422"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="sl2-Ss-fCM" id="53m-OV-ibM">
                                             <rect key="frame" x="0.0" y="0.0" width="362" height="43.666667938232422"/>
