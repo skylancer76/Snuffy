@@ -2,7 +2,8 @@
 
 ## Prototype 
 
-![Simulator Screenshot - iPhone 16 Pro - 2025-04-10 at 22 34 24](https://github.com/user-attachments/assets/37274539-0ec9-4237-8a36-dea9ef3a1962)
+<img src="https://github.com/user-attachments/assets/37274539-0ec9-4237-8a36-dea9ef3a1962" width="250"/>
+
 
 
 
