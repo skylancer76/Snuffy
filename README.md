@@ -1,5 +1,14 @@
 # Snuffy — for the tails that wag!
 
+## Prototype 
+
+![Simulator Screenshot - iPhone 16 Pro - 2025-04-10 at 22 34 24](https://github.com/user-attachments/assets/37274539-0ec9-4237-8a36-dea9ef3a1962)
+
+
+
+
+
+
 ## Problem Statement
 Pet owners often struggle to find **reliable and trustworthy caretakers** when they are unavailable. Whether it's for a short walk or an extended stay, they are always in a constant state of dilemma.
 
