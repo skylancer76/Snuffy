@@ -63,7 +63,7 @@ Snuffy ensures secure, seamless connections between pet owners and caretakers, c
 
 ## Flowchart 
 
-![Snuffy Flowchart](https://github.com/user-attachments/assets/34bc0a28-294e-477f-964d-94555be219bd)
+<img src="https://github.com/user-attachments/assets/34bc0a28-294e-477f-964d-94555be219bd" width="350"/>
 
 
 
